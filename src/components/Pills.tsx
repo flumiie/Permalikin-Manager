@@ -22,9 +22,9 @@ export default (props: PillsProps) => {
   const [selected, setSelected] = useState(false);
   const backgroundColor = useMemo(() => {
     if (selected) {
-      return '#1B72C0';
+      return '#BF2229';
     }
-    return '#D3E4FF';
+    return '#FFD3D3';
   }, [selected]);
 
   return (

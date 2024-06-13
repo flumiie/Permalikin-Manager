@@ -39,7 +39,7 @@ export default forwardRef(
         return '#F64C4C';
       }
       if ((props.value?.length ?? 0) > 0) {
-        return '#1B72C0';
+        return '#BF2229';
       }
       return '#E1E1E1';
     }, [props.value, props.error]);
@@ -47,9 +47,9 @@ export default forwardRef(
     const color = useMemo(() => {
       if (onBlur && props.filledTextColor && (props.value?.length ?? 0) > 0) {
         if (typeof props.filledTextColor === 'string') {
-          return props.filledTextColor ?? '#1B72C0';
+          return props.filledTextColor ?? '#BF2229';
         }
-        return '#1B72C0';
+        return '#BF2229';
       }
       return '#4B4B4B';
     }, [props.value, props.filledTextColor, onBlur]);
@@ -69,7 +69,7 @@ export default forwardRef(
           {props.leftIcon ? (
             <View style={styles.leftIcon}>
               <Pressable style={styles.sideIcon} onPress={props.onPress}>
-                <Icon name={props.leftIcon} size={20} color="#1B72C0" />
+                <Icon name={props.leftIcon} size={20} color="#BF2229" />
               </Pressable>
             </View>
           ) : null}
@@ -128,7 +128,7 @@ export default forwardRef(
                 key={`${icon}${Math.random()}`}
                 style={styles.sideIcon}
                 onPress={props.onPress}>
-                <Icon name={icon} size={20} color="#1B72C0" />
+                <Icon name={icon} size={20} color="#BF2229" />
               </Pressable>
             ))}
           </View>

@@ -27,17 +27,17 @@ export default (props: ButtonProps) => {
       return '#FFF';
     }
     if (props.type === 'primary') {
-      return '#1B72C0';
+      return '#BF2229';
     }
     if (props.type === 'secondary') {
-      return '#D3E4FF';
+      return '#FFD3D3';
     }
     return 'transparent';
   }, [props.disabled, props.type]);
 
   const borderColor = useMemo(() => {
     if (props.type === 'outline') {
-      return '#1B72C0';
+      return '#BF2229';
     }
     return 'transparent';
   }, [props.type]);
@@ -47,7 +47,7 @@ export default (props: ButtonProps) => {
       return '#1E1C1355';
     }
     if (props.type === 'outline') {
-      return '#1B72C0';
+      return '#BF2229';
     }
     if (props.type === 'secondary') {
       return '#001C38';

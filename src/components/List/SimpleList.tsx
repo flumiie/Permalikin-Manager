@@ -83,7 +83,7 @@ export default (props: SimpleListProps) => {
         <Pressable
           android_ripple={
             props.android_ripple ?? {
-              color: props.onPress ? '#1B72C066' : '',
+              color: props.onPress ? '#BF222966' : '',
             }
           }
           // eslint-disable-next-line react-native/no-inline-styles
@@ -98,7 +98,7 @@ export default (props: SimpleListProps) => {
                 <Icon
                   name={props.icon}
                   size={24}
-                  color={props.color?.icon ?? '#1B72C0'}
+                  color={props.color?.icon ?? '#BF2229'}
                 />
               </View>
               <Spacer width={8} />

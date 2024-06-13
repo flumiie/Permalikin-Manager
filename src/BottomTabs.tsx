@@ -4,7 +4,7 @@ import { Image, ImageSourcePropType, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { RegularText } from './components';
-import { HomeScreen } from './screens';
+import { AccountScreen, HomeScreen, ReportsScreen } from './screens';
 
 interface TabBarIconProps {
   focused: boolean | undefined;
@@ -19,7 +19,7 @@ const TabBarIcon = (props: TabBarIconProps) => {
     <View
       // eslint-disable-next-line react-native/no-inline-styles
       style={{
-        backgroundColor: props.focused ? '#D3E4FF' : 'transparent',
+        backgroundColor: props.focused ? '#FFD3D3' : 'transparent',
         ...styles.bottomTabImageContainer,
       }}>
       <Image
@@ -75,7 +75,7 @@ export default () => {
             }) => (
               <RegularText
                 type="body-small"
-                color={focused ? '#1B72C0' : '#44474E'}
+                color={focused ? '#BF2229' : '#44474E'}
                 style={styles.text}>
                 {children}
               </RegularText>
@@ -84,7 +84,7 @@ export default () => {
         />
         <Tab.Screen
           name="Report"
-          component={HomeScreen}
+          component={ReportsScreen}
           options={{
             title: 'Report',
             headerShown: true,
@@ -109,7 +109,7 @@ export default () => {
             }) => (
               <RegularText
                 type="body-small"
-                color={focused ? '#1B72C0' : '#44474E'}
+                color={focused ? '#BF2229' : '#44474E'}
                 style={styles.text}>
                 {children}
               </RegularText>
@@ -118,7 +118,7 @@ export default () => {
         />
         <Tab.Screen
           name="Account"
-          component={HomeScreen}
+          component={AccountScreen}
           options={{
             tabBarLabelStyle: {
               fontFamily: 'Poppins-Regular',
@@ -141,7 +141,7 @@ export default () => {
             }) => (
               <RegularText
                 type="body-small"
-                color={focused ? '#1B72C0' : '#44474E'}
+                color={focused ? '#BF2229' : '#44474E'}
                 style={styles.text}>
                 {children}
               </RegularText>

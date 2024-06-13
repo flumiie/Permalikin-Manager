@@ -8707,6 +8707,7 @@ __metadata:
     react-native-bootsplash: ^5.5.3
     react-native-bouncy-checkbox: ^4.0.1
     react-native-color-matrix-image-filters: ^6.0.9
+    react-native-date-picker: ^5.0.4
     react-native-fast-image: ^8.6.3
     react-native-gesture-handler: ^2.16.2
     react-native-image-crop-picker: ^0.41.1
@@ -9117,6 +9118,16 @@ __metadata:
     react: "*"
     react-native: "*"
   checksum: e7b876d8da57a85031fcbc7b6b449af450cf62d04e87cb62b10d59d1719674bf2dbb04da860e8e84f436e7efcabd390c7d2d86bcea1e4343e1378d6d85f07276
+  languageName: node
+  linkType: hard
+
+"react-native-date-picker@npm:^5.0.4":
+  version: 5.0.4
+  resolution: "react-native-date-picker@npm:5.0.4"
+  peerDependencies:
+    react: ">= 17.0.1"
+    react-native: ">= 0.64.3"
+  checksum: 67db7fba5de613c61a70b5b9274daef8c7d3b6f6cdc5a6063eb61126d4df43252c501c2cb78ebda37fb0997ccb0994e949976d0fb395453580019923100e03ad
   languageName: node
   linkType: hard
 

@@ -40,6 +40,7 @@
     "react-native-bootsplash": "^5.5.3",
     "react-native-bouncy-checkbox": "^4.0.1",
     "react-native-color-matrix-image-filters": "^6.0.9",
+    "react-native-date-picker": "^5.0.4",
     "react-native-fast-image": "^8.6.3",
     "react-native-gesture-handler": "^2.16.2",
     "react-native-image-crop-picker": "^0.41.1",

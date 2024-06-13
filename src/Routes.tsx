@@ -6,7 +6,12 @@ import { useMMKVStorage } from 'react-native-mmkv-storage';
 import { asyncStorage } from '../store';
 import BottomTabs from './BottomTabs';
 import { NavigationHeader } from './components';
-import { EasterEggScreen, SignInScreen, SignUpScreen } from './screens';
+import {
+  EasterEggScreen,
+  NewMasterDataScreen,
+  SignInScreen,
+  SignUpScreen,
+} from './screens';
 
 export type AuthStackParamList = {
   SignIn: undefined;
@@ -21,6 +26,7 @@ export type BottomTabsParamList = {
 
 export type RootStackParamList = {
   BottomTabs: NavigatorScreenParams<BottomTabsParamList>;
+  NewMasterData: undefined;
   EasterEgg: undefined;
 };
 
@@ -39,6 +45,11 @@ export default () => {
           name="BottomTabs"
           component={BottomTabs}
           options={{ headerShown: false }}
+        />
+        <MainStack.Screen
+          name="NewMasterData"
+          component={NewMasterDataScreen}
+          options={{ title: 'Data Baru' }}
         />
         <MainStack.Screen
           name="EasterEgg"

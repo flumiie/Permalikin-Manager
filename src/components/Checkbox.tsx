@@ -11,7 +11,7 @@ export default (props: CheckboxProps) => {
     <View
       // eslint-disable-next-line react-native/no-inline-styles
       style={{
-        borderColor: props.selected ? '#1B72C0' : '#CACACA',
+        borderColor: props.selected ? '#BF2229' : '#CACACA',
         ...styles.container,
       }}>
       {props.selected ? (
@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
   inner: {
     width: '100%',
     height: '100%',
-    backgroundColor: '#1B72C0',
+    backgroundColor: '#BF2229',
     alignItems: 'center',
     justifyContent: 'center',
   },

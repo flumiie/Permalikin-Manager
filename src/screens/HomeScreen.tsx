@@ -3,13 +3,13 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import React, { useEffect, useState } from 'react';
 import {
   FlatList,
-  Image,
   ImageSourcePropType,
   StatusBar,
   StyleSheet,
   View,
   ViewProps,
 } from 'react-native';
+import FastImage from 'react-native-fast-image';
 import { useMMKVStorage } from 'react-native-mmkv-storage';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/Feather';
@@ -36,11 +36,11 @@ const Header = (props: HeaderProps) => {
   return (
     <View {...props} style={headerStyles.header}>
       <View style={headerStyles.imageBackgroundColorOverlay} />
-      {/* <Image
-        source={require('../../assets/images/ampera-bg.png')}
-        resizeMode="cover"
+      <FastImage
+        source={require('../../assets/images/banner-clean.jpg')}
+        resizeMode="contain"
         style={headerStyles.imageBackground}
-      /> */}
+      />
       <View style={headerStyles.headerContents}>
         <BoldText type="title-large" color="#FAFAFA">
           Hello {props.user}
@@ -48,9 +48,9 @@ const Header = (props: HeaderProps) => {
         <Spacer height={2} />
 
         <RegularText type="body-medium" color="#E1E1E1">
-          Welcome back to Permalikin Manager App
+          Selamat datang di Permalikin Manager
         </RegularText>
-        <Spacer height={20} />
+        <Spacer height={8} />
 
         <View style={headerStyles.weatherContainer}>
           <View style={headerStyles.weatherLeftContents}>
@@ -92,19 +92,35 @@ type RespectorActionsType = {
 const RESPECTOR_ACTIONS: RespectorActionsType[] = [
   {
     id: 1,
-    icon: require('../../assets/images/clearances.png'),
-    title: 'Personels',
-    subtitle: 'Add data',
+    icon: require('../../assets/images/master.png'),
+    title: 'Master',
+    subtitle: 'Tambah baru',
     disabled: false,
-    screen: 'CreateNewClearance',
+    screen: 'NewMasterData',
   },
   {
     id: 2,
-    icon: require('../../assets/images/clearances.png'),
-    title: 'Check',
-    subtitle: 'Data check',
+    icon: require('../../assets/images/transactions.png'),
+    title: 'Transaksi',
+    subtitle: 'Tambah baru',
     disabled: false,
     screen: 'CreateNewVibration',
+  },
+  {
+    id: 3,
+    icon: require('../../assets/images/reports.png'),
+    title: 'Laporan',
+    subtitle: 'Tambah baru',
+    disabled: false,
+    screen: 'CreateNewVibration',
+  },
+  {
+    id: 4,
+    icon: undefined,
+    title: '',
+    subtitle: '',
+    disabled: true,
+    screen: '',
   },
 ];
 
@@ -184,10 +200,10 @@ export default () => {
       <View
         // eslint-disable-next-line react-native/no-inline-styles
         style={{
-          backgroundColor: contentOffset > headerHeight ? '#FFF' : '#1B72C0',
+          backgroundColor: contentOffset > headerHeight ? '#FFF' : '#BF2229',
         }}>
         <StatusBar
-          backgroundColor={contentOffset > headerHeight ? '#FCFCFF' : '#1B72C0'}
+          backgroundColor={contentOffset > headerHeight ? '#FCFCFF' : '#BF2229'}
         />
         <View
           // eslint-disable-next-line react-native/no-inline-styles
@@ -209,7 +225,7 @@ export default () => {
           ListHeaderComponent={
             <>
               <Header
-                user={userData?.name}
+                user="Yuslim"
                 weather="Sunny"
                 temperature={25}
                 onLayout={e => setHeaderHeight(e.nativeEvent.layout.height)}
@@ -253,7 +269,7 @@ const headerStyles = StyleSheet.create({
     alignSelf: 'center',
   },
   header: {
-    aspectRatio: 3 / 2,
+    aspectRatio: 2,
   },
   headerContents: {
     flex: 1,
@@ -272,7 +288,7 @@ const headerStyles = StyleSheet.create({
     position: 'absolute',
     width: '100%',
     height: '100%',
-    backgroundColor: '#1B72C0',
+    backgroundColor: '#BF2229',
   },
   weatherContainer: {
     flexDirection: 'row',
@@ -280,8 +296,8 @@ const headerStyles = StyleSheet.create({
     backgroundColor: 'rgba(252, 252, 255, 0.1)',
     width: '100%',
     borderRadius: 8,
-    paddingVertical: 12,
-    paddingHorizontal: 16,
+    paddingVertical: 10,
+    paddingHorizontal: 14,
   },
   weatherLeftContents: {
     flexDirection: 'row',

@@ -32,7 +32,7 @@ export default (props: DateInputProps) => {
       return '#F64C4C';
     }
     if ((input?.length ?? 0) > 0) {
-      return '#1B72C0';
+      return '#BF2229';
     }
     return '#E1E1E1';
   }, [input, props.error]);

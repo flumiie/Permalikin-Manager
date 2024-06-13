@@ -26,7 +26,7 @@ export default (props: ItemListProps) => {
   return (
     <View style={styles.container}>
       <Pressable
-        android_ripple={props.android_ripple ?? { color: '#1B72C066' }}
+        android_ripple={props.android_ripple ?? { color: '#BF222966' }}
         style={styles.pressable}
         onPress={props.onPress}>
         {props.date ? (

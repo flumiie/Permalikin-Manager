@@ -66,7 +66,7 @@ export default () => {
           paddingTop: 72 + insets.top,
           ...styles.container,
         }}>
-        <MediumText size={28} color="#1B72C0" style={styles.title}>
+        <MediumText size={28} color="#BF2229" style={styles.title}>
           Sign Up
         </MediumText>
         <Spacer height={40} />
@@ -165,7 +165,7 @@ export default () => {
               <View style={styles.tosCheck}>
                 <BouncyCheckbox
                   size={24}
-                  fillColor="#1B72C0"
+                  fillColor="#BF2229"
                   unFillColor="#FFF"
                   innerIconStyle={styles.checkboxIcon}
                   textComponent={
@@ -175,7 +175,7 @@ export default () => {
                         I agree to the{' '}
                         <RegularText
                           size={12}
-                          color="#1B72C0"
+                          color="#BF2229"
                           onPress={() => {
                             //TODO: Terms of Service page
                           }}>
@@ -184,7 +184,7 @@ export default () => {
                         and{' '}
                         <RegularText
                           size={12}
-                          color="#1B72C0"
+                          color="#BF2229"
                           onPress={() => {
                             //TODO: Privacy Policy page
                           }}>
@@ -223,7 +223,7 @@ export default () => {
             onPress={() => {
               navigation.goBack();
             }}>
-            <RegularText color="#1b72c0">Sign In</RegularText>
+            <RegularText color="#BF2229">Sign In</RegularText>
           </Pressable>
         </View>
       </View>

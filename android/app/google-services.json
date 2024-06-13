@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "813912710571",
+    "project_id": "permalikin-manager",
+    "storage_bucket": "permalikin-manager.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:813912710571:android:ad468925b18202f519c6ee",
+        "android_client_info": {
+          "package_name": "com.flumi.permalikinmanager"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA0z38HXXn1ytsyT-3uhQQKCV7VmR8wW3o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

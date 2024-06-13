@@ -88,7 +88,7 @@ export default () => {
               paddingTop: 72 + insets.top,
               ...styles.container,
             }}>
-            <MediumText size={28} color="#1B72C0" style={styles.title}>
+            <MediumText size={28} color="#BF2229" style={styles.title}>
               Sign In
             </MediumText>
             <Spacer height={40} />
@@ -150,7 +150,7 @@ export default () => {
                 onPress={() => {
                   navigation.navigate('SignUp');
                 }}>
-                <RegularText color="#1b72c0">Sign Up</RegularText>
+                <RegularText color="#BF2229">Sign Up</RegularText>
               </Pressable>
             </View>
           </View>

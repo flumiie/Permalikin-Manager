@@ -10,7 +10,7 @@ export default (props: RadioButtonProps) => {
     <View
       // eslint-disable-next-line react-native/no-inline-styles
       style={{
-        borderColor: props.selected ? '#1B72C0' : '#CACACA',
+        borderColor: props.selected ? '#BF2229' : '#CACACA',
         ...styles.container,
       }}>
       {props.selected ? <View style={styles.inner} /> : null}
@@ -32,6 +32,6 @@ const styles = StyleSheet.create({
     width: 12,
     height: 12,
     borderRadius: 12,
-    backgroundColor: '#1B72C0',
+    backgroundColor: '#BF2229',
   },
 });

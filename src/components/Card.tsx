@@ -7,11 +7,6 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import {
-  ColorMatrix,
-  concatColorMatrices,
-  grayscale,
-} from 'react-native-color-matrix-image-filters';
 
 import Spacer from './Spacer';
 import MediumText from './Text/MediumText';
@@ -31,20 +26,16 @@ export default (props: CardProps) => {
     <View style={{ ...styles.container, ...props.style }}>
       <Pressable
         disabled={props.disabled}
-        android_ripple={{ color: props.disabled ? 'transparent' : '#1B72C066' }}
+        android_ripple={{ color: props.disabled ? 'transparent' : '#BF222966' }}
         // eslint-disable-next-line react-native/no-inline-styles
         style={{
-          backgroundColor: props.disabled ? '#EEE' : '#EFF1F8',
+          borderColor: props.disabled ? 'transparent' : '#EEE',
+          backgroundColor: props.disabled ? 'transparent' : '#F8EFEF',
           ...styles.pressable,
         }}
         onPress={props.onPress}>
         {props.disabled ? (
-          <ColorMatrix matrix={concatColorMatrices(grayscale())}>
-            <Image
-              style={{ ...styles.image, ...styles.imageDisabled }}
-              source={props.icon}
-            />
-          </ColorMatrix>
+          <View />
         ) : (
           <Image style={styles.image} source={props.icon} />
         )}
@@ -54,7 +45,7 @@ export default (props: CardProps) => {
           <MediumText
             size={16}
             lineHeight={24}
-            color={props.disabled ? '#8E8E8E' : '#1F1F1F'}
+            color={props.disabled ? 'transparent' : '#1F1F1F'}
             style={styles.text}>
             {props.title}
           </MediumText>
@@ -81,7 +72,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     borderWidth: 1,
     borderRadius: 8,
-    borderColor: '#EEE',
     alignItems: 'center',
   },
   image: {
