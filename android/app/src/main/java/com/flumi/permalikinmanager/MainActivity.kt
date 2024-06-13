@@ -1,4 +1,4 @@
-package com.permalikinmanager
+package com.flumi.permalikinmanager
 
 import com.facebook.react.ReactActivity
 import com.facebook.react.ReactActivityDelegate

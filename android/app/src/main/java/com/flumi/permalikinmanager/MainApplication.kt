@@ -1,4 +1,4 @@
-package com.permalikinmanager
+package com.flumi.permalikinmanager
 
 import android.app.Application
 import com.facebook.react.PackageList
