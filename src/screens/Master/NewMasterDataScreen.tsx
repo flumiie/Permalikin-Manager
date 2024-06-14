@@ -1,6 +1,5 @@
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/core';
 import { StackNavigationProp } from '@react-navigation/stack';
-import dayjs from 'dayjs';
 import { Formik } from 'formik';
 import React, { useRef, useState } from 'react';
 import {
@@ -11,7 +10,6 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
-import DatePicker from 'react-native-date-picker';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import * as Yup from 'yup';
 
@@ -25,6 +23,7 @@ import {
   Spacer,
   TextInput,
 } from '../../components';
+import COUNTRIES from '../../libs/countries.json';
 
 const TYPES = ['OH', 'BB'];
 const AREAS = ['CDGP', 'CDL', 'UTL', 'OM', 'PP'];
@@ -37,7 +36,7 @@ export default () => {
   const fullNameInputRef = useRef<RNTextInput>(null);
   const birthPlaceDateInputRef = useRef<RNTextInput>(null);
   const identityCardAddressInputRef = useRef<RNTextInput>(null);
-  const domicileInputRef = useRef<RNTextInput>(null);
+  const countryInputRef = useRef<RNTextInput>(null);
   const areaInputRef = useRef<RNTextInput>(null);
   const areaCodeInputRef = useRef<RNTextInput>(null);
   const phoneNoInputRef = useRef<RNTextInput>(null);
@@ -47,6 +46,7 @@ export default () => {
   const balanceEndInputRef = useRef<RNTextInput>(null);
 
   const [showAreaDropdown, setShowAreaDropdown] = useState(false);
+  const [showCountriesDropdown, setShowCountriesDropdown] = useState(false);
   const [selectedType, setSelectedType] = useState<string | null>(null);
   const [selectedArea, setSelectedArea] = useState<string | null>(null);
 
@@ -82,7 +82,7 @@ export default () => {
           fullName: '',
           birthPlaceDate: '',
           identityCardAddress: '',
-          domicile: '',
+          country: '',
           area: '',
           areaCode: '',
           phoneNo: '',
@@ -126,6 +126,27 @@ export default () => {
               open={showAreaDropdown}
               title="Pilih Wilayah"
               options={AREAS}
+              selected={selectedArea}
+              onSelect={v => {
+                setSelectedArea(v);
+                setFieldValue('area', v);
+                areaInputRef.current?.blur();
+                // if (!values.fullName) {
+                //   fullNameInputRef.current?.focus();
+                // } else if (!values.birthPlaceDate) {
+                //   birthPlaceDateInputRef.current?.focus();
+                // }
+              }}
+              onClose={() => {
+                setShowAreaDropdown(false);
+                areaInputRef.current?.blur();
+              }}
+            />
+            <DropdownSelect
+              open={showCountriesDropdown}
+              title="Pilih Negara"
+              options={COUNTRIES.map(S => S.name)}
+              optionKeys={['name', 'code', 'continent']}
               selected={selectedArea}
               onSelect={v => {
                 setSelectedArea(v);
@@ -211,19 +232,20 @@ export default () => {
                   />
                   <Spacer height={16} />
                   <TextInput
-                    ref={domicileInputRef}
-                    id="domicile"
-                    label="Domisili"
-                    placeholder="Contoh: Jl. X, Blok A, No. 1"
+                    ref={countryInputRef}
+                    id="country"
+                    label="Negara"
+                    placeholder="Contoh: Indonesia"
                     filledTextColor
                     showSoftInputOnFocus={false}
-                    onChangeText={handleChange('domicile')}
-                    onBlur={handleBlur('domicile')}
-                    onSubmitEditing={() => {
-                      //
+                    onChangeText={handleChange('country')}
+                    onBlur={handleBlur('country')}
+                    onPress={() => {
+                      countryInputRef.current?.focus();
+                      setShowCountriesDropdown(true);
                     }}
-                    value={values.domicile}
-                    error={touched.domicile && errors.domicile}
+                    value={values.country}
+                    error={touched.country && errors.country}
                   />
                   <Spacer height={16} />
                   <TextInput
@@ -240,7 +262,7 @@ export default () => {
                     value={values.area}
                     error={touched.area && errors.area}
                     onPress={() => {
-                      domicileInputRef.current?.focus();
+                      countryInputRef.current?.focus();
                       setShowAreaDropdown(true);
                     }}
                   />
@@ -261,7 +283,7 @@ export default () => {
                       } else if (!values.timeCreated) {
                         identityCardAddressInputRef.current?.focus();
                       } else if (!values.type) {
-                        domicileInputRef.current?.focus();
+                        countryInputRef.current?.focus();
                       } else if (!values.area) {
                         areaInputRef.current?.focus();
                       }
