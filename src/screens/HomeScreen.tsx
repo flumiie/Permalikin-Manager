@@ -144,8 +144,6 @@ export default () => {
   );
   const [_, setSearchMode] = useMMKVStorage('searchMode', asyncStorage, false);
   const [userData, setUserData] = useState(null);
-  const [headerHeight, setHeaderHeight] = useState(0);
-  const [contentOffset, setContentOffset] = useState(0);
   const [showSnackbar, setShowSnackbar] = useState(false);
   const [snackbar, setSnackbar] = useState<{
     type: 'success' | 'error';
@@ -200,11 +198,11 @@ export default () => {
       <View
         // eslint-disable-next-line react-native/no-inline-styles
         style={{
-          backgroundColor: contentOffset > headerHeight ? '#FFF' : '#BF2229',
+          flex: 1,
+          backgroundColor: '#FFF',
         }}>
-        <StatusBar
-          backgroundColor={contentOffset > headerHeight ? '#FCFCFF' : '#BF2229'}
-        />
+        <StatusBar backgroundColor="#BF2229" />
+        <View style={styles.hiddenBackground} />
         <View
           // eslint-disable-next-line react-native/no-inline-styles
           style={{
@@ -221,15 +219,9 @@ export default () => {
         </View>
         <FlatList
           data={RESPECTOR_ACTIONS}
-          onScroll={e => setContentOffset(e.nativeEvent.contentOffset.y)}
           ListHeaderComponent={
             <>
-              <Header
-                user="Yuslim"
-                weather="Sunny"
-                temperature={25}
-                onLayout={e => setHeaderHeight(e.nativeEvent.layout.height)}
-              />
+              <Header user="Yuslim" weather="Sunny" temperature={25} />
               <Spacer height={18} />
             </>
           }
@@ -312,6 +304,7 @@ const headerStyles = StyleSheet.create({
 
 const styles = StyleSheet.create({
   container: {
+    flexGrow: 1,
     paddingBottom: 20,
     backgroundColor: '#FFF',
   },
@@ -321,6 +314,14 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingVertical: 6,
     paddingHorizontal: 20,
+  },
+  hiddenBackground: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    height: '45%',
+    backgroundColor: '#BF2229',
   },
   snackbarContainer: {
     position: 'absolute',

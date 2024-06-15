@@ -188,7 +188,7 @@ export default () => {
         <NavigationHeader {...props} useSearch search={setSearch} />
       ),
     });
-  }, [insets.top, navigation, route.params, credentials?.token]);
+  }, [navigation]);
 
   useEffect(() => {
     setLoading(true);

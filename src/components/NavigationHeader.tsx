@@ -89,16 +89,14 @@ export default ({ useSearch = false, ...props }: NavigationHeaderProps) => {
             </View>
           )}
         </Formik>
-        <View style={{ paddingTop: insets.top }}>
-          <Pressable onPress={() => setSearchMode(true)}>
-            <Icon
-              name="x"
-              size={24}
-              color="#74777F"
-              style={navHeaderStyles.backButtonIcon}
-            />
-          </Pressable>
-        </View>
+        <Pressable onPress={() => setSearchMode(true)}>
+          <Icon
+            name="x"
+            size={24}
+            color="#74777F"
+            style={navHeaderStyles.backButtonIcon}
+          />
+        </Pressable>
       </View>
     );
   }
@@ -135,16 +133,14 @@ export default ({ useSearch = false, ...props }: NavigationHeaderProps) => {
           }}>
           {props.options.title}
         </BoldText>
-        <View style={{ paddingTop: insets.top }}>
-          <Pressable onPress={() => setSearchMode(true)}>
-            <Icon
-              name="search"
-              size={24}
-              color="#74777F"
-              style={navHeaderStyles.backButtonIcon}
-            />
-          </Pressable>
-        </View>
+        <Pressable onPress={() => setSearchMode(true)}>
+          <Icon
+            name="search"
+            size={24}
+            color="#74777F"
+            style={navHeaderStyles.backButtonIcon}
+          />
+        </Pressable>
       </View>
     );
   }

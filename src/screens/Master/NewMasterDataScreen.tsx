@@ -47,7 +47,7 @@ export default () => {
 
   const [showAreaDropdown, setShowAreaDropdown] = useState(false);
   const [showCountriesDropdown, setShowCountriesDropdown] = useState(false);
-  const [selectedType, setSelectedType] = useState<string | null>(null);
+  const [selectedCountry, setSelectedCountry] = useState<string | null>(null);
   const [selectedArea, setSelectedArea] = useState<string | null>(null);
 
   const ValidationSchema = Yup.object().shape({
@@ -123,14 +123,14 @@ export default () => {
         }) => (
           <>
             <DropdownSelect
-              open={showAreaDropdown}
-              title="Pilih Wilayah"
-              options={AREAS}
-              selected={selectedArea}
+              open={showCountriesDropdown}
+              title="Pilih Negara"
+              options={COUNTRIES.map(S => S.name)}
+              selected={selectedCountry}
               onSelect={v => {
-                setSelectedArea(v);
-                setFieldValue('area', v);
-                areaInputRef.current?.blur();
+                setSelectedCountry(v);
+                setFieldValue('country', v);
+                countryInputRef.current?.blur();
                 // if (!values.fullName) {
                 //   fullNameInputRef.current?.focus();
                 // } else if (!values.birthPlaceDate) {
@@ -138,15 +138,14 @@ export default () => {
                 // }
               }}
               onClose={() => {
-                setShowAreaDropdown(false);
-                areaInputRef.current?.blur();
+                setShowCountriesDropdown(false);
+                countryInputRef.current?.blur();
               }}
             />
             <DropdownSelect
-              open={showCountriesDropdown}
-              title="Pilih Negara"
-              options={COUNTRIES.map(S => S.name)}
-              optionKeys={['name', 'code', 'continent']}
+              open={showAreaDropdown}
+              title="Pilih Wilayah"
+              options={AREAS}
               selected={selectedArea}
               onSelect={v => {
                 setSelectedArea(v);
@@ -178,8 +177,6 @@ export default () => {
                     label="Nama Lengkap"
                     placeholder="Contoh: Robbi Firmansyah"
                     filledTextColor
-                    showSoftInputOnFocus={false}
-                    rightIcons={{ custom: ['calendar'] }}
                     onChangeText={handleChange('fullName')}
                     onBlur={handleBlur('fullName')}
                     onSubmitEditing={() => {
@@ -238,6 +235,7 @@ export default () => {
                     placeholder="Contoh: Indonesia"
                     filledTextColor
                     showSoftInputOnFocus={false}
+                    rightIcons={{ custom: ['chevron-down'] }}
                     onChangeText={handleChange('country')}
                     onBlur={handleBlur('country')}
                     onPress={() => {

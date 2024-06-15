@@ -24,12 +24,7 @@ import MediumText from '../Text/MediumText';
 interface DropdownProps {
   open: boolean;
   title: string;
-  options:
-    | string[]
-    | {
-        label: string;
-        color?: string;
-      }[];
+  options: string[];
   selected: string | null;
   onSelect: (value: string) => void;
   onClose: () => void;
