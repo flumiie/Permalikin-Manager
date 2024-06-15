@@ -17,7 +17,7 @@ const store = configureStore({
 
 export type Dispatch = typeof store.dispatch;
 export type RootState = ReturnType<typeof store.getState>;
-export const HOST = 'https://HOST_URL_HERE';
+export const HOST = 'gs://permalikin-manager.appspot.com';
 export const asyncStorage = new MMKVLoader().initialize();
 
 export default store;

@@ -1,8 +1,10 @@
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { useNavigation } from '@react-navigation/core';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { Formik } from 'formik';
 import React, { useRef, useState } from 'react';
 import {
+  Dimensions,
   Pressable,
   TextInput as RNTextInput,
   StyleSheet,
@@ -10,6 +12,7 @@ import {
 } from 'react-native';
 import { useMMKVStorage } from 'react-native-mmkv-storage';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import * as Yup from 'yup';
 
 import { asyncStorage } from '../../store';
@@ -29,31 +32,58 @@ export default () => {
   const insets = useSafeAreaInsets();
   const dispatch = useAppDispatch();
   const navigation = useNavigation<StackNavigationProp<AuthStackParamList>>();
-  const [_, setCredentials] = useMMKVStorage(
-    'userCredentials',
-    asyncStorage,
-    null,
-  );
+  const [_, setCredentials] = useMMKVStorage<{
+    token: string;
+    name: string;
+    email: string;
+    photo: string;
+  }>('userCredentials', asyncStorage, {
+    token: '',
+    name: '',
+    email: '',
+    photo: '',
+  });
   const emailInputRef = useRef<RNTextInput>(null);
   const passwordInputRef = useRef<RNTextInput>(null);
   const [passwordInvisible, setPasswordInvisible] = useState(true);
-  const [isSnackbarVisible, setSnackbarVisible] = useState(false);
+  const [showSnackbar, setShowSnackbar] = useState(false);
+  const [snackbar, setSnackbar] = useState({
+    type: 'success' as 'success' | 'error',
+    message: '',
+  });
 
   const ValidationSchema = Yup.object().shape({
-    email: Yup.string()
-      .required('This field is mandatory')
-      .email('Invalid email address'),
-    password: Yup.string().required('This field is mandatory'),
+    email: Yup.string().email('Format email salah').required('Harus diisi'),
+    password: Yup.string().required('Harus diisi'),
   });
+
+  const handleGoogleSignIn = async () => {
+    try {
+      await GoogleSignin.hasPlayServices();
+      const userInfo = await GoogleSignin.signIn();
+      setCredentials({
+        token: userInfo.idToken ?? '',
+        name: userInfo.user.name ?? '',
+        email: userInfo.user.email ?? '',
+        photo: userInfo.user.photo ?? '',
+      });
+    } catch (error) {
+      setSnackbar({
+        type: 'error' as 'success' | 'error',
+        message: 'Ada kesalahan. Mohon coba sesaat lagi',
+      });
+      setShowSnackbar(true);
+    }
+  };
 
   return (
     <>
       <View style={{ paddingTop: insets.top }}>
         <Snackbar
-          visible={isSnackbarVisible}
-          onHide={() => setSnackbarVisible(false)}
-          type="error"
-          message="Wrong email or password"
+          visible={showSnackbar}
+          onHide={() => setShowSnackbar(false)}
+          type={snackbar.type}
+          message={snackbar.message}
         />
       </View>
       <Formik
@@ -70,7 +100,11 @@ export default () => {
                 setCredentials(v);
               },
               onError: () => {
-                setSnackbarVisible(true);
+                setSnackbar({
+                  type: 'error' as 'success' | 'error',
+                  message: 'Email atau password salah',
+                });
+                setShowSnackbar(true);
               },
             }),
           );
@@ -89,7 +123,7 @@ export default () => {
               ...styles.container,
             }}>
             <MediumText size={28} color="#BF2229" style={styles.title}>
-              Sign In
+              Login
             </MediumText>
             <Spacer height={40} />
             <TextInput
@@ -141,18 +175,34 @@ export default () => {
                 !!errors.password
               }
               onPress={handleSubmit}>
-              Sign In
+              Login
             </Button>
             <Spacer height={16} />
             <View style={styles.row}>
-              <RegularText>Don't have an account yet? </RegularText>
+              <RegularText>Belum ada akun? </RegularText>
               <Pressable
                 onPress={() => {
                   navigation.navigate('SignUp');
                 }}>
-                <RegularText color="#BF2229">Sign Up</RegularText>
+                <RegularText color="#BF2229">Registrasi</RegularText>
               </Pressable>
             </View>
+            <Spacer height={16} />
+            <Spacer
+              height={1}
+              width={Dimensions.get('window').width - 40}
+              color="#DDD"
+            />
+            <Spacer height={16} />
+            <Button type="primary" onPress={handleGoogleSignIn}>
+              <View style={styles.row}>
+                <FontAwesomeIcon name="google" size={18} color="#FFF" />
+                <Spacer width={8} />
+                <MediumText type="label-large" color="#FFF">
+                  Google
+                </MediumText>
+              </View>
+            </Button>
           </View>
         )}
       </Formik>
@@ -174,6 +224,7 @@ const styles = StyleSheet.create({
   },
   row: {
     flexDirection: 'row',
+    alignItems: 'center',
   },
   title: {
     textAlign: 'center',

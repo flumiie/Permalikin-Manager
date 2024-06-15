@@ -41,7 +41,11 @@ export default () => {
   const passwordInputRef = useRef<RNTextInput>(null);
   const [passwordInvisible, setPasswordInvisible] = useState(true);
   const [tosChecked, setTosChecked] = useState(false);
-  const [showSnackbarError, setShowSnackbarError] = useState(false);
+  const [showSnackbar, setShowSnackbar] = useState(false);
+  const [snackbar, setSnackbar] = useState({
+    type: 'success' as 'success' | 'error',
+    message: '',
+  });
 
   const ValidationSchema = Yup.object().shape({
     name: Yup.string().required('This field is mandatory'),
@@ -55,10 +59,10 @@ export default () => {
     <>
       <View style={{ paddingTop: insets.top }}>
         <Snackbar
-          visible={showSnackbarError}
-          onHide={() => setShowSnackbarError(false)}
-          type="error"
-          message="Something wrong happened. Please try again later"
+          visible={showSnackbar}
+          onHide={() => setShowSnackbar(false)}
+          type={snackbar.type}
+          message={snackbar.message}
         />
       </View>
       <View
@@ -67,7 +71,7 @@ export default () => {
           ...styles.container,
         }}>
         <MediumText size={28} color="#BF2229" style={styles.title}>
-          Sign Up
+          Registrasi
         </MediumText>
         <Spacer height={40} />
         <Formik
@@ -86,7 +90,11 @@ export default () => {
                   setRegistrationStatus(v);
                 },
                 onError: () => {
-                  setShowSnackbarError(true);
+                  setSnackbar({
+                    type: 'error' as 'success' | 'error',
+                    message: 'Ada kesalahan. Mohon coba lagi nanti',
+                  });
+                  setShowSnackbar(true);
                 },
               }),
             );
@@ -103,7 +111,7 @@ export default () => {
               <TextInput
                 ref={nameInputRef}
                 id="name"
-                placeholder="Name"
+                placeholder="Nama"
                 onChangeText={handleChange('name')}
                 onBlur={handleBlur('name')}
                 onSubmitEditing={() => {
@@ -162,42 +170,40 @@ export default () => {
                 error={touched.password && errors.password}
               />
               <Spacer height={20} />
-              <View style={styles.tosCheck}>
-                <BouncyCheckbox
-                  size={24}
-                  fillColor="#BF2229"
-                  unFillColor="#FFF"
-                  innerIconStyle={styles.checkboxIcon}
-                  textComponent={
-                    <>
-                      <Spacer width={14} />
-                      <RegularText size={12}>
-                        I agree to the{' '}
-                        <RegularText
-                          size={12}
-                          color="#BF2229"
-                          onPress={() => {
-                            //TODO: Terms of Service page
-                          }}>
-                          Terms of Service
-                        </RegularText>{' '}
-                        and{' '}
-                        <RegularText
-                          size={12}
-                          color="#BF2229"
-                          onPress={() => {
-                            //TODO: Privacy Policy page
-                          }}>
-                          Privacy Policy
-                        </RegularText>
+              <BouncyCheckbox
+                size={24}
+                fillColor="#BF2229"
+                unFillColor="#FFF"
+                innerIconStyle={styles.checkboxIcon}
+                textComponent={
+                  <View style={styles.checkboxContent}>
+                    <Spacer width={14} />
+                    <RegularText size={12} style={styles.textWrap}>
+                      Saya menyetujui{' '}
+                      <RegularText
+                        size={12}
+                        color="#BF2229"
+                        onPress={() => {
+                          //TODO: Terms of Service page
+                        }}>
+                        Persyaratan Layanan
+                      </RegularText>{' '}
+                      dan{' '}
+                      <RegularText
+                        size={12}
+                        color="#BF2229"
+                        onPress={() => {
+                          //TODO: Privacy Policy page
+                        }}>
+                        Kebijakan Privasi
                       </RegularText>
-                    </>
-                  }
-                  onPress={(isChecked: boolean) => {
-                    setTosChecked(isChecked);
-                  }}
-                />
-              </View>
+                    </RegularText>
+                  </View>
+                }
+                onPress={(isChecked: boolean) => {
+                  setTosChecked(isChecked);
+                }}
+              />
               <Spacer height={32} />
               <Button
                 type="primary"
@@ -246,7 +252,7 @@ const styles = StyleSheet.create({
   title: {
     textAlign: 'center',
   },
-  tosCheck: {
+  checkboxContent: {
     flexDirection: 'row',
   },
   checkboxIcon: {
@@ -255,5 +261,8 @@ const styles = StyleSheet.create({
   },
   signInButtonContainer: {
     flexDirection: 'row',
+  },
+  textWrap: {
+    flexShrink: 1,
   },
 });

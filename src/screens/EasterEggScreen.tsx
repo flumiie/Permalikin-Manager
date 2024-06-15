@@ -142,69 +142,6 @@ export default () => {
               </View>
             </Pressable>
           </View>
-          <Spacer height={16} />
-          <RegularText>UI Design by</RegularText>
-          <BoldText>Satrio Karuana</BoldText>
-          <View style={{ flexDirection: 'row' }}>
-            <Pressable
-              style={{ padding: 10, alignItems: 'center' }}
-              onPress={() =>
-                Linking.openURL('https://sharp-trip-047392.framer.app/')
-              }>
-              <Icon name="globe" size={20} color="rgb(158, 216, 72)" />
-              <Spacer height={4} />
-              <View
-                style={{
-                  padding: 4,
-                  borderRadius: 8,
-                  backgroundColor: 'rgba(255, 255, 255, 0.8)',
-                }}>
-                <RegularText size={11} color="rgb(158, 216, 72)">
-                  Web
-                </RegularText>
-              </View>
-            </Pressable>
-            <Spacer width={4} />
-            <Pressable
-              style={{ padding: 10, alignItems: 'center' }}
-              onPress={() =>
-                Linking.openURL(
-                  'https://id.linkedin.com/in/satrio-karuana-082a2316b',
-                )
-              }>
-              <Icon name="linkedin" size={20} color="rgb(109, 176, 241)" />
-              <Spacer height={4} />
-              <View
-                style={{
-                  padding: 4,
-                  borderRadius: 8,
-                  backgroundColor: 'rgba(255, 255, 255, 0.8)',
-                }}>
-                <RegularText size={11} color="rgb(109, 176, 241)">
-                  LinkedIn
-                </RegularText>
-              </View>
-            </Pressable>
-            <Spacer width={4} />
-            <Pressable
-              style={{ padding: 10, alignItems: 'center' }}
-              onPress={() =>
-                Linking.openURL('https://dribbble.com/Ansharstudio')
-              }>
-              <Icon name="dribbble" size={20} color="rgb(180, 53, 97)" />
-              <Spacer height={4} />
-              <View
-                style={{
-                  padding: 4,
-                  borderRadius: 8,
-                  backgroundColor: 'rgba(255, 255, 255, 0.8)',
-                }}>
-                <RegularText size={11} color="rgb(180, 53, 97)">
-                  Dribbble
-                </RegularText>
-              </View>
-            </Pressable>
-          </View>
         </View>
       </View>
     </>

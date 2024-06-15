@@ -36,7 +36,7 @@ const AuthStack = createStackNavigator<AuthStackParamList>();
 export default () => {
   const [credentials] = useMMKVStorage('userCredentials', asyncStorage, null);
 
-  if (!credentials) {
+  if (credentials) {
     return (
       <MainStack.Navigator
         initialRouteName="BottomTabs"
