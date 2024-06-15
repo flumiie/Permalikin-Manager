@@ -7,12 +7,25 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:813912710571:android:ad468925b18202f519c6ee",
+        "mobilesdk_app_id": "1:813912710571:android:ae49219ece7d835019c6ee",
         "android_client_info": {
           "package_name": "com.flumi.permalikinmanager"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "813912710571-e5p4ugb5jh9h1usapaqibb9j30qga4cn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.flumi.permalikinmanager",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "813912710571-9t6cgiusm83q5p8v8rcgnvh2gnd5mgvf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyA0z38HXXn1ytsyT-3uhQQKCV7VmR8wW3o"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "813912710571-9t6cgiusm83q5p8v8rcgnvh2gnd5mgvf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
