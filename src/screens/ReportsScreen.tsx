@@ -1,6 +1,6 @@
+import firestore from '@react-native-firebase/firestore';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/core';
 import { StackNavigationProp } from '@react-navigation/stack';
-import dayjs from 'dayjs';
 import React, { useEffect, useMemo, useState } from 'react';
 import {
   FlatList,
@@ -17,8 +17,6 @@ import { useAppDispatch } from '../../store/hooks';
 import { BottomTabsParamList, RootStackParamList } from '../Routes';
 import {
   DismissableView,
-  DropdownFilter,
-  DropdownMultiProps,
   Empty,
   ItemList,
   Loading,
@@ -28,30 +26,19 @@ import {
   Spacer,
   navHeaderStyles,
 } from '../components';
+import { MasterDataType } from '../libs/dataTypes';
 
 const ReportListItem = (props: { item: any; onPress: () => void }) => {
   const { item, onPress } = props;
 
-  const date = `${dayjs(dayjs(item.dateCreated, 'DD-MM-YYYY').toDate()).format(
-    'DD MMM',
-  )}, ${item.timeCreated}`;
-  const desc = () => {
-    if (item.category === 'vibration') {
-      const label = item.vibration?.remark
-        ?.replace(/†/g, '; ')
-        .substring(0, 40);
-      return `${label}${(label?.length ?? 0) > 40 ? '...' : ''}`;
-    }
-    return '';
-  };
-
   return (
     <ItemList
-      date={date}
-      leftImage="clearances"
-      imageType="small-icon"
-      title={item.tagNo}
-      sub={{ subtitle: item.type, desc: desc() }}
+      leftImage={require('../../assets/images/avatar.png')}
+      title={item.fullName}
+      sub={{
+        subtitle: item.email,
+        desc: item.phoneNo,
+      }}
       onPress={props.onPress}
     />
   );
@@ -59,8 +46,9 @@ const ReportListItem = (props: { item: any; onPress: () => void }) => {
 
 const ReportsScreenHeader = (props: {
   onSelectFilter: {
-    clearances: (selected: any) => void;
-    vibration: (selected: any) => void;
+    master: (selected: any) => void;
+    laporan: (selected: any) => void;
+    transaksi: (selected: any) => void;
   };
 }) => {
   return (
@@ -69,11 +57,11 @@ const ReportsScreenHeader = (props: {
       horizontal
       showsHorizontalScrollIndicator={false}
       contentContainerStyle={styles.pillsContainer}>
-      <Pills onSelect={props.onSelectFilter.clearances}>Master</Pills>
+      <Pills onSelect={props.onSelectFilter.master}>Master</Pills>
       <Spacer width={8} />
-      <Pills onSelect={props.onSelectFilter.vibration}>Laporan</Pills>
+      <Pills onSelect={props.onSelectFilter.laporan}>Laporan</Pills>
       <Spacer width={8} />
-      <Pills onSelect={props.onSelectFilter.vibration}>Transaksi</Pills>
+      <Pills onSelect={props.onSelectFilter.laporan}>Transaksi</Pills>
       <Spacer width={8} />
     </ScrollView>
   );
@@ -90,19 +78,32 @@ export default () => {
   }>('userCredentials', asyncStorage, {
     token: '',
   });
-  const [inspections, setInspections] = useMMKVStorage(
-    'inspections',
+  const [personels, setPersonels] = useMMKVStorage<MasterDataType[]>(
+    'personels',
     asyncStorage,
-    {
-      message: '',
-      data: [],
-      pagination: {
-        page: 0,
-        size: 0,
-        totalPage: 0,
-        totalData: 0,
+    [
+      {
+        avatar: '',
+        fullName: '',
+        birthPlaceDate: '',
+        religion: '',
+        address: {
+          identityCardAddress: '',
+          currentAddress: '',
+          country: '',
+          province: '',
+          city: '',
+          zipCode: '',
+        },
+        phoneNo: '',
+        email: '',
+        status: '',
+        balance: {
+          initial: '',
+          end: '',
+        },
       },
-    },
+    ],
   );
   const [_, setSearchMode] = useMMKVStorage('searchMode', asyncStorage, false);
 
@@ -113,46 +114,17 @@ export default () => {
     [],
   );
 
-  const filterSections: DropdownMultiProps['sections'] = useMemo(
-    () => [
-      {
-        type: 'checkbox',
-        title: 'Type',
-        options: ['OH', 'BB'],
-      },
-      {
-        type: 'dateRange',
-        title: 'Date',
-        options: [
-          dayjs().format('YYYY-MM-DD').toString(),
-          dayjs().add(1, 'week').format('YYYY-MM-DD').toString(),
-        ],
-      },
-      {
-        type: 'checkbox',
-        title: 'Area',
-        options: ['CDGP', 'CDL', 'UTL', 'OM', 'PP'],
-      },
-      {
-        type: 'radio',
-        title: 'Sort',
-        options: ['recently', 'oldest'],
-      },
-    ],
-    [],
-  );
-
   const filteredData = useMemo(() => {
-    let tempData: any[] = inspections?.data;
+    let tempData: MasterDataType[] = personels;
 
-    if (selectedCatFilter?.length) {
-      tempData = tempData.filter(data => {
-        if (selectedCatFilter) {
-          const filter = selectedCatFilter.find(S => S === data?.category);
-          return filter === data?.category;
-        }
-      });
-    }
+    // if (selectedCatFilter?.length) {
+    //   tempData = tempData.filter(data => {
+    //     if (selectedCatFilter) {
+    //       const filter = selectedCatFilter.find(S => S === data?.category);
+    //       return filter === data?.category;
+    //     }
+    //   });
+    // }
 
     if (search) {
       let processedSearch = search
@@ -161,14 +133,14 @@ export default () => {
         .toLowerCase();
       tempData = tempData.filter(
         S =>
-          S.tagNo.toLowerCase().includes(processedSearch) ||
-          S.type.toLowerCase().includes(processedSearch) ||
-          S.vibration?.remark.toLowerCase().includes(processedSearch),
+          S.fullName.toLowerCase().includes(processedSearch) ||
+          S.email.toLowerCase().includes(processedSearch) ||
+          S.phoneNo.toLowerCase().includes(processedSearch),
       );
     }
 
     return tempData;
-  }, [inspections, selectedCatFilter, search]);
+  }, [personels, selectedCatFilter, search]);
 
   const onSelectCatFilter = (props: {
     selected: boolean;
@@ -191,9 +163,20 @@ export default () => {
   }, [navigation]);
 
   useEffect(() => {
-    setLoading(true);
-    // dispatch();
-  }, [credentials?.token]);
+    if (credentials?.token) {
+      setLoading(true);
+      firestore()
+        .collection('Personels')
+        .get()
+        .then(querySnap => {
+          let temp: MasterDataType[] = [];
+          querySnap.forEach(docSnap => {
+            temp = [...temp, docSnap.data() as MasterDataType];
+          });
+          setPersonels(temp);
+        });
+    }
+  }, [credentials?.token, setPersonels]);
 
   useEffect(() => {
     if (filteredData) {
@@ -206,33 +189,21 @@ export default () => {
   return (
     <>
       <StatusBar barStyle="dark-content" />
-      <DropdownFilter
-        open={showMoreFiltersDropdown}
-        title="Filter"
-        sections={filterSections}
-        onApply={() => {
-          //TODO: Apply filters
-        }}
-        onClose={() => {
-          setShowMoreFiltersDropdown(false);
-          // setUnappliedFilters([
-          //   {
-          //     type: 'radio',
-          //     option: 'recently',
-          //   },
-          // ]);
-        }}
-      />
       {loading ? (
         <View style={styles.contentContainer}>
           <ReportsScreenHeader
             onSelectFilter={{
-              clearances: selected =>
+              master: selected =>
                 onSelectCatFilter({
                   selected,
                   category: 'Clearances',
                 }),
-              vibration: selected =>
+              laporan: selected =>
+                onSelectCatFilter({
+                  selected,
+                  category: 'Vibration',
+                }),
+              transaksi: selected =>
                 onSelectCatFilter({
                   selected,
                   category: 'Vibration',
@@ -245,27 +216,27 @@ export default () => {
         <DismissableView>
           <FlatList
             data={filteredData}
-            keyExtractor={item => item.id.toString()}
+            keyExtractor={item => item.id?.toString() ?? ''}
             contentContainerStyle={styles.contentContainer}
             ListHeaderComponent={
               <ReportsScreenHeader
                 onSelectFilter={{
-                  clearances: selected =>
+                  master: selected =>
                     onSelectCatFilter({
                       selected,
                       category: 'Clearances',
                     }),
-                  vibration: selected =>
+                  laporan: selected =>
+                    onSelectCatFilter({
+                      selected,
+                      category: 'Vibration',
+                    }),
+                  transaksi: selected =>
                     onSelectCatFilter({
                       selected,
                       category: 'Vibration',
                     }),
                 }}
-                moreFilterApplied={
-                  false
-                  // unappliedFilters.filter(S => S.option !== 'recently').length > 0
-                }
-                onShowMoreFilter={() => setShowMoreFiltersDropdown(true)}
               />
             }
             ListEmptyComponent={

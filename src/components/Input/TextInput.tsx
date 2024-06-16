@@ -14,10 +14,12 @@ import Spacer from '../Spacer';
 import RegularText from '../Text/RegularText';
 
 interface TextInputProps extends RNTextInputProps {
+  disabled?: boolean;
   label?: string;
   input?: string;
   error?: string | false;
   leftIcon?: string;
+  leftLabel?: string;
   rightIcons?: {
     password?: 'eye' | 'eye-off';
     custom?: string[];
@@ -54,33 +56,51 @@ export default forwardRef(
       return '#4B4B4B';
     }, [props.value, props.filledTextColor, onBlur]);
 
+    const LeftIcon = () => {
+      if (props.leftLabel) {
+        return (
+          <View style={styles.leftIcon}>
+            <RegularText>{props.leftLabel}</RegularText>
+          </View>
+        );
+      }
+      if (props.leftIcon) {
+        return (
+          <View style={styles.leftIcon}>
+            <Pressable style={styles.sideIcon} onPress={props.onPress}>
+              <Icon name={props.leftIcon} size={20} color="#00AB41" />
+            </Pressable>
+          </View>
+        );
+      }
+      return null;
+    };
+
     return (
       <>
         {props.label ? (
           <>
-            <RegularText type="body-medium" color="#4B4B4B">
+            <RegularText
+              type="body-medium"
+              color={props.disabled ? '#BBB' : '#4B4B4B'}>
               {props.label}
             </RegularText>
             <Spacer height={4} />
           </>
         ) : null}
-        <Pressable onPress={props.onPress} style={styles.container}>
+        <Pressable
+          onPress={!props.disabled ? props.onPress : null}
+          style={styles.container}>
           {props.onPress ? <View style={styles.pressableOverlay} /> : null}
-          {props.leftIcon ? (
-            <View style={styles.leftIcon}>
-              <Pressable style={styles.sideIcon} onPress={props.onPress}>
-                <Icon name={props.leftIcon} size={20} color="#00AB41" />
-              </Pressable>
-            </View>
-          ) : null}
-
+          <LeftIcon />
           <RNTextInput
             {...props}
             ref={ref}
+            editable={!props.disabled || props.editable}
             placeholder={`${props.leftIcon ? '         ' : ''}${
               props.placeholder
             }`}
-            placeholderTextColor="#8E8E8E"
+            placeholderTextColor={props.disabled ? '#BBB' : '#8E8E8E'}
             returnKeyType="next"
             onFocus={e => {
               props.onFocus?.(e);
@@ -96,6 +116,8 @@ export default forwardRef(
               borderColor,
               height: props.multiline ? 'auto' : 40,
               ...styles.input,
+              paddingLeft: props.leftIcon || props.leftLabel ? 36 : 12,
+              ...(props.disabled ? styles.darkerInput : null),
               ...props.inputStyle,
             }}
           />
@@ -128,7 +150,11 @@ export default forwardRef(
                 key={`${icon}${Math.random()}`}
                 style={styles.sideIcon}
                 onPress={props.onPress}>
-                <Icon name={icon} size={20} color="#00AB41" />
+                <Icon
+                  name={icon}
+                  size={20}
+                  color={props.disabled ? '#BBB' : '#00AB41'}
+                />
               </Pressable>
             ))}
           </View>
@@ -147,6 +173,9 @@ export default forwardRef(
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
+  },
+  darkerInput: {
+    backgroundColor: '#EFF1F8',
   },
   pressable: {
     position: 'absolute',
@@ -167,7 +196,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     backgroundColor: '#FFF',
     paddingVertical: 8,
-    paddingHorizontal: 12,
+    paddingRight: 12,
     fontFamily: 'Poppins-Regular',
     fontSize: 14,
     lineHeight: 20,

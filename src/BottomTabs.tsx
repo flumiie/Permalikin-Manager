@@ -95,8 +95,8 @@ export default () => {
               <TabBarIcon
                 focused={focused}
                 image={{
-                  focused: require('../assets/icons/account.png'),
-                  unfocused: require('../assets/icons/account-disabled.png'),
+                  focused: require('../assets/icons/report.png'),
+                  unfocused: require('../assets/icons/report-disabled.png'),
                 }}
               />
             ),

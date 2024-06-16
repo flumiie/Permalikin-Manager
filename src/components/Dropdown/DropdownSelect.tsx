@@ -84,7 +84,7 @@ export default (props: DropdownProps) => {
               ...styles.options,
             }}>
             {props.options.map((option, index) => {
-              if (typeof option === 'string') {
+              if (option) {
                 return (
                   <Pressable
                     key={index.toString()}
@@ -102,25 +102,7 @@ export default (props: DropdownProps) => {
                   </Pressable>
                 );
               }
-              return (
-                <Pressable
-                  key={index.toString()}
-                  style={styles.optionContainer}
-                  onPress={() => {
-                    props.onSelect(option.label);
-                    setTimeout(() => props.onClose(), 100);
-                  }}>
-                  <MediumText style={{ color: option.color ?? '' }}>
-                    {option.label}
-                  </MediumText>
-                  <RadioButton
-                    selected={
-                      option.label?.toLowerCase() ===
-                      props.selected?.toLowerCase()
-                    }
-                  />
-                </Pressable>
-              );
+              return null;
             })}
             <Spacer height={insets.bottom + 30} />
           </ScrollView>

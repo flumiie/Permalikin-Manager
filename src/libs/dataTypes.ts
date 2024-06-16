@@ -1,3 +1,25 @@
+export type MasterDataType = {
+  avatar: string;
+  fullName: string;
+  birthPlaceDate: string;
+  religion: string;
+  address: {
+    identityCardAddress: string;
+    currentAddress: string;
+    country: string;
+    province: string;
+    city: string;
+    zipCode: string;
+  };
+  phoneNo: string;
+  email: string;
+  status: string;
+  balance: {
+    initial: string;
+    end: string;
+  };
+};
+
 export type CountryType =
   | {
       name: string;
@@ -12,7 +34,7 @@ export type CityType =
       name: string;
       country: string;
       admin1: string;
-      admin2:string;
+      admin2: string;
       lat: string;
       lng: string;
     }

@@ -15,9 +15,7 @@ type SubtitleType = {
 
 interface ItemListProps extends PressableProps {
   leftImage: number | Source;
-  imageType: 'large-image' | 'small-icon';
   title: string;
-  date?: string;
   sub?: SubtitleType | BadgeProps;
   onPress: () => void;
 }
@@ -29,33 +27,20 @@ export default (props: ItemListProps) => {
         android_ripple={props.android_ripple ?? { color: '#BF222966' }}
         style={styles.pressable}
         onPress={props.onPress}>
-        {props.date ? (
-          <>
-            <RegularText size={11} color="#4B4B4B">
-              {props.date}
-            </RegularText>
-            <Spacer height={8} />
-          </>
-        ) : null}
-
         <View style={styles.contents}>
           <View style={styles.listLeftContents}>
             <View
               // eslint-disable-next-line react-native/no-inline-styles
               style={{
-                width: props.imageType === 'large-image' ? 68 : 56,
-                height: props.imageType === 'large-image' ? 68 : 56,
+                width: 56,
+                height: 56,
                 ...styles.imageContainer,
               }}>
               <FastImage
                 defaultSource={require('../../../assets/images/gears.jpeg')}
                 source={props.leftImage}
                 resizeMode={FastImage.resizeMode.cover}
-                style={
-                  props.imageType === 'large-image'
-                    ? styles.largeImage
-                    : styles.image
-                }
+                style={styles.largeImage}
               />
             </View>
             <Spacer width={12} />
@@ -113,19 +98,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   imageContainer: {
-    borderRadius: 8,
+    borderRadius: 30,
     overflow: 'hidden',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#EFF1F8',
   },
   largeImage: {
     width: '100%',
     height: '100%',
-  },
-  image: {
-    width: 40,
-    height: 40,
   },
   badgeContainer: {
     alignSelf: 'flex-start',

@@ -62,7 +62,7 @@ export default (props: ButtonProps) => {
     if (props.android_ripple) {
       return props.android_ripple;
     }
-    return { color: '#84b5ff' };
+    return { color: '#FF8484' };
   }, [props.disabled, props.android_ripple]);
 
   return (

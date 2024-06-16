@@ -15,7 +15,6 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/Feather';
 
 import { asyncStorage } from '../../store';
-import getUserData from '../../store/actions/getUserData';
 import { RootStackParamList } from '../Routes';
 import {
   BoldText,
@@ -142,7 +141,7 @@ export default () => {
   const [addDataStatus, setAddDataStatus] = useMMKVStorage(
     'addDataStatus',
     asyncStorage,
-    '',
+    false,
   );
   const [_, setSearchMode] = useMMKVStorage('searchMode', asyncStorage, false);
   const [showSnackbar, setShowSnackbar] = useState(false);
@@ -154,53 +153,45 @@ export default () => {
     message: '',
   });
 
-  useEffect(() => {
-    if (credentials) {
-      setSnackbar({
-        type: 'success',
-        message: `Selamat datang kembali, ${credentials?.name}`,
-      });
-      setShowSnackbar(true);
-    }
-
-    // getUserData({
-    //   token: credentials?.token,
-    //   onSuccess: v => {
-    //     console.log(v);
-    //     setSnackbar({
-    //       type: 'success',
-    //       message: `Selamat datang kembali, ${credentials?.name}`,
-    //     });
-    //     setShowSnackbar(true);
-    //   },
-    //   onError: v => {
-    //     console.log(v);
-    //     setSnackbar({
-    //       type: 'error',
-    //       message: 'Ada kesalahan. Mohon coba sesaat lagi',
-    //     });
-    //     setShowSnackbar(true);
-    //   },
-    // });
-  }, [credentials]);
+  // useEffect(() => {
+  //   getUserData({
+  //     token: credentials?.token,
+  //     onSuccess: v => {
+  //       console.log(v);
+  //       setSnackbar({
+  //         type: 'success',
+  //         message: `Selamat datang kembali, ${credentials?.name}`,
+  //       });
+  //       setShowSnackbar(true);
+  //     },
+  //     onError: v => {
+  //       console.log(v);
+  //       setSnackbar({
+  //         type: 'error',
+  //         message: 'Ada kesalahan. Mohon coba sesaat lagi',
+  //       });
+  //       setShowSnackbar(true);
+  //     },
+  //   });
+  // }, [credentials]);
 
   useEffect(() => {
-    if (registrationStatus) {
+    if (registrationStatus && credentials?.token) {
       setSnackbar({
         type: 'success',
-        message: 'Registration successful',
+        message: `Registrasi berhasil, selamat datang ${credentials?.token}`,
       });
       setShowSnackbar(true);
       setRegistrationStatus(null);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [registrationStatus]);
+  }, [registrationStatus, credentials?.token]);
 
   useEffect(() => {
     if (addDataStatus) {
       setSnackbar({
         type: 'success',
-        message: 'Data successfully added',
+        message: 'Data sudah tersimpan',
       });
       setShowSnackbar(true);
       setAddDataStatus('');
