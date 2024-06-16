@@ -3,6 +3,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { Formik } from 'formik';
 import React, { useRef, useState } from 'react';
 import {
+  Dimensions,
   TextInput as RNTextInput,
   SafeAreaView,
   ScrollView,
@@ -19,14 +20,18 @@ import {
   Button,
   DismissableView,
   DropdownSelect,
+  MediumText,
   RegularText,
   Spacer,
   TextInput,
 } from '../../components';
+import CITIES from '../../libs/cities.json';
 import COUNTRIES from '../../libs/countries.json';
+import { CityType, CountryType } from '../../libs/dataTypes';
+import { decimalize, getProvincesFromCountry } from '../../libs/functions';
 
 const TYPES = ['OH', 'BB'];
-const AREAS = ['CDGP', 'CDL', 'UTL', 'OM', 'PP'];
+const STATES = ['CDGP', 'CDL', 'UTL', 'OM', 'PP'];
 
 export default () => {
   const insets = useSafeAreaInsets();
@@ -37,40 +42,52 @@ export default () => {
   const birthPlaceDateInputRef = useRef<RNTextInput>(null);
   const identityCardAddressInputRef = useRef<RNTextInput>(null);
   const countryInputRef = useRef<RNTextInput>(null);
-  const areaInputRef = useRef<RNTextInput>(null);
-  const areaCodeInputRef = useRef<RNTextInput>(null);
+  const stateInputRef = useRef<RNTextInput>(null);
+  const cityInputRef = useRef<RNTextInput>(null);
+  const zipCodeInputRef = useRef<RNTextInput>(null);
   const phoneNoInputRef = useRef<RNTextInput>(null);
   const emailInputRef = useRef<RNTextInput>(null);
   const statusInputRef = useRef<RNTextInput>(null);
   const balanceInitialInputRef = useRef<RNTextInput>(null);
   const balanceEndInputRef = useRef<RNTextInput>(null);
 
-  const [showAreaDropdown, setShowAreaDropdown] = useState(false);
-  const [showCountriesDropdown, setShowCountriesDropdown] = useState(false);
-  const [selectedCountry, setSelectedCountry] = useState<string | null>(null);
-  const [selectedArea, setSelectedArea] = useState<string | null>(null);
+  // const [showCountriesDropdown, setShowCountriesDropdown] = useState(false);
+  // const [showProvinceDropdown, setShowProvinceDropdown] = useState(false);
+  // const [showCitiesDropdown, setShowCitiesDropdown] = useState(false);
+  // const [showZipCodeDropdown, setShowZipCodeDropdown] = useState(false);
+  // const [selectedCountry, setSelectedCountry] = useState<CountryType>({
+  //   name: '',
+  //   code: '',
+  //   continent: '',
+  // });
+  // const [selectedProvince, setSelectedProvince] = useState<string | null>(null);
+  // const [selectedCity, setSelectedCity] = useState<CityType>({
+  //   name: '',
+  //   country: '',
+  //   admin1: '',
+  //   admin2: '',
+  //   lat: '',
+  //   lng: '',
+  // });
+  // const [selectedZipCode, setSelectedZipCode] = useState<string | null>(null);
 
   const ValidationSchema = Yup.object().shape({
-    areaCode: Yup.string().required('Harus diisi'),
-    dateCreated: Yup.string()
-      .matches(
-        /^\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$/g,
-        'Format must be yyyy-mm-dd',
-      )
-      .required('Harus diisi'),
-    timeCreated: Yup.string()
-      .matches(
-        /^([0-1][0-9]|2[0-3]):[0-5][0-9]$/g,
-        'Format must be in 24h format',
-      )
-      .required('Harus diisi'),
-    type: Yup.string()
-      .matches(/^(OH|BB)$/g, 'Please select the correct type')
-      .required('Harus diisi'),
-    unit: Yup.string().required('Harus diisi'),
-    area: Yup.string()
-      .matches(/^(CDGP|CDL|UTL|OM|PP)$/g, 'Please select the correct area')
-      .required('Harus diisi'),
+    fullName: Yup.string().required('Harus diisi'),
+    birthPlaceDate: Yup.string().required('Harus diisi'),
+    address: Yup.object({
+      identityCardAddress: Yup.string().required('Harus diisi'),
+      country: Yup.string().required('Harus diisi'),
+      state: Yup.string().required('Harus diisi'),
+      city: Yup.string().required('Harus diisi'),
+      zipCode: Yup.string().required('Harus diisi'),
+    }),
+    phoneNo: Yup.string().required('Harus diisi'),
+    email: Yup.string().email('Format email salah').required('Harus diisi'),
+    status: Yup.string().required('Harus diisi'),
+    balance: Yup.object({
+      initial: Yup.string().required('Harus diisi'),
+      end: Yup.string().required('Harus diisi'),
+    }),
   });
 
   return (
@@ -81,16 +98,19 @@ export default () => {
         initialValues={{
           fullName: '',
           birthPlaceDate: '',
-          identityCardAddress: '',
-          country: '',
-          area: '',
-          areaCode: '',
           phoneNo: '',
           email: '',
           status: '',
+          address: {
+            identityCardAddress: '',
+            country: '',
+            state: '',
+            zipCode: '',
+            city: '',
+          },
           balance: {
-            initial: 0,
-            end: 0,
+            initial: '',
+            end: '',
           },
         }}
         validateOnBlur
@@ -122,14 +142,17 @@ export default () => {
           setFieldValue,
         }) => (
           <>
-            <DropdownSelect
+            {/* <DropdownSelect
               open={showCountriesDropdown}
               title="Pilih Negara"
               options={COUNTRIES.map(S => S.name)}
-              selected={selectedCountry}
+              selected={selectedCountry?.name ?? ''}
               onSelect={v => {
-                setSelectedCountry(v);
-                setFieldValue('country', v);
+                const countryFound = COUNTRIES.find(
+                  S => S.name === v && S.filename !== undefined,
+                );
+                setSelectedCountry(countryFound);
+                setFieldValue('address.country', v);
                 countryInputRef.current?.blur();
                 // if (!values.fullName) {
                 //   fullNameInputRef.current?.focus();
@@ -143,14 +166,18 @@ export default () => {
               }}
             />
             <DropdownSelect
-              open={showAreaDropdown}
-              title="Pilih Wilayah"
-              options={AREAS}
-              selected={selectedArea}
+              open={showProvinceDropdown}
+              title="Pilih Provinsi"
+              options={
+                getProvincesFromCountry(selectedCountry?.name).map(
+                  S => S?.name,
+                ) ?? ['']
+              }
+              selected={selectedProvince}
               onSelect={v => {
-                setSelectedArea(v);
-                setFieldValue('area', v);
-                areaInputRef.current?.blur();
+                setSelectedProvince(v);
+                setFieldValue('address.state', v);
+                stateInputRef.current?.blur();
                 // if (!values.fullName) {
                 //   fullNameInputRef.current?.focus();
                 // } else if (!values.birthPlaceDate) {
@@ -158,17 +185,62 @@ export default () => {
                 // }
               }}
               onClose={() => {
-                setShowAreaDropdown(false);
-                areaInputRef.current?.blur();
+                setShowProvinceDropdown(false);
+                stateInputRef.current?.blur();
               }}
             />
+            <DropdownSelect
+              open={showCitiesDropdown}
+              title="Pilih Kota"
+              options={(CITIES as CityType[])
+                .filter(
+                  S => (S?.country ?? '') === (selectedCountry?.code ?? ''),
+                )
+                .map(S => S?.name ?? '')}
+              selected={selectedCity?.name ?? ''}
+              onSelect={v => {
+                const res = (CITIES as CityType[]).find(S => S?.name === v);
+                setSelectedCity(res);
+                setFieldValue('address.city', res?.name);
+                cityInputRef.current?.blur();
+                // if (!values.fullName) {
+                //   fullNameInputRef.current?.focus();
+                // } else if (!values.birthPlaceDate) {
+                //   birthPlaceDateInputRef.current?.focus();
+                // }
+              }}
+              onClose={() => {
+                setShowCitiesDropdown(false);
+                cityInputRef.current?.blur();
+              }}
+            />
+            <DropdownSelect
+              open={showZipCodeDropdown}
+              title="Pilih Kode Pos"
+              options={['Zip code list here']}
+              selected={selectedZipCode}
+              onSelect={v => {
+                setSelectedZipCode(v);
+                setFieldValue('address.zipCode', v);
+                zipCodeInputRef.current?.blur();
+                // if (!values.fullName) {
+                //   fullNameInputRef.current?.focus();
+                // } else if (!values.birthPlaceDate) {
+                //   birthPlaceDateInputRef.current?.focus();
+                // }
+              }}
+              onClose={() => {
+                setShowZipCodeDropdown(false);
+                zipCodeInputRef.current?.blur();
+              }}
+            /> */}
             <ScrollView style={styles.container}>
               <SafeAreaView>
-                <DismissableView>
+                <DismissableView style={styles.contentContainer}>
                   <BoldText type="title-medium">Buat master data baru</BoldText>
                   <Spacer height={4} />
                   <RegularText type="body-small" color="#4B4B4B">
-                    Please input these data first to continue.
+                    Silakan masukan data terlebih dahulu untuk melanjutkan
                   </RegularText>
                   <Spacer height={24} />
                   <TextInput
@@ -212,21 +284,68 @@ export default () => {
                   />
                   <Spacer height={16} />
                   <TextInput
+                    ref={phoneNoInputRef}
+                    id="phoneNo"
+                    label="Nomor HP"
+                    placeholder="Contoh: 082111983759"
+                    filledTextColor
+                    onChangeText={handleChange('phoneNo')}
+                    onBlur={handleBlur('phoneNo')}
+                    value={values.phoneNo}
+                    error={touched.phoneNo && errors.phoneNo}
+                  />
+                  <Spacer height={16} />
+                  <TextInput
+                    ref={emailInputRef}
+                    id="email"
+                    label="Email"
+                    placeholder="Contoh: robbi@gmail.com"
+                    filledTextColor
+                    onChangeText={handleChange('email')}
+                    onBlur={handleBlur('email')}
+                    value={values.email}
+                    error={touched.email && errors.email}
+                  />
+                  <Spacer height={16} />
+                  <TextInput
+                    ref={statusInputRef}
+                    id="status"
+                    label="Status"
+                    placeholder="Contoh: Menikah"
+                    filledTextColor
+                    onChangeText={handleChange('status')}
+                    onBlur={handleBlur('status')}
+                    value={values.status}
+                    error={touched.status && errors.status}
+                  />
+                  <Spacer height={16} />
+                  <TextInput
                     ref={identityCardAddressInputRef}
                     id="identity-card-address"
                     label="Alamat KTP"
                     placeholder="Contoh: Jl. X, Blok A, No. 1"
                     filledTextColor
-                    onChangeText={handleChange('identityCardAddress')}
-                    onBlur={handleBlur('identityCardAddress')}
+                    onChangeText={handleChange('address.identityCardAddress')}
+                    onBlur={handleBlur('address.identityCardAddress')}
                     onSubmitEditing={() => {
                       //
                     }}
-                    value={values.identityCardAddress}
+                    value={values.address?.identityCardAddress}
                     error={
-                      touched.identityCardAddress && errors.identityCardAddress
+                      touched.address?.identityCardAddress &&
+                      errors.address?.identityCardAddress
                     }
                   />
+                </DismissableView>
+
+                <Spacer
+                  height={1}
+                  width={Dimensions.get('window').width}
+                  color="#DDD"
+                />
+
+                <DismissableView style={styles.contentContainer}>
+                  <MediumText type="label-large">Domisili</MediumText>
                   <Spacer height={16} />
                   <TextInput
                     ref={countryInputRef}
@@ -234,80 +353,141 @@ export default () => {
                     label="Negara"
                     placeholder="Contoh: Indonesia"
                     filledTextColor
-                    showSoftInputOnFocus={false}
-                    rightIcons={{ custom: ['chevron-down'] }}
-                    onChangeText={handleChange('country')}
-                    onBlur={handleBlur('country')}
-                    onPress={() => {
-                      countryInputRef.current?.focus();
-                      setShowCountriesDropdown(true);
-                    }}
-                    value={values.country}
-                    error={touched.country && errors.country}
+                    // showSoftInputOnFocus={false}
+                    // rightIcons={{ custom: ['chevron-down'] }}
+                    onChangeText={handleChange('address.country')}
+                    onBlur={handleBlur('address.country')}
+                    // onPress={() => {
+                    //   countryInputRef.current?.focus();
+                    //   setShowCountriesDropdown(true);
+                    // }}
+                    value={`${values.address.country
+                      .charAt(0)
+                      .toUpperCase()}${values.address?.country.substring(1)}`}
+                    error={touched.address?.country && errors.address?.country}
+                  />
+
+                  <Spacer height={16} />
+                  <TextInput
+                    ref={stateInputRef}
+                    // disabled={!values.address?.country}
+                    id="state"
+                    label="Provinsi"
+                    placeholder="Contoh: Jawa Barat"
+                    filledTextColor
+                    // showSoftInputOnFocus={false}
+                    // rightIcons={{ custom: ['chevron-down'] }}
+                    onChangeText={handleChange('address.state')}
+                    onBlur={handleBlur('address.state')}
+                    // onFocus={() => {
+                    //   if (selectedCountry?.filename) {
+                    //     setShowProvinceDropdown(true);
+                    //   }
+                    // }}
+                    value={`${values.address.state
+                      .charAt(0)
+                      .toUpperCase()}${values.address?.state.substring(1)}`}
+                    error={touched.address?.state && errors.address?.state}
+                    // onPress={() => {
+                    //   stateInputRef.current?.focus();
+                    //   if (selectedCountry?.filename) {
+                    //     setShowProvinceDropdown(true);
+                    //   }
+                    // }}
+                  />
+
+                  <Spacer height={16} />
+                  <TextInput
+                    ref={cityInputRef}
+                    // disabled={!values.address?.state}
+                    id="city"
+                    label="Kota"
+                    placeholder="Contoh: Bekasi"
+                    filledTextColor
+                    // showSoftInputOnFocus={false}
+                    // rightIcons={{ custom: ['chevron-down'] }}
+                    onChangeText={handleChange('address.city')}
+                    onBlur={handleBlur('address.city')}
+                    // onFocus={() => setShowCitiesDropdown(true)}
+                    value={`${values.address.city
+                      .charAt(0)
+                      .toUpperCase()}${values.address?.city.substring(1)}`}
+                    error={touched.address?.city && errors.address?.city}
+                    // onPress={() => {
+                    //   cityInputRef.current?.focus();
+                    //   setShowCitiesDropdown(true);
+                    // }}
                   />
                   <Spacer height={16} />
                   <TextInput
-                    ref={areaInputRef}
-                    id="area"
-                    label="Wilayah"
-                    placeholder="Pilih ..."
+                    ref={zipCodeInputRef}
+                    // disabled={!values.address?.city}
+                    id="zipCode"
+                    label="Kode Pos"
+                    placeholder="Contoh: 12345"
                     filledTextColor
-                    showSoftInputOnFocus={false}
-                    rightIcons={{ custom: ['chevron-down'] }}
-                    onChangeText={handleChange('area')}
-                    onBlur={handleBlur('area')}
-                    onFocus={() => setShowAreaDropdown(true)}
-                    value={values.area}
-                    error={touched.area && errors.area}
-                    onPress={() => {
-                      countryInputRef.current?.focus();
-                      setShowAreaDropdown(true);
-                    }}
+                    keyboardType="number-pad"
+                    // showSoftInputOnFocus={false}
+                    // rightIcons={{ custom: ['chevron-down'] }}
+                    onChangeText={handleChange('address.zipCode')}
+                    onBlur={handleBlur('address.zipCode')}
+                    // onFocus={() => setShowZipCodeDropdown(true)}
+                    value={values.address.zipCode.replace(/[.|,| |-]/g, '')}
+                    error={touched.address?.zipCode && errors.address?.zipCode}
+                    // onPress={() => {
+                    //   zipCodeInputRef.current?.focus();
+                    //   setShowZipCodeDropdown(true);
+                    // }}
+                  />
+                </DismissableView>
+
+                <Spacer
+                  height={1}
+                  width={Dimensions.get('window').width}
+                  color="#DDD"
+                />
+
+                <DismissableView style={styles.contentContainer}>
+                  <MediumText type="label-large">Saldo</MediumText>
+                  <Spacer height={16} />
+                  <TextInput
+                    ref={balanceInitialInputRef}
+                    id="initial-balance"
+                    label="Saldo Awal"
+                    placeholder="Contoh: 1000000"
+                    filledTextColor
+                    keyboardType="decimal-pad"
+                    leftLabel="Rp"
+                    onChangeText={handleChange('balance.initial')}
+                    onBlur={handleBlur('balance.initial')}
+                    value={
+                      values.balance.initial
+                        ? Number(
+                            values.balance.initial.replace(/[.|,| ]/g, ''),
+                          ).toLocaleString()
+                        : ''
+                    }
+                    error={touched.balance?.initial && errors.balance?.initial}
                   />
                   <Spacer height={16} />
                   <TextInput
-                    ref={phoneNoInputRef}
-                    id="unit"
-                    label="Unit"
-                    placeholder="example: RPM"
+                    ref={balanceEndInputRef}
+                    id="end-balance"
+                    label="Saldo Akhir"
+                    placeholder="Contoh: 1000000"
                     filledTextColor
-                    onChangeText={handleChange('unit')}
-                    onBlur={handleBlur('unit')}
-                    onSubmitEditing={() => {
-                      if (!values.areaCode) {
-                        areaCodeInputRef.current?.focus();
-                      } else if (!values.fullName) {
-                        birthPlaceDateInputRef.current?.focus();
-                      } else if (!values.timeCreated) {
-                        identityCardAddressInputRef.current?.focus();
-                      } else if (!values.type) {
-                        countryInputRef.current?.focus();
-                      } else if (!values.area) {
-                        areaInputRef.current?.focus();
-                      }
-                    }}
-                    value={values.unit}
-                    error={touched.unit && errors.unit}
-                    inputStyle={styles.darkerInput}
-                  />
-                  <Spacer height={16} />
-                  <TextInput
-                    ref={areaInputRef}
-                    id="area"
-                    label="Area"
-                    placeholder="Choose one"
-                    filledTextColor
-                    showSoftInputOnFocus={false}
-                    rightIcons={{ custom: ['chevron-down'] }}
-                    onChangeText={handleChange('area')}
-                    onBlur={handleBlur('area')}
-                    onFocus={() => setShowAreaDropdown(true)}
-                    value={values.area}
-                    error={touched.area && errors.area}
-                    onPress={() => {
-                      areaInputRef.current?.focus();
-                      setShowAreaDropdown(true);
-                    }}
+                    keyboardType="decimal-pad"
+                    leftLabel="Rp"
+                    onChangeText={handleChange('balance.end')}
+                    onBlur={handleBlur('balance.end')}
+                    value={
+                      values.balance.end
+                        ? Number(
+                            values.balance.end.replace(/[.|,| ]/g, ''),
+                          ).toLocaleString()
+                        : ''
+                    }
+                    error={touched.balance?.end && errors.balance?.end}
                   />
                   <Spacer height={44} />
                 </DismissableView>
@@ -321,18 +501,30 @@ export default () => {
               <Button
                 type="primary"
                 disabled={
-                  !values.areaCode ||
-                  !!errors.areaCode ||
                   !values.fullName ||
                   !!errors.fullName ||
-                  !values.timeCreated ||
-                  !!errors.timeCreated ||
-                  !values.type ||
-                  !!errors.type ||
-                  !values.unit ||
-                  !!errors.unit ||
-                  !values.area ||
-                  !!errors.area
+                  !values.birthPlaceDate ||
+                  !!errors.birthPlaceDate ||
+                  !values.phoneNo ||
+                  !!errors.phoneNo ||
+                  !values.email ||
+                  !!errors.email ||
+                  !values.status ||
+                  !!errors.status ||
+                  !values.address?.identityCardAddress ||
+                  !!errors.address?.identityCardAddress ||
+                  !values.address?.country ||
+                  !!errors.address?.country ||
+                  !values.address?.state ||
+                  !!errors.address?.state ||
+                  !values.address?.zipCode ||
+                  !!errors.address?.zipCode ||
+                  !values.address?.city ||
+                  !!errors.address?.city ||
+                  !values.balance?.initial ||
+                  !!errors.balance?.initial ||
+                  !values.balance?.end ||
+                  !!errors.balance?.end
                 }
                 onPress={handleSubmit}>
                 Next
@@ -348,6 +540,8 @@ export default () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  contentContainer: {
     padding: 20,
   },
   buttonContainer: {
@@ -356,8 +550,5 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: '#EEE',
     backgroundColor: '#FFF',
-  },
-  darkerInput: {
-    backgroundColor: '#EFF1F8',
   },
 });

@@ -1,8 +1,9 @@
 {
   "extends": "@react-native/typescript-config/tsconfig.json",
   "compilerOptions": {
-    "target": "ES6",
-    "lib": ["es6", "dom", "es2016"],
+    "target": "ESNext",
+    "lib": ["es6", "dom", "es2018"],
+    "module": "ESNext",
     "moduleResolution": "NodeNext",
     "esModuleInterop": true,
     "preserveSymlinks": true

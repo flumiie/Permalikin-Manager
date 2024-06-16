@@ -89,7 +89,7 @@ type RespectorActionsType = {
   screen: string;
 };
 
-const RESPECTOR_ACTIONS: RespectorActionsType[] = [
+const HOME_ACTIONS: RespectorActionsType[] = [
   {
     id: 1,
     icon: require('../../assets/images/master.png'),
@@ -129,8 +129,10 @@ export default () => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   const [credentials] = useMMKVStorage<{
     token: string;
+    name: string;
   }>('userCredentials', asyncStorage, {
     token: '',
+    name: '',
   });
   const [registrationStatus, setRegistrationStatus] = useMMKVStorage(
     'registrationStatus',
@@ -143,7 +145,6 @@ export default () => {
     '',
   );
   const [_, setSearchMode] = useMMKVStorage('searchMode', asyncStorage, false);
-  const [userData, setUserData] = useState(null);
   const [showSnackbar, setShowSnackbar] = useState(false);
   const [snackbar, setSnackbar] = useState<{
     type: 'success' | 'error';
@@ -154,19 +155,33 @@ export default () => {
   });
 
   useEffect(() => {
-    getUserData({
-      token: credentials?.token,
-      onSuccess: v => {
-        setUserData(v);
-      },
-      onError: () => {
-        setSnackbar({
-          type: 'error',
-          message: 'Something wrong happened. Please try again later',
-        });
-        setShowSnackbar(true);
-      },
-    });
+    if (credentials) {
+      setSnackbar({
+        type: 'success',
+        message: `Selamat datang kembali, ${credentials?.name}`,
+      });
+      setShowSnackbar(true);
+    }
+
+    // getUserData({
+    //   token: credentials?.token,
+    //   onSuccess: v => {
+    //     console.log(v);
+    //     setSnackbar({
+    //       type: 'success',
+    //       message: `Selamat datang kembali, ${credentials?.name}`,
+    //     });
+    //     setShowSnackbar(true);
+    //   },
+    //   onError: v => {
+    //     console.log(v);
+    //     setSnackbar({
+    //       type: 'error',
+    //       message: 'Ada kesalahan. Mohon coba sesaat lagi',
+    //     });
+    //     setShowSnackbar(true);
+    //   },
+    // });
   }, [credentials]);
 
   useEffect(() => {
@@ -203,25 +218,31 @@ export default () => {
         }}>
         <StatusBar backgroundColor="#BF2229" />
         <View style={styles.hiddenBackground} />
-        <View
-          // eslint-disable-next-line react-native/no-inline-styles
-          style={{
-            ...styles.snackbarContainer,
-            display: showSnackbar ? 'flex' : 'none',
-            marginTop: insets.top,
-          }}>
-          <Snackbar
-            visible={showSnackbar}
-            onHide={() => setShowSnackbar(false)}
-            type={snackbar.type}
-            message={snackbar.message}
-          />
-        </View>
+
+        {showSnackbar ? (
+          <View
+            style={{
+              ...styles.snackbarContainer,
+              marginTop: insets.top,
+            }}>
+            <Snackbar
+              visible={showSnackbar}
+              onHide={() => setShowSnackbar(false)}
+              type={snackbar.type}
+              message={snackbar.message}
+            />
+          </View>
+        ) : null}
+
         <FlatList
-          data={RESPECTOR_ACTIONS}
+          data={HOME_ACTIONS}
           ListHeaderComponent={
             <>
-              <Header user="Yuslim" weather="Sunny" temperature={25} />
+              <Header
+                user={credentials?.name}
+                weather="Sunny"
+                temperature={25}
+              />
               <Spacer height={18} />
             </>
           }
@@ -320,6 +341,7 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     right: 0,
+    zIndex: 0,
     height: '45%',
     backgroundColor: '#BF2229',
   },
@@ -327,6 +349,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 0,
     right: 0,
-    zIndex: 1,
+    zIndex: 10,
   },
 });
