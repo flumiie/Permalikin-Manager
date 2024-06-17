@@ -1,13 +1,20 @@
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { useNavigation } from '@react-navigation/core';
 import { StackNavigationProp } from '@react-navigation/stack';
-import React from 'react';
+import React, { useState } from 'react';
 import { ScrollView, StatusBar, StyleSheet } from 'react-native';
 import { useMMKVStorage } from 'react-native-mmkv-storage';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { asyncStorage } from '../../store';
 import { RootStackParamList } from '../Routes';
-import { RegularText, SimpleList, Spacer } from '../components';
+import {
+  BoldText,
+  DropdownConfirm,
+  RegularText,
+  SimpleList,
+  Spacer,
+} from '../components';
 
 export default () => {
   const insets = useSafeAreaInsets();
@@ -22,10 +29,43 @@ export default () => {
     type: 'success',
     message: '',
   });
+  const [showConfirmLogoutDropdown, setShowConfirmLogoutDropdown] =
+    useState(false);
 
   return (
     <>
       <StatusBar barStyle="dark-content" />
+      <DropdownConfirm
+        open={showConfirmLogoutDropdown}
+        onClose={() => {
+          setShowConfirmLogoutDropdown(false);
+        }}
+        content={
+          <>
+            <BoldText type="title-medium">Konfirmasi Logout</BoldText>
+            <Spacer height={8} />
+            <RegularText type="body-small">
+              Yakin mau logout dari akun ini?
+            </RegularText>
+          </>
+        }
+        actions={{
+          left: {
+            label: 'Batal',
+            onPress: () => {
+              setShowConfirmLogoutDropdown(false);
+            },
+          },
+          right: {
+            label: 'OK',
+            onPress: () => {
+              setShowConfirmLogoutDropdown(false);
+              GoogleSignin.signOut();
+              asyncStorage.removeItem('userCredentials');
+            },
+          },
+        }}
+      />
       <ScrollView
         contentContainerStyle={{
           paddingTop: insets.top + 20,
@@ -80,7 +120,7 @@ export default () => {
             chevron: '#BA1A1A',
           }}
           onPress={() => {
-            asyncStorage.removeItem('userCredentials');
+            setShowConfirmLogoutDropdown(true);
           }}
         />
       </ScrollView>
