@@ -11,6 +11,7 @@ import {
   NewMasterDataScreen,
   SignInScreen,
   SignUpScreen,
+  TransactionsDataScreen,
 } from './screens';
 
 export type AuthStackParamList = {
@@ -27,6 +28,10 @@ export type BottomTabsParamList = {
 export type RootStackParamList = {
   BottomTabs: NavigatorScreenParams<BottomTabsParamList>;
   NewMasterData: undefined;
+  TransactionsData: {
+    memberCode: string;
+    fullName: string;
+  };
   EasterEgg: undefined;
 };
 
@@ -50,6 +55,11 @@ export default () => {
           name="NewMasterData"
           component={NewMasterDataScreen}
           options={{ title: 'Data Baru' }}
+        />
+        <MainStack.Screen
+          name="TransactionsData"
+          component={TransactionsDataScreen}
+          options={{ title: 'Transaksi' }}
         />
         <MainStack.Screen
           name="EasterEgg"

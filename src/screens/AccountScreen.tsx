@@ -64,7 +64,7 @@ export default () => {
             chevron: '#BA1A1A',
           }}
           onPress={() => {
-            asyncStorage.clearStore();
+            asyncStorage.removeItem('userCredentials');
           }}
         />
       </ScrollView>

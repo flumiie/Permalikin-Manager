@@ -23,7 +23,6 @@ import {
   Button,
   MediumText,
   RegularText,
-  Snackbar,
   Spacer,
   TextInput,
 } from '../components';
@@ -32,7 +31,17 @@ export default () => {
   const insets = useSafeAreaInsets();
   const dispatch = useAppDispatch();
   const navigation = useNavigation<StackNavigationProp<AuthStackParamList>>();
-  const [_, setCredentials] = useMMKVStorage<{
+
+  const [_, setSnackbar] = useMMKVStorage<{
+    show: boolean;
+    type: 'success' | 'error';
+    message: string;
+  }>('snackbar', asyncStorage, {
+    show: false,
+    type: 'success',
+    message: '',
+  });
+  const [__, setCredentials] = useMMKVStorage<{
     token: string;
     name: string;
     email: string;
@@ -43,14 +52,10 @@ export default () => {
     email: '',
     photo: '',
   });
+
   const emailInputRef = useRef<RNTextInput>(null);
   const passwordInputRef = useRef<RNTextInput>(null);
   const [passwordInvisible, setPasswordInvisible] = useState(true);
-  const [showSnackbar, setShowSnackbar] = useState(false);
-  const [snackbar, setSnackbar] = useState({
-    type: 'success' as 'success' | 'error',
-    message: '',
-  });
 
   const ValidationSchema = Yup.object().shape({
     email: Yup.string().email('Format email salah').required('Harus diisi'),
@@ -63,150 +68,140 @@ export default () => {
       const userInfo = await GoogleSignin.signIn();
       setCredentials({
         token: userInfo.idToken ?? '',
-        name: userInfo.user.name ?? '',
+        code: userInfo.user.name ?? '',
         email: userInfo.user.email ?? '',
         photo: userInfo.user.photo ?? '',
       });
     } catch (error) {
       setSnackbar({
-        type: 'error' as 'success' | 'error',
+        show: true,
+        type: 'error',
         message: 'Ada kesalahan. Mohon coba sesaat lagi',
       });
-      setShowSnackbar(true);
     }
   };
 
   return (
-    <>
-      <View style={{ paddingTop: insets.top }}>
-        <Snackbar
-          visible={showSnackbar}
-          onHide={() => setShowSnackbar(false)}
-          type={snackbar.type}
-          message={snackbar.message}
-        />
-      </View>
-      <Formik
-        initialValues={{ email: '', password: '' }}
-        validateOnBlur
-        validateOnChange
-        validationSchema={ValidationSchema}
-        onSubmit={values => {
-          dispatch(
-            getAuth({
-              email: values.email,
-              password: values.password,
-              onSuccess: v => {
-                setCredentials(v);
-              },
-              onError: () => {
-                setSnackbar({
-                  type: 'error' as 'success' | 'error',
-                  message: 'Email atau password salah',
-                });
-                setShowSnackbar(true);
-              },
-            }),
-          );
-        }}>
-        {({
-          values,
-          errors,
-          touched,
-          handleChange,
-          handleBlur,
-          handleSubmit,
-        }) => (
-          <View
-            style={{
-              paddingTop: 72 + insets.top,
-              ...styles.container,
-            }}>
-            <MediumText size={28} color="#BF2229" style={styles.title}>
-              Login
-            </MediumText>
-            <Spacer height={40} />
-            <TextInput
-              ref={emailInputRef}
-              id="email"
-              placeholder="Email"
-              keyboardType="email-address"
-              onChangeText={handleChange('email')}
-              onBlur={handleBlur('email')}
-              onSubmitEditing={() => {
-                if (!values.password) {
-                  passwordInputRef.current?.focus();
-                }
-                emailInputRef.current?.blur();
-              }}
-              value={values.email}
-              error={touched.email && errors.email}
-            />
-            <Spacer height={16} />
-            <TextInput
-              ref={passwordInputRef}
-              id="password"
-              placeholder="Password"
-              onChangeText={handleChange('password')}
-              onBlur={handleBlur('password')}
-              onSubmitEditing={() => {
-                if (!values.email) {
-                  emailInputRef.current?.focus();
-                }
-                passwordInputRef.current?.blur();
-              }}
-              secureTextEntry={passwordInvisible}
-              rightIcons={{
-                password: passwordInvisible ? 'eye-off' : 'eye',
-              }}
-              showPassword={() => {
-                setPasswordInvisible(!passwordInvisible);
-              }}
-              value={values.password}
-              error={touched.password && errors.password}
-            />
-            <Spacer height={32} />
-            <Button
-              type="primary"
-              disabled={
-                !values.email ||
-                !!errors.email ||
-                !values.password ||
-                !!errors.password
+    <Formik
+      initialValues={{ email: '', password: '' }}
+      validateOnBlur
+      validateOnChange
+      validationSchema={ValidationSchema}
+      onSubmit={values => {
+        dispatch(
+          getAuth({
+            email: values.email,
+            password: values.password,
+            onSuccess: v => {
+              setCredentials(v);
+            },
+            onError: () => {
+              setSnackbar({
+                show: true,
+                type: 'error',
+                message: 'Email atau password salah',
+              });
+            },
+          }),
+        );
+      }}>
+      {({
+        values,
+        errors,
+        touched,
+        handleChange,
+        handleBlur,
+        handleSubmit,
+      }) => (
+        <View
+          style={{
+            paddingTop: 72 + insets.top,
+            ...styles.container,
+          }}>
+          <MediumText size={28} color="#BF2229" style={styles.title}>
+            Login
+          </MediumText>
+          <Spacer height={40} />
+          <TextInput
+            ref={emailInputRef}
+            id="email"
+            placeholder="Email"
+            keyboardType="email-address"
+            onChangeText={handleChange('email')}
+            onBlur={handleBlur('email')}
+            onSubmitEditing={() => {
+              if (!values.password) {
+                passwordInputRef.current?.focus();
               }
-              onPress={handleSubmit}>
-              Login
-            </Button>
-            <Spacer height={16} />
-            <View style={styles.row}>
-              <RegularText>Belum ada akun? </RegularText>
-              <Pressable
-                onPress={() => {
-                  navigation.navigate('SignUp');
-                }}>
-                <RegularText color="#BF2229">Registrasi</RegularText>
-              </Pressable>
-            </View>
-            <Spacer height={16} />
-            <Spacer
-              height={1}
-              width={Dimensions.get('window').width - 40}
-              color="#DDD"
-            />
-            <Spacer height={16} />
-            <Button type="primary" onPress={handleGoogleSignIn}>
-              <View style={styles.row}>
-                <FontAwesomeIcon name="google" size={18} color="#FFF" />
-                <Spacer width={8} />
-                <MediumText type="label-large" color="#FFF">
-                  Google
-                </MediumText>
-              </View>
-            </Button>
+              emailInputRef.current?.blur();
+            }}
+            value={values.email}
+            error={touched.email && errors.email}
+          />
+          <Spacer height={16} />
+          <TextInput
+            ref={passwordInputRef}
+            id="password"
+            placeholder="Password"
+            onChangeText={handleChange('password')}
+            onBlur={handleBlur('password')}
+            onSubmitEditing={() => {
+              if (!values.email) {
+                emailInputRef.current?.focus();
+              }
+              passwordInputRef.current?.blur();
+            }}
+            secureTextEntry={passwordInvisible}
+            rightIcons={{
+              password: passwordInvisible ? 'eye-off' : 'eye',
+            }}
+            showPassword={() => {
+              setPasswordInvisible(!passwordInvisible);
+            }}
+            value={values.password}
+            error={touched.password && errors.password}
+          />
+          <Spacer height={32} />
+          <Button
+            type="primary"
+            disabled={
+              !values.email ||
+              !!errors.email ||
+              !values.password ||
+              !!errors.password
+            }
+            onPress={handleSubmit}>
+            Login
+          </Button>
+          <Spacer height={16} />
+          <View style={styles.row}>
+            <RegularText>Belum ada akun? </RegularText>
+            <Pressable
+              onPress={() => {
+                navigation.navigate('SignUp');
+              }}>
+              <RegularText color="#BF2229">Registrasi</RegularText>
+            </Pressable>
           </View>
-        )}
-      </Formik>
-    </>
+          <Spacer height={16} />
+          <Spacer
+            height={1}
+            width={Dimensions.get('window').width - 40}
+            color="#DDD"
+          />
+          <Spacer height={16} />
+          <Button type="primary" onPress={handleGoogleSignIn}>
+            <View style={styles.row}>
+              <FontAwesomeIcon name="google" size={18} color="#FFF" />
+              <Spacer width={8} />
+              <MediumText type="label-large" color="#FFF">
+                Google
+              </MediumText>
+            </View>
+          </Button>
+        </View>
+      )}
+    </Formik>
   );
 };
 

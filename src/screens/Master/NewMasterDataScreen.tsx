@@ -34,13 +34,18 @@ export default () => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   const route = useRoute<RouteProp<RootStackParamList, 'NewMasterData'>>();
 
-  const [_, setAddDataStatus] = useMMKVStorage(
-    'addDataStatus',
-    asyncStorage,
-    false,
-  );
+  const [_, setSnackbar] = useMMKVStorage<{
+    show: boolean;
+    type: 'success' | 'error';
+    message: string;
+  }>('snackbar', asyncStorage, {
+    show: false,
+    type: 'success',
+    message: '',
+  });
 
   // const avatarInputRef = useRef<RNTextInput>(null);
+  const memberCodeInputRef = useRef<RNTextInput>(null);
   const fullNameInputRef = useRef<RNTextInput>(null);
   const birthPlaceDateInputRef = useRef<RNTextInput>(null);
   const religionInputRef = useRef<RNTextInput>(null);
@@ -83,7 +88,8 @@ export default () => {
   // const [selectedZipCode, setSelectedZipCode] = useState<string | null>(null);
 
   const ValidationSchema = Yup.object().shape({
-    avatar: Yup.string().required('Harus diisi'),
+    // avatar: Yup.string().required('Harus diisi'),
+    memberCode: Yup.string().required('Harus diisi'),
     fullName: Yup.string().required('Harus diisi'),
     birthPlaceDate: Yup.string().required('Harus diisi'),
     religion: Yup.string().required('Harus diisi'),
@@ -110,6 +116,7 @@ export default () => {
       <Formik
         initialValues={{
           // avatar: '',
+          memberCode: '',
           fullName: '',
           birthPlaceDate: '',
           religion: '',
@@ -203,8 +210,12 @@ export default () => {
                       .collection('Personels')
                       .add(values)
                       .then(res => {
-                        setAddDataStatus(!!res);
                         navigation.goBack();
+                        setSnackbar({
+                          show: true,
+                          type: 'success',
+                          message: 'Data sudah tersimpan',
+                        });
                       });
                   },
                 },
@@ -355,6 +366,46 @@ export default () => {
                     </Pressable>
                   </Pressable>
                   <Spacer height={16} /> */}
+                  <TextInput
+                    ref={memberCodeInputRef}
+                    id="member-code"
+                    label="Kode Member*"
+                    placeholder="Contoh: ABC-123"
+                    filledTextColor
+                    onChangeText={handleChange('memberCode')}
+                    onBlur={handleBlur('memberCode')}
+                    onSubmitEditing={() => {
+                      if (!values.birthPlaceDate) {
+                        birthPlaceDateInputRef.current?.focus();
+                      } else if (!values.religion) {
+                        religionInputRef.current?.focus();
+                      } else if (!values.email) {
+                        emailInputRef.current?.focus();
+                      } else if (!values.status) {
+                        statusInputRef.current?.focus();
+                      } else if (!values.phoneNo) {
+                        phoneNoInputRef.current?.focus();
+                      } else if (!values.address?.identityCardAddress) {
+                        identityCardAddressInputRef.current?.focus();
+                      } else if (!values.address?.currentAddress) {
+                        currentAddressInputRef.current?.focus();
+                      } else if (!values.address?.country) {
+                        countryInputRef.current?.focus();
+                      } else if (!values.address?.province) {
+                        provinceInputRef.current?.focus();
+                      } else if (!values.address?.city) {
+                        cityInputRef.current?.focus();
+                      } else if (!values.address?.zipCode) {
+                        zipCodeInputRef.current?.focus();
+                      } else if (!values.balance?.initial) {
+                        balanceInitialInputRef.current?.focus();
+                      } else if (!values.balance?.end) {
+                        balanceEndInputRef.current?.focus();
+                      }
+                    }}
+                    value={values.memberCode.toUpperCase()}
+                    error={touched.memberCode && errors.memberCode}
+                  />
                   <TextInput
                     ref={fullNameInputRef}
                     id="full-name"

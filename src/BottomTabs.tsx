@@ -4,7 +4,7 @@ import { Image, ImageSourcePropType, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { RegularText } from './components';
-import { AccountScreen, HomeScreen, ReportsScreen } from './screens';
+import { AccountScreen, HomeScreen, MemberListScreen } from './screens';
 
 interface TabBarIconProps {
   focused: boolean | undefined;
@@ -83,10 +83,10 @@ export default () => {
           }}
         />
         <Tab.Screen
-          name="Report"
-          component={ReportsScreen}
+          name="Daftar Anggota"
+          component={MemberListScreen}
           options={{
-            title: 'Report',
+            title: 'Daftar Anggota',
             headerShown: true,
             tabBarLabelStyle: {
               fontFamily: 'Poppins-Regular',

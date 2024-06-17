@@ -16,14 +16,7 @@ import Icon from 'react-native-vector-icons/Feather';
 
 import { asyncStorage } from '../../store';
 import { RootStackParamList } from '../Routes';
-import {
-  BoldText,
-  Card,
-  MediumText,
-  RegularText,
-  Snackbar,
-  Spacer,
-} from '../components';
+import { BoldText, Card, MediumText, RegularText, Spacer } from '../components';
 
 interface HeaderProps extends Partial<ViewProps> {
   user: string;
@@ -126,6 +119,15 @@ const HOME_ACTIONS: RespectorActionsType[] = [
 export default () => {
   const insets = useSafeAreaInsets();
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+  const [_, setSnackbar] = useMMKVStorage<{
+    show: boolean;
+    type: 'success' | 'error';
+    message: string;
+  }>('snackbar', asyncStorage, {
+    show: false,
+    type: 'success',
+    message: '',
+  });
   const [credentials] = useMMKVStorage<{
     token: string;
     name: string;
@@ -138,20 +140,7 @@ export default () => {
     asyncStorage,
     null,
   );
-  const [addDataStatus, setAddDataStatus] = useMMKVStorage(
-    'addDataStatus',
-    asyncStorage,
-    false,
-  );
-  const [_, setSearchMode] = useMMKVStorage('searchMode', asyncStorage, false);
-  const [showSnackbar, setShowSnackbar] = useState(false);
-  const [snackbar, setSnackbar] = useState<{
-    type: 'success' | 'error';
-    message: string;
-  }>({
-    type: 'success',
-    message: '',
-  });
+  const [__, setSearchMode] = useMMKVStorage('searchMode', asyncStorage, false);
 
   // useEffect(() => {
   //   getUserData({
@@ -178,26 +167,14 @@ export default () => {
   useEffect(() => {
     if (registrationStatus && credentials?.token) {
       setSnackbar({
+        show: true,
         type: 'success',
         message: `Registrasi berhasil, selamat datang ${credentials?.token}`,
       });
-      setShowSnackbar(true);
       setRegistrationStatus(null);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [registrationStatus, credentials?.token]);
-
-  useEffect(() => {
-    if (addDataStatus) {
-      setSnackbar({
-        type: 'success',
-        message: 'Data sudah tersimpan',
-      });
-      setShowSnackbar(true);
-      setAddDataStatus('');
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [addDataStatus]);
 
   return (
     <>
@@ -209,21 +186,6 @@ export default () => {
         }}>
         <StatusBar backgroundColor="#BF2229" />
         <View style={styles.hiddenBackground} />
-
-        {showSnackbar ? (
-          <View
-            style={{
-              ...styles.snackbarContainer,
-              marginTop: insets.top,
-            }}>
-            <Snackbar
-              visible={showSnackbar}
-              onHide={() => setShowSnackbar(false)}
-              type={snackbar.type}
-              message={snackbar.message}
-            />
-          </View>
-        ) : null}
 
         <FlatList
           data={HOME_ACTIONS}
@@ -335,11 +297,5 @@ const styles = StyleSheet.create({
     zIndex: 0,
     height: '45%',
     backgroundColor: '#BF2229',
-  },
-  snackbarContainer: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    zIndex: 10,
   },
 });
