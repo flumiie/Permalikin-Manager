@@ -5,7 +5,6 @@ import Checkbox from './Checkbox';
 import DismissableView from './DismissableView';
 import Dot from './Dot';
 import DropdownConfirm from './Dropdown/DropdownConfirm';
-import DropdownFilter, { DropdownMultiProps } from './Dropdown/DropdownFilter';
 import DropdownSelect from './Dropdown/DropdownSelect';
 import Empty from './Empty';
 import Form from './Form';
@@ -49,11 +48,7 @@ export {
 export { NavigationHeader, navHeaderStyles };
 export { ItemList, SimpleList };
 export { DateInput, TextInput };
-export { DropdownConfirm, DropdownSelect, DropdownFilter };
+export { DropdownConfirm, DropdownSelect };
 export { BoldText, MediumText, RegularText, SemiBoldText };
 
-export type {
-  BottomTabNavigationHeaderProps,
-  NavigationHeaderProps,
-  DropdownMultiProps,
-};
+export type { BottomTabNavigationHeaderProps, NavigationHeaderProps };

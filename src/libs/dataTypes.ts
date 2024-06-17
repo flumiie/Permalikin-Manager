@@ -1,8 +1,9 @@
 export type MasterDataType = {
-  avatar: string;
+  avatar?: string;
+  memberCode: string;
   fullName: string;
   birthPlaceDate: string;
-  religion: string;
+  religion?: string;
   address: {
     identityCardAddress: string;
     currentAddress: string;
@@ -12,8 +13,8 @@ export type MasterDataType = {
     zipCode: string;
   };
   phoneNo: string;
-  email: string;
-  status: string;
+  email?: string;
+  status?: string;
   balance: {
     initial: string;
     end: string;

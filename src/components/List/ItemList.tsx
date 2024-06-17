@@ -4,6 +4,7 @@ import FastImage, { Source } from 'react-native-fast-image';
 import Icon from 'react-native-vector-icons/Feather';
 
 import Badge, { BadgeProps } from '../Badge';
+import Button from '../Button';
 import Spacer from '../Spacer';
 import MediumText from '../Text/MediumText';
 import RegularText from '../Text/RegularText';
@@ -14,7 +15,13 @@ type SubtitleType = {
 };
 
 interface ItemListProps extends PressableProps {
+  showNavigator: { code: string } | undefined;
+  navigators: {
+    label: string;
+    onPress: () => void;
+  }[];
   leftImage: number | Source;
+  code: string;
   title: string;
   sub?: SubtitleType | BadgeProps;
   onPress: () => void;
@@ -70,32 +77,50 @@ export default (props: ItemListProps) => {
               ) : null}
             </View>
           </View>
-          <Icon name="chevron-right" size={24} color="#44474E" />
+          <Icon
+            name={
+              props.showNavigator?.code === props.code
+                ? 'chevron-down'
+                : 'chevron-up'
+            }
+            size={24}
+            color="#44474E"
+          />
         </View>
+        {props.showNavigator?.code === props.code ? (
+          <View>
+            <Spacer height={8} />
+            <View style={styles.row}>
+              {props.navigators.map(nav => (
+                <>
+                  <Button type="secondary" onPress={nav.onPress}>
+                    {nav.label}
+                  </Button>
+                  <Spacer width={8} />
+                </>
+              ))}
+            </View>
+          </View>
+        ) : null}
       </Pressable>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  badgeContainer: {
+    alignSelf: 'flex-start',
+  },
   container: {
     flex: 1,
     overflow: 'hidden',
     borderBottomWidth: 1,
     borderBottomColor: '#EEE',
   },
-  pressable: {
-    paddingVertical: 12,
-    paddingHorizontal: 20,
-  },
   contents: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-  },
-  listLeftContents: {
-    flexDirection: 'row',
-    alignItems: 'center',
   },
   imageContainer: {
     borderRadius: 30,
@@ -107,7 +132,15 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
-  badgeContainer: {
-    alignSelf: 'flex-start',
+  listLeftContents: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  pressable: {
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+  },
+  row: {
+    flexDirection: 'row',
   },
 });
