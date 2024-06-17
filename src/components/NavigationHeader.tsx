@@ -79,7 +79,7 @@ export default ({ useSearch = false, ...props }: NavigationHeaderProps) => {
               <TextInput
                 ref={searchInputRef}
                 id="nav-search"
-                placeholder="Search..."
+                placeholder="Cari..."
                 onBlur={handleBlur('search')}
                 onChangeText={handleChange('search')}
                 onChange={() => handleSubmit()}

@@ -2,8 +2,8 @@
  * @format
  */
 import { OAUTH_CLIENT_ID } from '@env';
-import { firebase } from '@react-native-firebase/firestore';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
+// import { initializeFirestore } from 'firebase/firestore';
 import { AppRegistry } from 'react-native';
 
 import { name as appName } from './app.json';
@@ -13,8 +13,8 @@ GoogleSignin.configure({
   webClientId: OAUTH_CLIENT_ID,
 });
 
-firebase.firestore().settings({
-  experimentalForceLongPolling: true,
-});
+// const db = initializeFirestore(App, {
+//   experimentalForceLongPolling: true,
+// });
 
 AppRegistry.registerComponent(appName, () => App);

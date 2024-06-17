@@ -45,6 +45,14 @@ function App(): React.JSX.Element {
   }, []);
 
   useEffect(() => {
+    setSnackbar({
+      show: false,
+      type: 'success',
+      message: '',
+    });
+  }, [setSnackbar]);
+
+  useEffect(() => {
     setNetworkConnected(!!isConnected);
     if (isConnected) {
       setSnackbar({
@@ -56,7 +64,7 @@ function App(): React.JSX.Element {
       setSnackbar({
         show: false,
         type: 'success',
-        message: '',
+        message: 'Berhasil terhubung ke internet',
       });
     }
   }, [isConnected, setNetworkConnected, setSnackbar]);

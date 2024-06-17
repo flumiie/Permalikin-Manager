@@ -8,10 +8,10 @@ import BottomTabs from './BottomTabs';
 import { NavigationHeader } from './components';
 import {
   EasterEggScreen,
+  MemberDuesScreen,
   NewMasterDataScreen,
   SignInScreen,
   SignUpScreen,
-  TransactionsDataScreen,
 } from './screens';
 
 export type AuthStackParamList = {
@@ -28,7 +28,7 @@ export type BottomTabsParamList = {
 export type RootStackParamList = {
   BottomTabs: NavigatorScreenParams<BottomTabsParamList>;
   NewMasterData: undefined;
-  TransactionsData: {
+  MemberDues: { 
     memberCode: string;
     fullName: string;
   };
@@ -57,9 +57,9 @@ export default () => {
           options={{ title: 'Data Baru' }}
         />
         <MainStack.Screen
-          name="TransactionsData"
-          component={TransactionsDataScreen}
-          options={{ title: 'Transaksi' }}
+          name="MemberDues"
+          component={MemberDuesScreen}
+          options={{ title: 'Iuran Anggota' }}
         />
         <MainStack.Screen
           name="EasterEgg"

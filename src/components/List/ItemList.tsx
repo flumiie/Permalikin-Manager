@@ -4,7 +4,6 @@ import FastImage, { Source } from 'react-native-fast-image';
 import Icon from 'react-native-vector-icons/Feather';
 
 import Badge, { BadgeProps } from '../Badge';
-import Button from '../Button';
 import Spacer from '../Spacer';
 import MediumText from '../Text/MediumText';
 import RegularText from '../Text/RegularText';
@@ -15,11 +14,6 @@ type SubtitleType = {
 };
 
 interface ItemListProps extends PressableProps {
-  showNavigator: { code: string } | undefined;
-  navigators: {
-    label: string;
-    onPress: () => void;
-  }[];
   leftImage: number | Source;
   code: string;
   title: string;
@@ -77,31 +71,8 @@ export default (props: ItemListProps) => {
               ) : null}
             </View>
           </View>
-          <Icon
-            name={
-              props.showNavigator?.code === props.code
-                ? 'chevron-down'
-                : 'chevron-up'
-            }
-            size={24}
-            color="#44474E"
-          />
+          <Icon name="chevron-right" size={24} color="#44474E" />
         </View>
-        {props.showNavigator?.code === props.code ? (
-          <View>
-            <Spacer height={8} />
-            <View style={styles.row}>
-              {props.navigators.map(nav => (
-                <>
-                  <Button type="secondary" onPress={nav.onPress}>
-                    {nav.label}
-                  </Button>
-                  <Spacer width={8} />
-                </>
-              ))}
-            </View>
-          </View>
-        ) : null}
       </Pressable>
     </View>
   );
@@ -135,6 +106,9 @@ const styles = StyleSheet.create({
   listLeftContents: {
     flexDirection: 'row',
     alignItems: 'center',
+  },
+  navigator: {
+    paddingRight: 8,
   },
   pressable: {
     paddingVertical: 12,

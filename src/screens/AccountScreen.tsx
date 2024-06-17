@@ -2,6 +2,7 @@ import { useNavigation } from '@react-navigation/core';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
 import { ScrollView, StatusBar, StyleSheet } from 'react-native';
+import { useMMKVStorage } from 'react-native-mmkv-storage';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { asyncStorage } from '../../store';
@@ -11,6 +12,16 @@ import { RegularText, SimpleList, Spacer } from '../components';
 export default () => {
   const insets = useSafeAreaInsets();
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+
+  const [_, setSnackbar] = useMMKVStorage<{
+    show: boolean;
+    type: 'success' | 'error';
+    message: string;
+  }>('snackbar', asyncStorage, {
+    show: false,
+    type: 'success',
+    message: '',
+  });
 
   return (
     <>
@@ -26,38 +37,43 @@ export default () => {
         <Spacer height={4} />
         <SimpleList
           icon="user"
-          title="Personal Information"
-          subtitle="Your account information"
+          title="Info Personal"
+          subtitle="informasi akun Anda"
           onPress={() => {
-            navigation.navigate('PersonalInformation');
+            // navigation.navigate('PersonalInformation');
+            setSnackbar({
+              show: true,
+              type: 'error',
+              message: 'Sementara ini tidak tersedia',
+            });
           }}
         />
         <SimpleList
           icon="lock"
           title="Password"
-          subtitle="Change your password"
+          subtitle="Ganti password"
           onPress={() => {
-            navigation.navigate('NewPassword');
+            // navigation.navigate('NewPassword');
+            setSnackbar({
+              show: true,
+              type: 'error',
+              message: 'Sementara ini tidak tersedia',
+            });
           }}
         />
         <SimpleList
           icon="info"
-          title="User Guideline"
-          subtitle="Learn more about how to use app"
+          title="Pedoman Pengguna"
+          subtitle="Pelajari cara menggunakan apl. ini"
           onPress={() => {
             // TODO: Go to User Guideline screen
           }}
         />
-        <SimpleList
-          easterEgg
-          icon="info"
-          title="About"
-          subtitle="Version 1.0"
-        />
+        <SimpleList easterEgg icon="info" title="Tentang" subtitle="v1.0" />
         <Spacer height={24} />
         <SimpleList
           icon="log-out"
-          title="Sign Out"
+          title="Keluar"
           color={{
             icon: '#BA1A1A',
             title: '#BA1A1A',

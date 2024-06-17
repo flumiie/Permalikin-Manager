@@ -68,7 +68,7 @@ export default () => {
       const userInfo = await GoogleSignin.signIn();
       setCredentials({
         token: userInfo.idToken ?? '',
-        code: userInfo.user.name ?? '',
+        name: userInfo.user.name ?? '',
         email: userInfo.user.email ?? '',
         photo: userInfo.user.photo ?? '',
       });

@@ -51,7 +51,7 @@ export default () => {
           },
         }}>
         <Tab.Screen
-          name="Home"
+          name="Rumah"
           component={HomeScreen}
           options={{
             tabBarLabelStyle: {
@@ -117,7 +117,7 @@ export default () => {
           }}
         />
         <Tab.Screen
-          name="Account"
+          name="Akun"
           component={AccountScreen}
           options={{
             tabBarLabelStyle: {
