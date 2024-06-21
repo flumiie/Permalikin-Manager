@@ -83,7 +83,7 @@ export default () => {
           }}
         />
         <Tab.Screen
-          name="Daftar Anggota"
+          name="Anggota"
           component={MemberListScreen}
           options={{
             title: 'Daftar Anggota',
@@ -100,18 +100,12 @@ export default () => {
                 }}
               />
             ),
-            tabBarLabel: ({
-              focused,
-              children,
-            }: {
-              focused: boolean;
-              children: React.ReactNode;
-            }) => (
+            tabBarLabel: ({ focused }: { focused: boolean }) => (
               <RegularText
                 type="body-small"
                 color={focused ? '#BF2229' : '#44474E'}
                 style={styles.text}>
-                {children}
+                Anggota
               </RegularText>
             ),
           }}
