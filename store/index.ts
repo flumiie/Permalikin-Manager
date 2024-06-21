@@ -2,11 +2,15 @@ import { Tuple, combineReducers, configureStore } from '@reduxjs/toolkit';
 import { MMKVLoader } from 'react-native-mmkv-storage';
 import { thunk } from 'redux-thunk';
 
-import { getAuthReducer, getUserDataReducer, signUpReducer } from './reducers';
+import {
+  getAuthReducer,
+  getMemberDuesReducer,
+  signUpReducer,
+} from './reducers';
 
 const rootReducer = combineReducers({
   getAuth: getAuthReducer,
-  getUserData: getUserDataReducer,
+  getMemberDues: getMemberDuesReducer,
   signUp: signUpReducer,
 });
 

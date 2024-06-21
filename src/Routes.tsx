@@ -28,7 +28,7 @@ export type BottomTabsParamList = {
 export type RootStackParamList = {
   BottomTabs: NavigatorScreenParams<BottomTabsParamList>;
   NewMasterData: undefined;
-  MemberDues: { 
+  MemberDues: {
     memberCode: string;
     fullName: string;
   };
@@ -39,7 +39,7 @@ const MainStack = createStackNavigator<RootStackParamList>();
 const AuthStack = createStackNavigator<AuthStackParamList>();
 
 export default () => {
-  const [credentials] = useMMKVStorage('userCredentials', asyncStorage, null);
+  const [credentials] = useMMKVStorage('credentials', asyncStorage, null);
 
   if (credentials) {
     return (
@@ -56,11 +56,7 @@ export default () => {
           component={NewMasterDataScreen}
           options={{ title: 'Data Baru' }}
         />
-        <MainStack.Screen
-          name="MemberDues"
-          component={MemberDuesScreen}
-          options={{ title: 'Iuran Anggota' }}
-        />
+        <MainStack.Screen name="MemberDues" component={MemberDuesScreen} />
         <MainStack.Screen
           name="EasterEgg"
           component={EasterEggScreen}

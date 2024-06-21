@@ -1,5 +1,5 @@
 import getAuthReducer from './getAuthReducer';
-import getUserDataReducer from './getUserDataReducer';
+import getMemberDuesReducer from './getMemberDuesReducer';
 import signUpReducer from './signUpReducer';
 
-export { getAuthReducer, getUserDataReducer, signUpReducer };
+export { getAuthReducer, getMemberDuesReducer, signUpReducer };

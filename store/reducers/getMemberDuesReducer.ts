@@ -1,4 +1,4 @@
-import { GET_USER_DATA, GET_USER_DATA_ERROR } from '../constants';
+import { GET_MEMBER_DUES, GET_MEMBER_DUES_ERROR } from '../constants';
 
 const initialState = {
   data: '',
@@ -7,13 +7,13 @@ const initialState = {
 
 export default (state = initialState, action: any) => {
   switch (action.type) {
-    case GET_USER_DATA:
+    case GET_MEMBER_DUES:
       return {
         data: action.payload,
         error: null,
       };
 
-    case GET_USER_DATA_ERROR:
+    case GET_MEMBER_DUES_ERROR:
       return {
         ...state,
         error: action.payload,

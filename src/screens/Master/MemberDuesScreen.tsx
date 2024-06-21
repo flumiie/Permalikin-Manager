@@ -1,6 +1,7 @@
 import firestore from '@react-native-firebase/firestore';
-import { RouteProp, useRoute } from '@react-navigation/core';
-import React, { useMemo, useState } from 'react';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/core';
+import { StackNavigationProp } from '@react-navigation/stack';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
   FlatList,
   RefreshControl,
@@ -9,62 +10,100 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
+import { useMMKVStorage } from 'react-native-mmkv-storage';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { asyncStorage } from '../../../store';
+import { getUserData } from '../../../store/actions';
+import { useAppDispatch } from '../../../store/hooks';
 import { RootStackParamList } from '../../Routes';
 import {
-  BoldText,
   Button,
   DismissableView,
   Empty,
+  ItemList,
+  NavigationHeader,
+  NavigationHeaderProps,
   Pills,
-  RegularText,
   Spacer,
 } from '../../components';
 
 type MemberDuesPillTypes = 'latest' | 'oldest' | 'highest' | 'lowest';
 
+const ReportListItem = (props: { item: any; onPress: () => void }) => {
+  if (props.item.dues) {
+    return (
+      <ItemList
+        code={props.item.memberCode}
+        title={props.item.fullName}
+        sub={{
+          subtitle: props.item.email,
+          desc: props.item.phoneNo,
+        }}
+        onPress={props.onPress}
+      />
+    );
+  }
+
+  return (
+    <View style={{ flex: 1, paddingTop: 24 }}>
+      <Empty />
+    </View>
+  );
+};
+
 export default () => {
   const insets = useSafeAreaInsets();
+  const dispatch = useAppDispatch();
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   const route = useRoute<RouteProp<RootStackParamList, 'MemberDues'>>();
 
-  const [loading, setLoading] = useState(true);
+  const [credentials] = useMMKVStorage<{
+    token: string;
+  }>('credentials', asyncStorage, {
+    token: '',
+  });
+  const [userData, setUserData] = useMMKVStorage('userData', asyncStorage, []);
+  const [_, setSearchMode] = useMMKVStorage('searchMode', asyncStorage, false);
+
+  const [loading, setLoading] = useState(false);
+  const [search, setSearch] = useState('');
   const [showConfirmCreateDataDropdown, setShowConfirmCreateDataDropdown] =
     useState({
       state: false,
       values: {},
     });
   const [selectedSortFilter, setSelectedSortFilter] =
-    useState<MemberDuesPillTypes>();
+    useState<MemberDuesPillTypes[]>();
 
   const memberDuesData = useMemo(() => {
-    let tempData: any[] = inspections;
+    let tempData: any[] = userData;
 
-    tempData = tempData.sort((a, b) => {
-      if (selectedSortFilter === 'latest') {
-        return b.date - a.date;
-      } else if (selectedSortFilter === 'oldest') {
-        return a.date - b.date;
-      } else if (selectedSortFilter === 'highest') {
-        return b.amount - a.amount;
-      } else if (selectedSortFilter === 'lowest') {
-        return a.amount - b.amount;
-      }
-    });
+    // tempData = tempData.sort((a, b) => {
+    //   if (selectedSortFilter === 'latest') {
+    //     return b.date - a.date;
+    //   } else if (selectedSortFilter === 'oldest') {
+    //     return a.date - b.date;
+    //   } else if (selectedSortFilter === 'highest') {
+    //     return b.amount - a.amount;
+    //   } else if (selectedSortFilter === 'lowest') {
+    //     return a.amount - b.amount;
+    //   }
+    // });
 
     return tempData;
-  }, [selectedSortFilter]);
+  }, [userData]);
 
   const MemberDuesHeader = (props: {
     onSelectFilter: (v: MemberDuesPillTypes) => void;
   }) => {
     return (
       <ScrollView
-        scrollEnabled={false}
         horizontal
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.pillsContainer}>
         <Pills
+          selected={!!selectedSortFilter?.find(S => S === 'latest')}
           onSelect={() => {
             props.onSelectFilter('latest');
           }}>
@@ -72,6 +111,7 @@ export default () => {
         </Pills>
         <Spacer width={8} />
         <Pills
+          selected={!!selectedSortFilter?.find(S => S === 'oldest')}
           onSelect={() => {
             props.onSelectFilter('oldest');
           }}>
@@ -79,6 +119,7 @@ export default () => {
         </Pills>
         <Spacer width={8} />
         <Pills
+          selected={!!selectedSortFilter?.find(S => S === 'highest')}
           onSelect={() => {
             props.onSelectFilter('highest');
           }}>
@@ -86,6 +127,7 @@ export default () => {
         </Pills>
         <Spacer width={8} />
         <Pills
+          selected={!!selectedSortFilter?.find(S => S === 'lowest')}
           onSelect={() => {
             props.onSelectFilter('lowest');
           }}>
@@ -98,7 +140,19 @@ export default () => {
 
   const fetchData = () => {
     setLoading(true);
-    // firestore()
+
+    dispatch(
+      getUserData({
+        memberCode: route.params?.memberCode ?? '',
+        onSuccess: v => {
+          setUserData(v);
+          setLoading(false);
+        },
+        onError: () => {
+          setLoading(false);
+        },
+      }),
+    );
   };
 
   const addMemberDueData = (memberCode: string) => {
@@ -119,12 +173,26 @@ export default () => {
     });
   };
 
+  useEffect(() => {
+    navigation.setOptions({
+      title: `Iuran ${route.params?.fullName}`,
+      header: (props: NavigationHeaderProps) => (
+        <NavigationHeader {...props} useSearch search={setSearch} />
+      ),
+    });
+  }, [navigation, route.params?.fullName]);
+
+  useEffect(() => {
+    if (credentials?.token) {
+      fetchData();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [credentials?.token]);
+
   return (
     <>
       <StatusBar barStyle="dark-content" backgroundColor="#FCFCFF" />
-      <DismissableView style={styles.contentContainer}>
-        <BoldText type="title-medium">{`Iuran ${route.params?.fullName}`}</BoldText>
-        <Spacer height={24} />
+      <DismissableView style={{ flex: 1 }}>
         <FlatList
           data={memberDuesData}
           refreshControl={
@@ -132,7 +200,21 @@ export default () => {
           }
           keyExtractor={item => item.memberCode}
           ListHeaderComponent={
-            <MemberDuesHeader onSelectFilter={v => setSelectedSortFilter(v)} />
+            <MemberDuesHeader
+              onSelectFilter={v =>
+                setSelectedSortFilter(prev => {
+                  let temp = prev;
+
+                  if (temp?.find(S => S === v)) {
+                    temp = temp?.filter(S => S !== v);
+                  } else {
+                    temp = [...(temp ?? []), v];
+                  }
+
+                  return temp;
+                })
+              }
+            />
           }
           ListEmptyComponent={
             <>
@@ -141,17 +223,12 @@ export default () => {
             </>
           }
           renderItem={({ item }) => (
-            <RegularText>{'Hello'}</RegularText>
-            // <ReportListItem
-            //   item={item}
-            //   onPress={() => {
-            //     setSearchMode(false);
-            //     setShowDropdown({
-            //       memberCode: item.memberCode,
-            //       fullName: item.fullName,
-            //     });
-            //   }}
-            // />
+            <ReportListItem
+              item={item}
+              onPress={() => {
+                setSearchMode(false);
+              }}
+            />
           )}
         />
         <Spacer height={16} />
@@ -163,15 +240,10 @@ export default () => {
         }}>
         <Button
           type="primary"
-          disabled={
-            false
-            // !values.avatar ||
-            // !!errors.avatar ||
-          }
           onPress={() => {
             // navigation.navigate('NewMemberDuesData')
           }}>
-          Tambah Transaksi
+          Tambah Iuran
         </Button>
       </View>
     </>
@@ -180,10 +252,8 @@ export default () => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-  },
-  contentContainer: {
-    padding: 20,
+    paddingTop: 20,
+    paddingHorizontal: 20,
   },
   buttonContainer: {
     paddingTop: 16,
@@ -193,7 +263,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF',
   },
   pillsContainer: {
-    paddingBottom: 12,
-    paddingHorizontal: 20,
+    padding: 12,
   },
 });

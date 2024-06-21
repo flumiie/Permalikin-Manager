@@ -1,4 +1,3 @@
-import firestore from '@react-native-firebase/firestore';
 import { useNavigation } from '@react-navigation/core';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
@@ -7,67 +6,66 @@ import { RefreshControl } from 'react-native';
 import { useMMKVStorage } from 'react-native-mmkv-storage';
 
 import { asyncStorage } from '../../store';
+import { getMemberList } from '../../store/actions';
+import { useAppDispatch } from '../../store/hooks';
 import { RootStackParamList } from '../Routes';
 import {
   DismissableView,
   DropdownNavigator,
   Empty,
-  ItemList,
   NavigationHeader,
   NavigationHeaderProps,
+  SimpleList,
   Spacer,
 } from '../components';
 import { MasterDataType } from '../libs/dataTypes';
 
 const ReportListItem = (props: { item: any; onPress: () => void }) => {
   return (
-    <ItemList
-      leftImage={require('../../assets/images/avatar.png')}
-      code={props.item.memberCode}
+    <SimpleList
+      icon="user"
       title={props.item.fullName}
-      sub={{
-        subtitle: props.item.email,
-        desc: props.item.phoneNo,
-      }}
+      subtitle={props.item.email}
       onPress={props.onPress}
     />
   );
 };
 
 export default () => {
+  const dispatch = useAppDispatch();
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
   const [credentials] = useMMKVStorage<{
     token: string;
-  }>('userCredentials', asyncStorage, {
+  }>('credentials', asyncStorage, {
     token: '',
   });
   const [personels, setPersonels] = useMMKVStorage<MasterDataType[]>(
     'personels',
     asyncStorage,
     [
-      {
-        avatar: '',
-        memberCode: '',
-        fullName: '',
-        birthPlaceDate: '',
-        religion: '',
-        address: {
-          identityCardAddress: '',
-          currentAddress: '',
-          country: '',
-          province: '',
-          city: '',
-          zipCode: '',
-        },
-        phoneNo: '',
-        email: '',
-        status: '',
-        balance: {
-          initial: '',
-          end: '',
-        },
-      },
+      // {
+      //   avatar: '',
+      //   memberCode: '',
+      //   fullName: '',
+      //   birthPlaceDate: '',
+      //   religion: '',
+      //   address: {
+      //     identityCardAddress: '',
+      //     currentAddress: '',
+      //     country: '',
+      //     province: '',
+      //     city: '',
+      //     zipCode: '',
+      //   },
+      //   phoneNo: '',
+      //   email: '',
+      //   status: '',
+      //   balance: {
+      //     initial: '',
+      //     end: '',
+      //   },
+      // },
     ],
   );
   const [_, setSearchMode] = useMMKVStorage('searchMode', asyncStorage, false);
@@ -102,19 +100,21 @@ export default () => {
     return tempData;
   }, [personels, search]);
 
-  const fetchData = useCallback(() => {
+  const fetchData = () => {
     setLoading(true);
-    return firestore()
-      .collection('Personels')
-      .get()
-      .then(querySnap => {
-        let temp: MasterDataType[] = [];
-        querySnap.forEach(docSnap => {
-          temp = [...temp, docSnap.data() as MasterDataType];
-        });
-        setPersonels(temp);
-      });
-  }, [setPersonels]);
+
+    dispatch(
+      getMemberList({
+        onSuccess: v => {
+          setPersonels(v);
+          setLoading(false);
+        },
+        onError: () => {
+          setLoading(false);
+        },
+      }),
+    );
+  };
 
   const onSelectNavigator = (
     v: string,
@@ -151,15 +151,8 @@ export default () => {
     if (credentials?.token) {
       fetchData();
     }
-  }, [credentials?.token, fetchData]);
-
-  useEffect(() => {
-    if (filteredData) {
-      setTimeout(() => {
-        setLoading(false);
-      }, 1000);
-    }
-  }, [filteredData]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [credentials?.token]);
 
   return (
     <>

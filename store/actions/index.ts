@@ -1,6 +1,6 @@
 import getAuth from './getAuth';
-import getUserData from './getUserData';
+import getMemberDues from './getMemberDues';
 import setUserData from './setUserData';
 import signUp from './signUp';
 
-export { getAuth, getUserData, setUserData, signUp };
+export { getAuth, getMemberDues, setUserData, signUp };
