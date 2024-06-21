@@ -46,7 +46,7 @@ export default () => {
     name: string;
     email: string;
     photo: string;
-  }>('userCredentials', asyncStorage, {
+  }>('credentials', asyncStorage, {
     token: '',
     name: '',
     email: '',

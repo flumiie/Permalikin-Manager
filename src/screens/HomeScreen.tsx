@@ -131,7 +131,7 @@ export default () => {
   const [credentials] = useMMKVStorage<{
     token: string;
     name: string;
-  }>('userCredentials', asyncStorage, {
+  }>('credentials', asyncStorage, {
     token: '',
     name: '',
   });

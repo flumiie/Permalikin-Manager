@@ -61,7 +61,7 @@ export default () => {
             onPress: () => {
               setShowConfirmLogoutDropdown(false);
               GoogleSignin.signOut();
-              asyncStorage.removeItem('userCredentials');
+              asyncStorage.removeItem('credentials');
             },
           },
         }}
@@ -107,6 +107,11 @@ export default () => {
           subtitle="Pelajari cara menggunakan apl. ini"
           onPress={() => {
             // TODO: Go to User Guideline screen
+            setSnackbar({
+              show: true,
+              type: 'error',
+              message: 'Sementara ini tidak tersedia',
+            });
           }}
         />
         <SimpleList easterEgg icon="info" title="Tentang" subtitle="v1.0" />
