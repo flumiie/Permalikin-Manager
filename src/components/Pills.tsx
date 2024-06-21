@@ -12,6 +12,7 @@ import MediumText from './Text/MediumText';
 
 interface PillsProps extends PressableProps {
   children: string | React.ReactNode;
+  selected: boolean;
   onSelect: (selected: boolean) => void;
   withSelectState?: boolean;
   style?: ViewStyle;
@@ -19,13 +20,12 @@ interface PillsProps extends PressableProps {
 }
 
 export default (props: PillsProps) => {
-  const [selected, setSelected] = useState(false);
   const backgroundColor = useMemo(() => {
-    if (selected) {
+    if (props.selected) {
       return '#BF2229';
     }
     return '#FFD3D3';
-  }, [selected]);
+  }, [props.selected]);
 
   return (
     <View style={styles.buttonContainer}>
@@ -37,15 +37,12 @@ export default (props: PillsProps) => {
           ...props.style,
         }}
         onPress={() => {
-          if (props.withSelectState ?? true) {
-            setSelected(!selected);
-          }
-          props.onSelect(selected);
+          props.onSelect(props.withSelectState ? props.selected : false);
         }}>
         {typeof props.children === 'string' ? (
           <MediumText
             type="label-large"
-            color={selected ? '#FAFAFA' : '#001E2F'}
+            color={props.selected ? '#FAFAFA' : '#001E2F'}
             style={props.textStyle}>
             {props.children}
           </MediumText>

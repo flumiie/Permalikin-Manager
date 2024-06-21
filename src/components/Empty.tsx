@@ -13,7 +13,7 @@ export default () => {
       />
       <Spacer height={12} />
       <RegularText weight="800" color="#222">
-        Result not found
+        Data tidak ditemukan
       </RegularText>
     </View>
   );

@@ -57,7 +57,7 @@ export default (props: SimpleListProps) => {
     if (increment > 0) {
       const eggTimeout = setTimeout(() => {
         setIncrement(0);
-      }, 10000);
+      }, 7000);
 
       return () => clearTimeout(eggTimeout);
     }
