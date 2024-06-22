@@ -9,7 +9,8 @@ import {
   View,
 } from 'react-native';
 import { useMMKVStorage } from 'react-native-mmkv-storage';
-import Icon from 'react-native-vector-icons/Feather';
+import FeatherIcon from 'react-native-vector-icons/Feather';
+import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome5';
 
 import { asyncStorage } from '../../../store';
 import { RootStackParamList } from '../../Routes';
@@ -18,7 +19,9 @@ import MediumText from '../Text/MediumText';
 import RegularText from '../Text/RegularText';
 
 interface SimpleListProps extends PressableProps {
-  icon: string;
+  iconLabel?: string;
+  icon?: string;
+  iconType?: 'Feather' | 'FontAwesome5';
   title: string;
   subtitle?: string;
   color?: {
@@ -31,7 +34,7 @@ interface SimpleListProps extends PressableProps {
   onPress?: () => void;
 }
 
-export default (props: SimpleListProps) => {
+export default ({ iconType = 'Feather', ...props }: SimpleListProps) => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   const [increment, setIncrement] = useState(0);
   const [eggFound, setEggFound] = useMMKVStorage(
@@ -94,13 +97,30 @@ export default (props: SimpleListProps) => {
           onPress={props.onPress}>
           <View style={styles.contents}>
             <View style={styles.listLeftContents}>
-              <View style={styles.iconContainer}>
-                <Icon
-                  name={props.icon}
-                  size={24}
-                  color={props.color?.icon ?? '#BF2229'}
-                />
-              </View>
+              {props.icon ? (
+                <View style={styles.iconContainer}>
+                  {iconType === 'Feather' ? (
+                    <FeatherIcon
+                      name={props.icon}
+                      size={24}
+                      color={props.color?.icon ?? '#BF2229'}
+                    />
+                  ) : (
+                    <FontAwesomeIcon
+                      name={props.icon}
+                      size={24}
+                      color={props.color?.icon ?? '#BF2229'}
+                    />
+                  )}
+                </View>
+              ) : null}
+
+              {props.iconLabel ? (
+                <View style={styles.iconContainer}>
+                  <MediumText size={18}>{props.iconLabel}</MediumText>
+                </View>
+              ) : null}
+
               <Spacer width={8} />
               <View>
                 <MediumText
@@ -123,7 +143,7 @@ export default (props: SimpleListProps) => {
               </View>
             </View>
             {props.onPress ? (
-              <Icon
+              <FeatherIcon
                 name="chevron-right"
                 size={24}
                 color={props.color?.chevron ?? '#44474E'}
@@ -157,8 +177,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   iconContainer: {
-    width: 24,
-    height: 24,
+    width: 30,
+    height: 30,
     alignItems: 'center',
     justifyContent: 'center',
   },

@@ -14,8 +14,8 @@ type SubtitleType = {
 };
 
 interface ItemListProps extends PressableProps {
+  id: string;
   leftImage: number | Source;
-  code: string;
   title: string;
   sub?: SubtitleType | BadgeProps;
   onPress: () => void;

@@ -40,3 +40,10 @@ export type CityType =
       lng: string;
     }
   | undefined;
+
+export type MemberDuesType = {
+  date: string;
+  due: string;
+  paid: string;
+  remaining: string;
+};

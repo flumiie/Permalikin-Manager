@@ -3,6 +3,7 @@ import EasterEggScreen from './EasterEggScreen';
 import HomeScreen from './HomeScreen';
 import MemberDuesScreen from './Master/MemberDuesScreen';
 import NewMasterDataScreen from './Master/NewMasterDataScreen';
+import NewMemberDueScreen from './Master/NewMemberDueScreen';
 import MemberListScreen from './MemberListScreen';
 import SignInScreen from './SignInScreen';
 import SignUpScreen from './SignUpScreen';
@@ -16,4 +17,4 @@ export {
   SignUpScreen,
 };
 
-export { NewMasterDataScreen, MemberDuesScreen };
+export { NewMasterDataScreen, MemberDuesScreen, NewMemberDueScreen };

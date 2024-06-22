@@ -10,6 +10,7 @@ import {
   EasterEggScreen,
   MemberDuesScreen,
   NewMasterDataScreen,
+  NewMemberDueScreen,
   SignInScreen,
   SignUpScreen,
 } from './screens';
@@ -29,6 +30,10 @@ export type RootStackParamList = {
   BottomTabs: NavigatorScreenParams<BottomTabsParamList>;
   NewMasterData: undefined;
   MemberDues: {
+    memberCode: string;
+    fullName: string;
+  };
+  NewMemberDue: {
     memberCode: string;
     fullName: string;
   };
@@ -57,6 +62,7 @@ export default () => {
           options={{ title: 'Data Baru' }}
         />
         <MainStack.Screen name="MemberDues" component={MemberDuesScreen} />
+        <MainStack.Screen name="NewMemberDue" component={NewMemberDueScreen} />
         <MainStack.Screen
           name="EasterEgg"
           component={EasterEggScreen}

@@ -14,33 +14,55 @@ import { useMMKVStorage } from 'react-native-mmkv-storage';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { asyncStorage } from '../../../store';
-import { getUserData } from '../../../store/actions';
+import { getMemberDues } from '../../../store/actions';
 import { useAppDispatch } from '../../../store/hooks';
 import { RootStackParamList } from '../../Routes';
 import {
   Button,
   DismissableView,
   Empty,
-  ItemList,
   NavigationHeader,
   NavigationHeaderProps,
   Pills,
+  SimpleList,
   Spacer,
 } from '../../components';
+import { MemberDuesType } from '../../libs/dataTypes';
 
 type MemberDuesPillTypes = 'latest' | 'oldest' | 'highest' | 'lowest';
 
-const ReportListItem = (props: { item: any; onPress: () => void }) => {
-  if (props.item.dues) {
+const ReportListItem = (props: {
+  item: MemberDuesType;
+  index: number;
+  onPress: () => void;
+}) => {
+  const title = useMemo(() => {
+    if (props.item.paid < props.item.due) {
+      return `Kurang: Rp ${
+        Number(
+          props.item.due?.replace(/[.|,| |-]/g, '') ?? 0,
+        ).toLocaleString() ?? 0
+      }\nDibayar: Rp ${
+        Number(
+          props.item.paid?.replace(/[.|,| |-]/g, '') ?? 0,
+        ).toLocaleString() ?? 0
+      }\nSisa: Rp ${
+        Number(
+          props.item.remaining?.replace(/[.|,| |-]/g, '') ?? 0,
+        ).toLocaleString() ?? 0
+      }`;
+    }
+    return `Total: Rp ${Number(
+      props.item.due?.replace(/[.|,| |-]/g, '') ?? 0,
+    ).toLocaleString()} (Sudah lunas)`;
+  }, [props.item]);
+
+  if (props.item) {
     return (
-      <ItemList
-        code={props.item.memberCode}
-        title={props.item.fullName}
-        sub={{
-          subtitle: props.item.email,
-          desc: props.item.phoneNo,
-        }}
-        onPress={props.onPress}
+      <SimpleList
+        iconLabel={`${props.index + 1}.`}
+        title={title}
+        subtitle={`Tanggal: ${props.item.date}`}
       />
     );
   }
@@ -63,8 +85,17 @@ export default () => {
   }>('credentials', asyncStorage, {
     token: '',
   });
-  const [userData, setUserData] = useMMKVStorage('userData', asyncStorage, []);
-  const [_, setSearchMode] = useMMKVStorage('searchMode', asyncStorage, false);
+  const [snackbar, setSnackbar] = useMMKVStorage<{
+    show: boolean;
+    type: 'success' | 'error';
+    message: string;
+  } | null>('snackbar', asyncStorage, null);
+  const [memberDues, setMemberDues] = useMMKVStorage<MemberDuesType[] | null>(
+    'memberDues',
+    asyncStorage,
+    null,
+  );
+  const [__, setSearchMode] = useMMKVStorage('searchMode', asyncStorage, false);
 
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState('');
@@ -76,8 +107,8 @@ export default () => {
   const [selectedSortFilter, setSelectedSortFilter] =
     useState<MemberDuesPillTypes[]>();
 
-  const memberDuesData = useMemo(() => {
-    let tempData: any[] = userData;
+  const filteredData = useMemo(() => {
+    let tempData: MemberDuesType[] | null = memberDues;
 
     // tempData = tempData.sort((a, b) => {
     //   if (selectedSortFilter === 'latest') {
@@ -91,8 +122,8 @@ export default () => {
     //   }
     // });
 
-    return tempData;
-  }, [userData]);
+    return tempData?.[0];
+  }, [memberDues]);
 
   const MemberDuesHeader = (props: {
     onSelectFilter: (v: MemberDuesPillTypes) => void;
@@ -142,35 +173,37 @@ export default () => {
     setLoading(true);
 
     dispatch(
-      getUserData({
+      getMemberDues({
         memberCode: route.params?.memberCode ?? '',
         onSuccess: v => {
-          setUserData(v);
+          setMemberDues(v);
           setLoading(false);
         },
-        onError: () => {
+        onError: v => {
+          if (
+            v.includes('The query requires an index. You can create it here')
+          ) {
+            setSnackbar({
+              show: true,
+              type: 'error',
+              message: 'Data belum di index. Mohon coba lagi nanti',
+            });
+          }
+          if (
+            v.includes(
+              'The query requires an index. That index is currently building and cannot be used yet.',
+            )
+          ) {
+            setSnackbar({
+              show: true,
+              type: 'error',
+              message: 'Data sedang di index. Mohon coba lagi nanti',
+            });
+          }
           setLoading(false);
         },
       }),
     );
-  };
-
-  const addMemberDueData = (memberCode: string) => {
-    // Create a reference to the post
-    const postReference = firestore().doc(`posts/${memberCode}`);
-
-    return firestore().runTransaction(async transaction => {
-      // Get post data first
-      const postSnapshot = await transaction.get(postReference);
-
-      if (!postSnapshot.exists) {
-        throw 'Post does not exist!';
-      }
-
-      transaction.update(postReference, {
-        likes: postSnapshot.data()?.likes + 1,
-      });
-    });
   };
 
   useEffect(() => {
@@ -183,7 +216,7 @@ export default () => {
   }, [navigation, route.params?.fullName]);
 
   useEffect(() => {
-    if (credentials?.token) {
+    if (credentials?.token || snackbar?.message === 'Data sudah tersimpan') {
       fetchData();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -194,37 +227,38 @@ export default () => {
       <StatusBar barStyle="dark-content" backgroundColor="#FCFCFF" />
       <DismissableView style={{ flex: 1 }}>
         <FlatList
-          data={memberDuesData}
+          data={filteredData}
           refreshControl={
             <RefreshControl refreshing={loading} onRefresh={fetchData} />
           }
-          keyExtractor={item => item.memberCode}
-          ListHeaderComponent={
-            <MemberDuesHeader
-              onSelectFilter={v =>
-                setSelectedSortFilter(prev => {
-                  let temp = prev;
+          keyExtractor={(___, index) => index.toString()}
+          // ListHeaderComponent={
+          //   <MemberDuesHeader
+          //     onSelectFilter={v =>
+          //       setSelectedSortFilter(prev => {
+          //         let temp = prev;
 
-                  if (temp?.find(S => S === v)) {
-                    temp = temp?.filter(S => S !== v);
-                  } else {
-                    temp = [...(temp ?? []), v];
-                  }
+          //         if (temp?.find(S => S === v)) {
+          //           temp = temp?.filter(S => S !== v);
+          //         } else {
+          //           temp = [...(temp ?? []), v];
+          //         }
 
-                  return temp;
-                })
-              }
-            />
-          }
+          //         return temp;
+          //       })
+          //     }
+          //   />
+          // }
           ListEmptyComponent={
             <>
               <Spacer height={24} />
               <Empty />
             </>
           }
-          renderItem={({ item }) => (
+          renderItem={({ item, index }) => (
             <ReportListItem
               item={item}
+              index={index}
               onPress={() => {
                 setSearchMode(false);
               }}
@@ -241,7 +275,10 @@ export default () => {
         <Button
           type="primary"
           onPress={() => {
-            // navigation.navigate('NewMemberDuesData')
+            navigation.navigate('NewMemberDue', {
+              memberCode: route.params?.memberCode ?? '',
+              fullName: route.params?.fullName ?? '',
+            });
           }}>
           Tambah Iuran
         </Button>

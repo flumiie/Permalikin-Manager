@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/core';
 import { StackNavigationProp } from '@react-navigation/stack';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { FlatList, StatusBar } from 'react-native';
 import { RefreshControl } from 'react-native';
 import { useMMKVStorage } from 'react-native-mmkv-storage';
@@ -13,19 +13,23 @@ import {
   DismissableView,
   DropdownNavigator,
   Empty,
+  ItemList,
   NavigationHeader,
   NavigationHeaderProps,
-  SimpleList,
   Spacer,
 } from '../components';
 import { MasterDataType } from '../libs/dataTypes';
 
 const ReportListItem = (props: { item: any; onPress: () => void }) => {
   return (
-    <SimpleList
-      icon="user"
+    <ItemList
+      id={props.item.memberCode}
+      leftImage={require('../../assets/images/avatar.png')}
       title={props.item.fullName}
-      subtitle={props.item.email}
+      sub={{
+        subtitle: props.item.email,
+        desc: props.item.memberCode,
+      }}
       onPress={props.onPress}
     />
   );

@@ -3,7 +3,7 @@
   "compilerOptions": {
     "target": "ESNext",
     "lib": ["es6", "dom", "es2018"],
-    "module": "ESNext",
+    "module": "NodeNext",
     "moduleResolution": "NodeNext",
     "esModuleInterop": true,
     "preserveSymlinks": true

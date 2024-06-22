@@ -36,11 +36,7 @@ export default () => {
     show: boolean;
     type: 'success' | 'error';
     message: string;
-  }>('snackbar', asyncStorage, {
-    show: false,
-    type: 'success',
-    message: '',
-  });
+  } | null>('snackbar', asyncStorage, null);
   const [__, setCredentials] = useMMKVStorage<{
     token: string;
     name: string;

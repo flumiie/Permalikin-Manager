@@ -3,6 +3,7 @@ import { MMKVLoader } from 'react-native-mmkv-storage';
 import { thunk } from 'redux-thunk';
 
 import {
+  createMemberDueReducer,
   getAuthReducer,
   getMemberDuesReducer,
   signUpReducer,
@@ -11,6 +12,7 @@ import {
 const rootReducer = combineReducers({
   getAuth: getAuthReducer,
   getMemberDues: getMemberDuesReducer,
+  createMemberDue: createMemberDueReducer,
   signUp: signUpReducer,
 });
 
@@ -19,9 +21,12 @@ const store = configureStore({
   middleware: () => new Tuple(thunk),
 });
 
-export type Dispatch = typeof store.dispatch;
-export type RootState = ReturnType<typeof store.getState>;
-export const HOST = 'gs://permalikin-manager.appspot.com';
-export const asyncStorage = new MMKVLoader().initialize();
+type Dispatch = typeof store.dispatch;
+type RootState = ReturnType<typeof store.getState>;
 
+const HOST = 'gs://permalikin-manager.appspot.com';
+const asyncStorage = new MMKVLoader().initialize();
+
+export type { Dispatch, RootState };
+export { HOST, asyncStorage };
 export default store;

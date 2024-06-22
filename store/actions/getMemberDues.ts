@@ -16,20 +16,18 @@ export default (props: GetUserDataProps) => {
       .where('dues', '!=', [])
       .get()
       .then(querySnap => {
-        if (querySnap.docs.length) {
-          const data = querySnap.docs.map(doc => doc.data());
+        const data = querySnap.docs.map(doc => {
+          return doc.data().dues;
+        });
 
-          dispatch({
-            type: GET_MEMBER_DUES,
-            payload: data,
-          });
-          if (data.length) {
-            props.onSuccess(data);
-          }
-        }
+        dispatch({
+          type: GET_MEMBER_DUES,
+          payload: data,
+        });
+
+        props.onSuccess(data);
       })
       .catch(err => {
-        console.log(err);
         dispatch({
           type: GET_MEMBER_DUES_ERROR,
           payload: err?.message,

@@ -119,15 +119,12 @@ const HOME_ACTIONS: RespectorActionsType[] = [
 export default () => {
   const insets = useSafeAreaInsets();
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+
   const [_, setSnackbar] = useMMKVStorage<{
     show: boolean;
     type: 'success' | 'error';
     message: string;
-  }>('snackbar', asyncStorage, {
-    show: false,
-    type: 'success',
-    message: '',
-  });
+  } | null>('snackbar', asyncStorage, null);
   const [credentials] = useMMKVStorage<{
     token: string;
     name: string;

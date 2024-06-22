@@ -32,11 +32,7 @@ function App(): React.JSX.Element {
     show: boolean;
     type: 'success' | 'error';
     message: string;
-  }>('snackbar', asyncStorage, {
-    show: false,
-    type: 'success',
-    message: '',
-  });
+  } | null>('snackbar', asyncStorage, null);
 
   useEffect(() => {
     setTimeout(() => {

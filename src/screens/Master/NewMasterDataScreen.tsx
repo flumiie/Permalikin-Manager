@@ -1,5 +1,5 @@
 import firestore from '@react-native-firebase/firestore';
-import { RouteProp, useNavigation, useRoute } from '@react-navigation/core';
+import { useNavigation } from '@react-navigation/core';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { Formik } from 'formik';
 import React, { useRef, useState } from 'react';
@@ -32,17 +32,12 @@ import {
 export default () => {
   const insets = useSafeAreaInsets();
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
-  const route = useRoute<RouteProp<RootStackParamList, 'NewMasterData'>>();
 
   const [_, setSnackbar] = useMMKVStorage<{
     show: boolean;
     type: 'success' | 'error';
     message: string;
-  }>('snackbar', asyncStorage, {
-    show: false,
-    type: 'success',
-    message: '',
-  });
+  } | null>('snackbar', asyncStorage, null);
 
   // const avatarInputRef = useRef<RNTextInput>(null);
   const memberCodeInputRef = useRef<RNTextInput>(null);
