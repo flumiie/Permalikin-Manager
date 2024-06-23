@@ -34,6 +34,8 @@ local.properties
 *.keystore
 !debug.keystore
 
+appcenter-config.json
+
 # node.js
 #
 node_modules/

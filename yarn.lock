@@ -3678,6 +3678,47 @@ __metadata:
   languageName: node
   linkType: hard
 
+"appcenter-analytics@npm:^5.0.1":
+  version: 5.0.1
+  resolution: "appcenter-analytics@npm:5.0.1"
+  dependencies:
+    appcenter: 5.0.1
+  checksum: fdae463a3f784ed61b0003ed9eec31b8004c1b918759ce5f1d2783646b9a386a8e6f7c8cdb204ddf9b4e36068059c345562cf712a4d993659f8bbd0bf10886d4
+  languageName: node
+  linkType: hard
+
+"appcenter-crashes@npm:^5.0.1":
+  version: 5.0.1
+  resolution: "appcenter-crashes@npm:5.0.1"
+  dependencies:
+    appcenter: 5.0.1
+  checksum: e39d0d6cc526907d00ba20edc3491a3216ad01ee5b3845188288fd611623a52c24bb0c499fa00c6b226c01707cba7d86ac21350959e8628eadbfbb0bdda70a31
+  languageName: node
+  linkType: hard
+
+"appcenter-link-scripts@npm:5.0.1":
+  version: 5.0.1
+  resolution: "appcenter-link-scripts@npm:5.0.1"
+  dependencies:
+    debug: 4.3.1
+    glob: 5.0.15
+    mkdirp: 0.5.3
+    plist: ^3.0.2
+    which: 1.2.11
+    xcode: 2.0.0
+  checksum: ec3bf2dfca7fcbd6735f78051bda510ff7af805fe924b5afb5f6598b8276b0bd036d93d447915d3542604b6b9cac6af259faac14b04ee539607d47be6671d6c5
+  languageName: node
+  linkType: hard
+
+"appcenter@npm:5.0.1, appcenter@npm:^5.0.1":
+  version: 5.0.1
+  resolution: "appcenter@npm:5.0.1"
+  dependencies:
+    appcenter-link-scripts: 5.0.1
+  checksum: ca2b833e849a54807e1e62c8d9f97de0dd5dacd9df3e805afcc0efa0d2254e6f3ebbefe9989482aba28ea6806679a8b1993facc6d8b52e1c253f1fe820c59e60
+  languageName: node
+  linkType: hard
+
 "appdirsjs@npm:^1.2.4":
   version: 1.2.7
   resolution: "appdirsjs@npm:1.2.7"
@@ -4756,6 +4797,18 @@ __metadata:
     supports-color:
       optional: true
   checksum: 7c002b51e256257f936dda09eb37167df952758c57badf6bf44bdc40b89a4bcb8e5a0a2e4c7b53f97c69e2970dd5272d33a757378a12c8f8e64ea7bf99e8e86e
+  languageName: node
+  linkType: hard
+
+"debug@npm:4.3.1":
+  version: 4.3.1
+  resolution: "debug@npm:4.3.1"
+  dependencies:
+    ms: 2.1.2
+  peerDependenciesMeta:
+    supports-color:
+      optional: true
+  checksum: 2c3352e37d5c46b0d203317cd45ea0e26b2c99f2d9dfec8b128e6ceba90dfb65425f5331bf3020fe9929d7da8c16758e737f4f3bfc0fce6b8b3d503bae03298b
   languageName: node
   linkType: hard
 
@@ -6053,6 +6106,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"glob@npm:5.0.15":
+  version: 5.0.15
+  resolution: "glob@npm:5.0.15"
+  dependencies:
+    inflight: ^1.0.4
+    inherits: 2
+    minimatch: 2 || 3
+    once: ^1.3.0
+    path-is-absolute: ^1.0.0
+  checksum: f9742448303460672607e569457f1b57e486a79a985e269b69465834d2075b243378225f65dc54c09fcd4b75e4fb34442aec88f33f8c65fa4abccc8ee2dc2f5d
+  languageName: node
+  linkType: hard
+
 "glob@npm:7.1.6":
   version: 7.1.6
   resolution: "glob@npm:7.1.6"
@@ -6826,6 +6892,13 @@ __metadata:
   version: 1.0.0
   resolution: "isarray@npm:1.0.0"
   checksum: f032df8e02dce8ec565cf2eb605ea939bdccea528dbcf565cdf92bfa2da9110461159d86a537388ef1acef8815a330642d7885b29010e8f7eac967c9993b65ab
+  languageName: node
+  linkType: hard
+
+"isexe@npm:^1.1.1":
+  version: 1.1.2
+  resolution: "isexe@npm:1.1.2"
+  checksum: a35523bc88b8c14c8934a0a411cff0bbf193c64a3049d75ca76c1508f7323a6ef933fa2e96437241713ec16d65c5368a5de99bd3320c0fbfb0ce2c63c8418f84
   languageName: node
   linkType: hard
 
@@ -8133,7 +8206,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"minimatch@npm:^3.0.2, minimatch@npm:^3.0.4, minimatch@npm:^3.0.5, minimatch@npm:^3.1.1, minimatch@npm:^3.1.2":
+"minimatch@npm:2 || 3, minimatch@npm:^3.0.2, minimatch@npm:^3.0.4, minimatch@npm:^3.0.5, minimatch@npm:^3.1.1, minimatch@npm:^3.1.2":
   version: 3.1.2
   resolution: "minimatch@npm:3.1.2"
   dependencies:
@@ -8151,7 +8224,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"minimist@npm:^1.2.0, minimist@npm:^1.2.3, minimist@npm:^1.2.6":
+"minimist@npm:^1.2.0, minimist@npm:^1.2.3, minimist@npm:^1.2.5, minimist@npm:^1.2.6":
   version: 1.2.8
   resolution: "minimist@npm:1.2.8"
   checksum: 75a6d645fb122dad29c06a7597bddea977258957ed88d7a6df59b5cd3fe4a527e253e9bbf2e783e4b73657f9098b96a5fe96ab8a113655d4109108577ecf85b0
@@ -8256,6 +8329,17 @@ __metadata:
   version: 0.5.3
   resolution: "mkdirp-classic@npm:0.5.3"
   checksum: 3f4e088208270bbcc148d53b73e9a5bd9eef05ad2cbf3b3d0ff8795278d50dd1d11a8ef1875ff5aea3fa888931f95bfcb2ad5b7c1061cfefd6284d199e6776ac
+  languageName: node
+  linkType: hard
+
+"mkdirp@npm:0.5.3":
+  version: 0.5.3
+  resolution: "mkdirp@npm:0.5.3"
+  dependencies:
+    minimist: ^1.2.5
+  bin:
+    mkdirp: bin/cmd.js
+  checksum: 7c63182c26bd48d2fa3e65f0c9d2b146d62ae5843f7d04af37e4530ff4c7a116b2649d0ce75a51efc54a514a6b7251368e471cecb1cc6a0e316a1ef119a3374f
   languageName: node
   linkType: hard
 
@@ -8862,6 +8946,9 @@ __metadata:
     "@types/react-native-rss-parser": ^1.4.3
     "@types/react-native-vector-icons": ^6.4.18
     "@types/react-test-renderer": ^18.0.0
+    appcenter: ^5.0.1
+    appcenter-analytics: ^5.0.1
+    appcenter-crashes: ^5.0.1
     axios: ^1.7.2
     babel-jest: ^29.6.3
     eslint: ^8.19.0
@@ -8941,7 +9028,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"plist@npm:^3.0.5, plist@npm:^3.1.0":
+"plist@npm:^3.0.2, plist@npm:^3.0.5, plist@npm:^3.1.0":
   version: 3.1.0
   resolution: "plist@npm:3.1.0"
   dependencies:
@@ -10168,7 +10255,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"simple-plist@npm:^1.1.0":
+"simple-plist@npm:^1.0.0, simple-plist@npm:^1.1.0":
   version: 1.4.0
   resolution: "simple-plist@npm:1.4.0"
   dependencies:
@@ -11120,6 +11207,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"uuid@npm:^3.3.2":
+  version: 3.4.0
+  resolution: "uuid@npm:3.4.0"
+  bin:
+    uuid: ./bin/uuid
+  checksum: 58de2feed61c59060b40f8203c0e4ed7fd6f99d42534a499f1741218a1dd0c129f4aa1de797bcf822c8ea5da7e4137aa3673431a96dae729047f7aca7b27866f
+  languageName: node
+  linkType: hard
+
 "uuid@npm:^7.0.3":
   version: 7.0.3
   resolution: "uuid@npm:7.0.3"
@@ -11268,6 +11364,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"which@npm:1.2.11":
+  version: 1.2.11
+  resolution: "which@npm:1.2.11"
+  dependencies:
+    isexe: ^1.1.1
+  bin:
+    which: ./bin/which
+  checksum: 90ef6058ae47569dd2317b5e906e5e7bfb17dde6b350225337ba001b48fed9d7155e70a5e8e7825af2a4770e9421c5e18b8ace922ac28e0f1dcc0c1b6b13bea9
+  languageName: node
+  linkType: hard
+
 "which@npm:^2.0.1":
   version: 2.0.2
   resolution: "which@npm:2.0.2"
@@ -11379,6 +11486,16 @@ __metadata:
     utf-8-validate:
       optional: true
   checksum: c3c100a181b731f40b7f2fddf004aa023f79d64f489706a28bc23ff88e87f6a64b3c6651fbec3a84a53960b75159574d7a7385709847a62ddb7ad6af76f49138
+  languageName: node
+  linkType: hard
+
+"xcode@npm:2.0.0":
+  version: 2.0.0
+  resolution: "xcode@npm:2.0.0"
+  dependencies:
+    simple-plist: ^1.0.0
+    uuid: ^3.3.2
+  checksum: 08684e579f77f8706718993253c5300f4d8a10941106c3ff023fbbcbb07095a45248222684a66633f97cf996b863e95fb584d993765eb0c469fa13c63a695c8c
   languageName: node
   linkType: hard
 
