@@ -10,12 +10,15 @@ import {
   EasterEggScreen,
   MemberDonationsScreen,
   MemberDuesScreen,
+  MemberInterestsScreen,
   NewMasterDataScreen,
   NewMemberDonationScreen,
   NewMemberDueScreen,
+  NewTransactionMenuScreen,
   SignInScreen,
   SignUpScreen,
 } from './screens';
+import NewMemberInterestScreen from './screens/Master/NewMemberInterestScreen';
 
 export type AuthStackParamList = {
   SignIn: undefined;
@@ -47,6 +50,15 @@ export type RootStackParamList = {
     memberCode: string;
     fullName: string;
   };
+  MemberInterests: {
+    memberCode: string;
+    fullName: string;
+  };
+  NewMemberInterest: {
+    memberCode: string;
+    fullName: string;
+  };
+  NewTransactionMenu: undefined;
   EasterEgg: undefined;
 };
 
@@ -80,6 +92,18 @@ export default () => {
         <MainStack.Screen
           name="NewMemberDonation"
           component={NewMemberDonationScreen}
+        />
+        <MainStack.Screen
+          name="MemberInterests"
+          component={MemberInterestsScreen}
+        />
+        <MainStack.Screen
+          name="NewMemberInterest"
+          component={NewMemberInterestScreen}
+        />
+        <MainStack.Screen
+          name="NewTransactionMenu"
+          component={NewTransactionMenuScreen}
         />
         <MainStack.Screen
           name="EasterEgg"

@@ -1,4 +1,3 @@
-import firestore from '@react-native-firebase/firestore';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/core';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { useEffect, useMemo, useState } from 'react';
@@ -84,11 +83,6 @@ export default () => {
 
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState('');
-  const [showConfirmCreateDataDropdown, setShowConfirmCreateDataDropdown] =
-    useState({
-      state: false,
-      values: {},
-    });
   const [selectedSortFilter, setSelectedSortFilter] =
     useState<MemberDonationsPillTypes[]>();
 

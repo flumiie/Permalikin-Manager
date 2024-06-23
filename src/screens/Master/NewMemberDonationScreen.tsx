@@ -17,7 +17,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import * as Yup from 'yup';
 
 import { asyncStorage } from '../../../store';
-import { createMemberDonation, createMemberDue } from '../../../store/actions';
+import { createMemberDonation } from '../../../store/actions';
 import { useAppDispatch } from '../../../store/hooks';
 import { RootStackParamList } from '../../Routes';
 import {
@@ -241,7 +241,7 @@ export default () => {
                   <Spacer height={16} />
                   <TextInput
                     ref={donationInputRef}
-                    id="donation"
+                    id="donation-amount"
                     label="Total Donasi*"
                     placeholder="Contoh: 300000"
                     filledTextColor

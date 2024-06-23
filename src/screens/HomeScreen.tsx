@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/core';
 import { StackNavigationProp } from '@react-navigation/stack';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import {
   FlatList,
   ImageSourcePropType,
@@ -79,6 +79,7 @@ type RespectorActionsType = {
   subtitle: string;
   disabled: boolean;
   screen: string;
+  type: string;
 };
 
 const HOME_ACTIONS: RespectorActionsType[] = [
@@ -89,30 +90,25 @@ const HOME_ACTIONS: RespectorActionsType[] = [
     subtitle: 'Tambah baru',
     disabled: false,
     screen: 'NewMasterData',
+    type: 'screen',
   },
   {
     id: 2,
-    icon: require('../../assets/images/transactions.png'),
-    title: 'Transaksi',
-    subtitle: 'Tambah baru',
+    icon: require('../../assets/images/reports.png'),
+    title: 'Laporan',
+    subtitle: 'Listing data',
     disabled: false,
-    screen: 'CreateNewVibration',
+    screen: 'Report',
+    type: 'bottom-tab',
   },
   {
     id: 3,
-    icon: require('../../assets/images/reports.png'),
-    title: 'Laporan',
-    subtitle: 'Tambah baru',
-    disabled: false,
-    screen: 'CreateNewVibration',
-  },
-  {
-    id: 4,
     icon: undefined,
     title: '',
     subtitle: '',
     disabled: true,
     screen: '',
+    type: '',
   },
 ];
 
@@ -138,28 +134,6 @@ export default () => {
     null,
   );
   const [__, setSearchMode] = useMMKVStorage('searchMode', asyncStorage, false);
-
-  // useEffect(() => {
-  //   getUserData({
-  //     token: credentials?.token,
-  //     onSuccess: v => {
-  //       console.log(v);
-  //       setSnackbar({
-  //         type: 'success',
-  //         message: `Selamat datang kembali, ${credentials?.name}`,
-  //       });
-  //       setShowSnackbar(true);
-  //     },
-  //     onError: v => {
-  //       console.log(v);
-  //       setSnackbar({
-  //         type: 'error',
-  //         message: 'Ada kesalahan. Mohon coba sesaat lagi',
-  //       });
-  //       setShowSnackbar(true);
-  //     },
-  //   });
-  // }, [credentials]);
 
   useEffect(() => {
     if (registrationStatus && credentials?.token) {
@@ -215,7 +189,13 @@ export default () => {
                 disabled={item.disabled}
                 onPress={() => {
                   setSearchMode(false);
-                  navigation.navigate(item.screen as never);
+                  if (item.type === 'screen') {
+                    navigation.navigate(item.screen as never);
+                  } else {
+                    navigation.navigate('BottomTabs', {
+                      screen: item.screen as never,
+                    });
+                  }
                 }}
               />
               {index % 2 === 0 ? <Spacer width={12} /> : null}

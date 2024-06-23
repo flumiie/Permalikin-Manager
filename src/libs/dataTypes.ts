@@ -52,3 +52,8 @@ export type MemberDonationsType = {
   date: string;
   amount: string;
 };
+
+export type MemberInterestsType = {
+  date: string;
+  amount: string;
+};

@@ -6,13 +6,17 @@ import {
   createMemberDonationReducer,
   createMemberDueReducer,
   getAuthReducer,
+  getMemberDonationsReducer,
   getMemberDuesReducer,
+  getMemberInterestsReducer,
   signUpReducer,
 } from './reducers';
 
 const rootReducer = combineReducers({
   getAuth: getAuthReducer,
   getMemberDues: getMemberDuesReducer,
+  getMemberDonations: getMemberDonationsReducer,
+  getMemberInterests: getMemberInterestsReducer,
   createMemberDonation: createMemberDonationReducer,
   createMemberDue: createMemberDueReducer,
   signUp: signUpReducer,

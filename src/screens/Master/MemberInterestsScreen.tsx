@@ -13,7 +13,7 @@ import { useMMKVStorage } from 'react-native-mmkv-storage';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { asyncStorage } from '../../../store';
-import { getMemberDues } from '../../../store/actions';
+import { getMemberInterests } from '../../../store/actions';
 import { useAppDispatch } from '../../../store/hooks';
 import { RootStackParamList } from '../../Routes';
 import {
@@ -26,34 +26,21 @@ import {
   SimpleList,
   Spacer,
 } from '../../components';
-import { MemberDuesType } from '../../libs/dataTypes';
+import { MemberInterestsType } from '../../libs/dataTypes';
 
-type MemberDuesPillTypes = 'latest' | 'oldest' | 'highest' | 'lowest';
+type MemberInterestsPillTypes = 'latest' | 'oldest' | 'highest' | 'lowest';
 
 const ReportListItem = (props: {
-  item: MemberDuesType;
+  item: MemberInterestsType;
   index: number;
   onPress: () => void;
 }) => {
   const title = useMemo(() => {
-    if (props.item.paid < props.item.due) {
-      return `Kurang: Rp ${
-        Number(
-          props.item.due?.replace(/[.|,| |-]/g, '') ?? 0,
-        ).toLocaleString() ?? 0
-      }\nDibayar: Rp ${
-        Number(
-          props.item.paid?.replace(/[.|,| |-]/g, '') ?? 0,
-        ).toLocaleString() ?? 0
-      }\nSisa: Rp ${
-        Number(
-          props.item.remaining?.replace(/[.|,| |-]/g, '') ?? 0,
-        ).toLocaleString() ?? 0
-      }`;
-    }
-    return `Total: Rp ${Number(
-      props.item.due?.replace(/[.|,| |-]/g, '') ?? 0,
-    ).toLocaleString()} (Sudah lunas)`;
+    return `Rp ${
+      Number(
+        props.item.amount?.replace(/[.|,| |-]/g, '') ?? 0,
+      ).toLocaleString() ?? 0
+    }`;
   }, [props.item]);
 
   if (props.item) {
@@ -61,7 +48,7 @@ const ReportListItem = (props: {
       <SimpleList
         iconLabel={`${props.index + 1}.`}
         title={title}
-        subtitle={`Tanggal iuran: ${props.item.date}`}
+        subtitle={`Tanggal: ${props.item.date}`}
       />
     );
   }
@@ -77,7 +64,7 @@ export default () => {
   const insets = useSafeAreaInsets();
   const dispatch = useAppDispatch();
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
-  const route = useRoute<RouteProp<RootStackParamList, 'MemberDues'>>();
+  const route = useRoute<RouteProp<RootStackParamList, 'MemberInterests'>>();
 
   const [credentials] = useMMKVStorage<{
     token: string;
@@ -89,20 +76,18 @@ export default () => {
     type: 'success' | 'error';
     message: string;
   } | null>('snackbar', asyncStorage, null);
-  const [memberDues, setMemberDues] = useMMKVStorage<MemberDuesType[] | null>(
-    'memberDues',
-    asyncStorage,
-    null,
-  );
+  const [memberInterests, setMemberInterests] = useMMKVStorage<
+    MemberInterestsType[] | null
+  >('memberInterests', asyncStorage, null);
   const [__, setSearchMode] = useMMKVStorage('searchMode', asyncStorage, false);
 
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState('');
   const [selectedSortFilter, setSelectedSortFilter] =
-    useState<MemberDuesPillTypes[]>();
+    useState<MemberInterestsPillTypes[]>();
 
   const filteredData = useMemo(() => {
-    let tempData: MemberDuesType[] | null = memberDues;
+    let tempData: MemberInterestsType[] | null = memberInterests;
 
     // tempData = tempData.sort((a, b) => {
     //   if (selectedSortFilter === 'latest') {
@@ -117,10 +102,10 @@ export default () => {
     // });
 
     return tempData?.[0];
-  }, [memberDues]);
+  }, [memberInterests]);
 
-  const MemberDuesHeader = (props: {
-    onSelectFilter: (v: MemberDuesPillTypes) => void;
+  const MemberInterestsHeader = (props: {
+    onSelectFilter: (v: MemberInterestsPillTypes) => void;
   }) => {
     return (
       <ScrollView
@@ -167,10 +152,10 @@ export default () => {
     setLoading(true);
 
     dispatch(
-      getMemberDues({
+      getMemberInterests({
         memberCode: route.params?.memberCode ?? '',
         onSuccess: v => {
-          setMemberDues(v);
+          setMemberInterests(v);
           setLoading(false);
         },
         onError: v => {
@@ -193,6 +178,13 @@ export default () => {
               type: 'error',
               message: 'Data sedang di index. Mohon coba lagi nanti',
             });
+          } else {
+            console.log(v);
+            setSnackbar({
+              show: true,
+              type: 'error',
+              message: 'Ada kesalahan. Mohon coba lagi nanti',
+            });
           }
           setLoading(false);
         },
@@ -202,7 +194,7 @@ export default () => {
 
   useEffect(() => {
     navigation.setOptions({
-      title: `Iuran ${route.params?.fullName}`,
+      title: `Bunga ${route.params?.fullName}`,
       header: (props: NavigationHeaderProps) => (
         <NavigationHeader {...props} useSearch search={setSearch} />
       ),
@@ -227,7 +219,7 @@ export default () => {
           }
           keyExtractor={(___, index) => index.toString()}
           // ListHeaderComponent={
-          //   <MemberDuesHeader
+          //   <MemberInterestsHeader
           //     onSelectFilter={v =>
           //       setSelectedSortFilter(prev => {
           //         let temp = prev;
@@ -269,12 +261,12 @@ export default () => {
         <Button
           type="primary"
           onPress={() => {
-            navigation.navigate('NewMemberDue', {
+            navigation.navigate('NewMemberInterest', {
               memberCode: route.params?.memberCode ?? '',
               fullName: route.params?.fullName ?? '',
             });
           }}>
-          Tambah Iuran
+          Tambah Bunga
         </Button>
       </View>
     </>

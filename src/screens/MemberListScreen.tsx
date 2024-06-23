@@ -140,7 +140,10 @@ export default () => {
       });
     }
     if (v === 'Cek Bunga Bank') {
-      return console.warn('bunga');
+      return navigation.navigate('MemberInterests', {
+        memberCode: data.memberCode ?? '',
+        fullName: data.fullName ?? '',
+      });
     }
 
     return null;
