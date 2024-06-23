@@ -69,7 +69,7 @@ function App(): React.JSX.Element {
     <SafeAreaProvider>
       <StatusBar barStyle="dark-content" backgroundColor="#FCFCFF" />
       <Snackbar
-        visible={snackbar.show}
+        visible={snackbar?.show ?? false}
         onHide={() => {
           setSnackbar({
             show: false,
@@ -77,8 +77,8 @@ function App(): React.JSX.Element {
             message: '',
           });
         }}
-        type={snackbar.type}
-        message={snackbar.message}
+        type={snackbar?.type ?? 'success'}
+        message={snackbar?.message ?? ''}
       />
       <NavigationContainer theme={Theme}>
         <Provider store={store}>

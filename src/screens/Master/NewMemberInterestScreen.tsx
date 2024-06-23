@@ -185,8 +185,7 @@ export default () => {
                           });
                           navigation.goBack();
                         },
-                        onError: v => {
-                          console.log(v);
+                        onError: () => {
                           setSnackbar({
                             show: true,
                             type: 'error',
