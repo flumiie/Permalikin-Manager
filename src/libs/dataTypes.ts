@@ -47,3 +47,8 @@ export type MemberDuesType = {
   paid: string;
   remaining: string;
 };
+
+export type MemberDonationsType = {
+  date: string;
+  amount: string;
+};

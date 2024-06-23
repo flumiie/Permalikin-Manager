@@ -8,8 +8,10 @@ import BottomTabs from './BottomTabs';
 import { NavigationHeader } from './components';
 import {
   EasterEggScreen,
+  MemberDonationsScreen,
   MemberDuesScreen,
   NewMasterDataScreen,
+  NewMemberDonationScreen,
   NewMemberDueScreen,
   SignInScreen,
   SignUpScreen,
@@ -34,6 +36,14 @@ export type RootStackParamList = {
     fullName: string;
   };
   NewMemberDue: {
+    memberCode: string;
+    fullName: string;
+  };
+  MemberDonations: {
+    memberCode: string;
+    fullName: string;
+  };
+  NewMemberDonation: {
     memberCode: string;
     fullName: string;
   };
@@ -63,6 +73,14 @@ export default () => {
         />
         <MainStack.Screen name="MemberDues" component={MemberDuesScreen} />
         <MainStack.Screen name="NewMemberDue" component={NewMemberDueScreen} />
+        <MainStack.Screen
+          name="MemberDonations"
+          component={MemberDonationsScreen}
+        />
+        <MainStack.Screen
+          name="NewMemberDonation"
+          component={NewMemberDonationScreen}
+        />
         <MainStack.Screen
           name="EasterEgg"
           component={EasterEggScreen}

@@ -134,7 +134,10 @@ export default () => {
       });
     }
     if (v === 'Cek Donasi / Sumbangan') {
-      return console.warn('donasi');
+      return navigation.navigate('MemberDonations', {
+        memberCode: data.memberCode ?? '',
+        fullName: data.fullName ?? '',
+      });
     }
     if (v === 'Cek Bunga Bank') {
       return console.warn('bunga');

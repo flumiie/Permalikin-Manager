@@ -14,7 +14,7 @@ import { useMMKVStorage } from 'react-native-mmkv-storage';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { asyncStorage } from '../../../store';
-import { getMemberDues } from '../../../store/actions';
+import { getMemberDonations } from '../../../store/actions';
 import { useAppDispatch } from '../../../store/hooks';
 import { RootStackParamList } from '../../Routes';
 import {
@@ -27,34 +27,21 @@ import {
   SimpleList,
   Spacer,
 } from '../../components';
-import { MemberDuesType } from '../../libs/dataTypes';
+import { MemberDonationsType } from '../../libs/dataTypes';
 
-type MemberDuesPillTypes = 'latest' | 'oldest' | 'highest' | 'lowest';
+type MemberDonationsPillTypes = 'latest' | 'oldest' | 'highest' | 'lowest';
 
 const ReportListItem = (props: {
-  item: MemberDuesType;
+  item: MemberDonationsType;
   index: number;
   onPress: () => void;
 }) => {
   const title = useMemo(() => {
-    if (props.item.paid < props.item.due) {
-      return `Kurang: Rp ${
-        Number(
-          props.item.due?.replace(/[.|,| |-]/g, '') ?? 0,
-        ).toLocaleString() ?? 0
-      }\nDibayar: Rp ${
-        Number(
-          props.item.paid?.replace(/[.|,| |-]/g, '') ?? 0,
-        ).toLocaleString() ?? 0
-      }\nSisa: Rp ${
-        Number(
-          props.item.remaining?.replace(/[.|,| |-]/g, '') ?? 0,
-        ).toLocaleString() ?? 0
-      }`;
-    }
-    return `Total: Rp ${Number(
-      props.item.due?.replace(/[.|,| |-]/g, '') ?? 0,
-    ).toLocaleString()} (Sudah lunas)`;
+    return `Rp ${
+      Number(
+        props.item.amount?.replace(/[.|,| |-]/g, '') ?? 0,
+      ).toLocaleString() ?? 0
+    }`;
   }, [props.item]);
 
   if (props.item) {
@@ -62,7 +49,7 @@ const ReportListItem = (props: {
       <SimpleList
         iconLabel={`${props.index + 1}.`}
         title={title}
-        subtitle={`Tanggal iuran: ${props.item.date}`}
+        subtitle={`Tanggal donasi: ${props.item.date}`}
       />
     );
   }
@@ -78,7 +65,7 @@ export default () => {
   const insets = useSafeAreaInsets();
   const dispatch = useAppDispatch();
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
-  const route = useRoute<RouteProp<RootStackParamList, 'MemberDues'>>();
+  const route = useRoute<RouteProp<RootStackParamList, 'MemberDonations'>>();
 
   const [credentials] = useMMKVStorage<{
     token: string;
@@ -90,11 +77,9 @@ export default () => {
     type: 'success' | 'error';
     message: string;
   } | null>('snackbar', asyncStorage, null);
-  const [memberDues, setMemberDues] = useMMKVStorage<MemberDuesType[] | null>(
-    'memberDues',
-    asyncStorage,
-    null,
-  );
+  const [memberDonations, setMemberDonations] = useMMKVStorage<
+    MemberDonationsType[] | null
+  >('memberDonations', asyncStorage, null);
   const [__, setSearchMode] = useMMKVStorage('searchMode', asyncStorage, false);
 
   const [loading, setLoading] = useState(false);
@@ -105,10 +90,10 @@ export default () => {
       values: {},
     });
   const [selectedSortFilter, setSelectedSortFilter] =
-    useState<MemberDuesPillTypes[]>();
+    useState<MemberDonationsPillTypes[]>();
 
   const filteredData = useMemo(() => {
-    let tempData: MemberDuesType[] | null = memberDues;
+    let tempData: MemberDonationsType[] | null = memberDonations;
 
     // tempData = tempData.sort((a, b) => {
     //   if (selectedSortFilter === 'latest') {
@@ -123,10 +108,10 @@ export default () => {
     // });
 
     return tempData?.[0];
-  }, [memberDues]);
+  }, [memberDonations]);
 
-  const MemberDuesHeader = (props: {
-    onSelectFilter: (v: MemberDuesPillTypes) => void;
+  const MemberDonationsHeader = (props: {
+    onSelectFilter: (v: MemberDonationsPillTypes) => void;
   }) => {
     return (
       <ScrollView
@@ -173,10 +158,10 @@ export default () => {
     setLoading(true);
 
     dispatch(
-      getMemberDues({
+      getMemberDonations({
         memberCode: route.params?.memberCode ?? '',
         onSuccess: v => {
-          setMemberDues(v);
+          setMemberDonations(v);
           setLoading(false);
         },
         onError: v => {
@@ -199,6 +184,12 @@ export default () => {
               type: 'error',
               message: 'Data sedang di index. Mohon coba lagi nanti',
             });
+          } else {
+            setSnackbar({
+              show: true,
+              type: 'error',
+              message: 'Ada kesalahan. Mohon coba lagi nanti',
+            });
           }
           setLoading(false);
         },
@@ -208,7 +199,7 @@ export default () => {
 
   useEffect(() => {
     navigation.setOptions({
-      title: `Iuran ${route.params?.fullName}`,
+      title: `Donasi ${route.params?.fullName}`,
       header: (props: NavigationHeaderProps) => (
         <NavigationHeader {...props} useSearch search={setSearch} />
       ),
@@ -233,7 +224,7 @@ export default () => {
           }
           keyExtractor={(___, index) => index.toString()}
           // ListHeaderComponent={
-          //   <MemberDuesHeader
+          //   <MemberDonationsHeader
           //     onSelectFilter={v =>
           //       setSelectedSortFilter(prev => {
           //         let temp = prev;
@@ -275,12 +266,12 @@ export default () => {
         <Button
           type="primary"
           onPress={() => {
-            navigation.navigate('NewMemberDue', {
+            navigation.navigate('NewMemberDonation', {
               memberCode: route.params?.memberCode ?? '',
               fullName: route.params?.fullName ?? '',
             });
           }}>
-          Tambah Iuran
+          Tambah Donasi
         </Button>
       </View>
     </>

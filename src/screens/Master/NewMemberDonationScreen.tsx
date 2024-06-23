@@ -17,7 +17,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import * as Yup from 'yup';
 
 import { asyncStorage } from '../../../store';
-import { createMemberDue } from '../../../store/actions';
+import { createMemberDonation, createMemberDue } from '../../../store/actions';
 import { useAppDispatch } from '../../../store/hooks';
 import { RootStackParamList } from '../../Routes';
 import {
@@ -29,7 +29,7 @@ import {
   Spacer,
   TextInput,
 } from '../../components';
-import { MemberDuesType } from '../../libs/dataTypes';
+import { MemberDonationsType } from '../../libs/dataTypes';
 
 export default () => {
   const insets = useSafeAreaInsets();
@@ -45,16 +45,14 @@ export default () => {
 
   // const avatarInputRef = useRef<RNTextInput>(null);
   const dateInputRef = useRef<RNTextInput>(null);
-  const dueInputRef = useRef<RNTextInput>(null);
-  const paidInputRef = useRef<RNTextInput>(null);
-  const remainingInputRef = useRef<RNTextInput>(null);
+  const donationInputRef = useRef<RNTextInput>(null);
 
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [dateCreated, setDateCreated] = useState<Date>(new Date());
   const [showConfirmCreateDataDropdown, setShowConfirmCreateDataDropdown] =
     useState<{
       state: boolean;
-      values: { dues: MemberDuesType } | null;
+      values: { donations: MemberDonationsType } | null;
     } | null>(null);
 
   // const [showCountriesDropdown, setShowCountriesDropdown] = useState(false);
@@ -78,11 +76,9 @@ export default () => {
   // const [selectedZipCode, setSelectedZipCode] = useState<string | null>(null);
 
   const ValidationSchema = Yup.object().shape({
-    dues: Yup.object({
+    donations: Yup.object({
       date: Yup.string().required('Harus diisi'),
-      due: Yup.string().required('Harus diisi'),
-      paid: Yup.string().required('Harus diisi'),
-      remaining: Yup.string().required('Harus diisi'),
+      amount: Yup.string().required('Harus diisi'),
     }),
   });
 
@@ -91,11 +87,9 @@ export default () => {
       <StatusBar barStyle="dark-content" backgroundColor="#FCFCFF" />
       <Formik
         initialValues={{
-          dues: {
+          donations: {
             date: '',
-            due: '',
-            paid: '',
-            remaining: '',
+            amount: '',
           },
         }}
         validateOnBlur
@@ -105,12 +99,10 @@ export default () => {
           setShowConfirmCreateDataDropdown({
             state: true,
             values: {
-              ...values.dues,
-              dues: {
-                date: values.dues?.date,
-                due: values.dues?.due?.replace(/[.|,| |-]/g, ''),
-                paid: values.dues?.paid?.replace(/[.|,| |-]/g, ''),
-                remaining: values.dues?.remaining?.replace(/[.|,| |-]/g, ''),
+              ...values.donations,
+              donations: {
+                date: values.donations?.date,
+                amount: values.donations?.amount?.replace(/[.|,| |-]/g, ''),
               },
             },
           });
@@ -136,14 +128,10 @@ export default () => {
                 const formattedDate = dayjs(date).format('YYYY/MM/DD');
                 setShowDatePicker(false);
                 setDateCreated(date);
-                setFieldValue('dues.date', formattedDate);
+                setFieldValue('donations.date', formattedDate);
                 dateInputRef.current?.blur();
-                if (!values.dues?.due) {
-                  dueInputRef.current?.focus();
-                } else if (!values.dues?.paid) {
-                  paidInputRef.current?.focus();
-                } else if (!values.dues?.remaining) {
-                  remainingInputRef.current?.focus();
+                if (!values.donations?.amount) {
+                  donationInputRef.current?.focus();
                 }
               }}
               onCancel={() => {
@@ -162,7 +150,7 @@ export default () => {
               content={
                 <>
                   <BoldText type="title-medium">
-                    Konfirmasi tambah data iuran
+                    Konfirmasi tambah data donasi
                   </BoldText>
                   <Spacer height={8} />
                   <RegularText type="body-small">
@@ -185,9 +173,10 @@ export default () => {
                   label: 'OK',
                   onPress: () => {
                     dispatch(
-                      createMemberDue({
+                      createMemberDonation({
                         memberCode: route.params?.memberCode ?? '',
-                        duesData: showConfirmCreateDataDropdown?.values?.dues,
+                        donationsData:
+                          showConfirmCreateDataDropdown?.values?.donations,
                         onSuccess: () => {
                           setSnackbar({
                             show: true,
@@ -196,7 +185,8 @@ export default () => {
                           });
                           navigation.goBack();
                         },
-                        onError: () => {
+                        onError: v => {
+                          console.log(v);
                           setSnackbar({
                             show: true,
                             type: 'error',
@@ -216,7 +206,7 @@ export default () => {
             <ScrollView style={styles.container}>
               <SafeAreaView>
                 <DismissableView style={styles.contentContainer}>
-                  <BoldText type="title-medium">Tambah data iuran</BoldText>
+                  <BoldText type="title-medium">Tambah data donasi</BoldText>
                   <Spacer height={4} />
                   <RegularText type="body-small" color="#4B4B4B">
                     Silakan masukan data terlebih dahulu untuk melanjutkan
@@ -228,116 +218,55 @@ export default () => {
                   <Spacer height={24} />
                   <TextInput
                     ref={dateInputRef}
-                    id="due-date"
-                    label="Tanggal iuran*"
+                    id="donation-date"
+                    label="Tanggal donasi*"
                     placeholder="Contoh: 2024/01/01"
                     filledTextColor
                     rightIcons={{ custom: ['calendar'] }}
-                    onChangeText={handleChange('dues.date')}
-                    onBlur={handleBlur('dues.date')}
+                    onChangeText={handleChange('donations.date')}
+                    onBlur={handleBlur('donations.date')}
                     onFocus={() => setShowDatePicker(true)}
                     onPress={() => {
                       dateInputRef.current?.focus();
                       setShowDatePicker(true);
                     }}
                     onSubmitEditing={() => {
-                      if (!values.dues?.due) {
-                        dueInputRef.current?.focus();
-                      } else if (!values.dues?.paid) {
-                        paidInputRef.current?.focus();
-                      } else if (!values.dues?.remaining) {
-                        remainingInputRef.current?.focus();
+                      if (!values.donations?.amount) {
+                        donationInputRef.current?.focus();
                       }
                     }}
-                    value={values.dues?.date.toUpperCase()}
-                    error={touched.dues?.date && errors.dues?.date}
+                    value={values.donations?.date.toUpperCase()}
+                    error={touched.donations?.date && errors.donations?.date}
                   />
+                  <Spacer height={16} />
                   <TextInput
-                    ref={dueInputRef}
-                    id="due"
-                    label="Total Iuran*"
+                    ref={donationInputRef}
+                    id="donation"
+                    label="Total Donasi*"
                     placeholder="Contoh: 300000"
                     filledTextColor
                     keyboardType="decimal-pad"
                     leftLabel="Rp"
-                    onChangeText={handleChange('dues.due')}
-                    onBlur={handleBlur('dues.due')}
+                    onChangeText={handleChange('donations.amount')}
+                    onBlur={handleBlur('donations.amount')}
                     onSubmitEditing={() => {
-                      if (!values.dues?.date) {
+                      if (!values.donations?.date) {
                         dateInputRef.current?.focus();
-                      } else if (!values.dues?.paid) {
-                        paidInputRef.current?.focus();
-                      } else if (!values.dues?.remaining) {
-                        remainingInputRef.current?.focus();
                       }
                     }}
                     value={
-                      values.dues?.due
+                      values.donations?.amount
                         ? Number(
-                            values.dues?.due?.replace(/[.|,| |-]/g, '') ?? 0,
+                            values.donations?.amount?.replace(
+                              /[.|,| |-]/g,
+                              '',
+                            ) ?? 0,
                           ).toLocaleString()
                         : ''
                     }
-                    error={touched.dues?.due && errors.dues?.due}
-                  />
-                  <Spacer height={16} />
-                  <TextInput
-                    ref={paidInputRef}
-                    id="paid"
-                    label="Total sudah dibayar*"
-                    placeholder="Contoh: 200000"
-                    filledTextColor
-                    keyboardType="decimal-pad"
-                    leftLabel="Rp"
-                    onChangeText={handleChange('dues.paid')}
-                    onBlur={handleBlur('dues.paid')}
-                    onSubmitEditing={() => {
-                      if (!values.dues?.date) {
-                        dateInputRef.current?.focus();
-                      } else if (!values.dues?.due) {
-                        dueInputRef.current?.focus();
-                      } else if (!values.dues?.remaining) {
-                        remainingInputRef.current?.focus();
-                      }
-                    }}
-                    value={
-                      values.dues?.paid
-                        ? Number(
-                            values.dues?.paid?.replace(/[.|,| |-]/g, '') ?? 0,
-                          ).toLocaleString()
-                        : ''
+                    error={
+                      touched.donations?.amount && errors.donations?.amount
                     }
-                    error={touched.dues?.paid && errors.dues?.paid}
-                  />
-                  <Spacer height={16} />
-                  <TextInput
-                    ref={remainingInputRef}
-                    id="remaining"
-                    label="Sisa*"
-                    placeholder="Contoh: 100000"
-                    filledTextColor
-                    keyboardType="decimal-pad"
-                    leftLabel="Rp"
-                    onChangeText={handleChange('dues.remaining')}
-                    onBlur={handleBlur('dues.remaining')}
-                    onSubmitEditing={() => {
-                      if (!values.dues?.date) {
-                        dateInputRef.current?.focus();
-                      } else if (!values.dues?.due) {
-                        dueInputRef.current?.focus();
-                      } else if (!values.dues?.paid) {
-                        paidInputRef.current?.focus();
-                      }
-                    }}
-                    value={
-                      values.dues?.remaining
-                        ? Number(
-                            values.dues?.remaining?.replace(/[.|,| |-]/g, '') ??
-                              0,
-                          ).toLocaleString()
-                        : ''
-                    }
-                    error={touched.dues?.remaining && errors.dues?.remaining}
                   />
                 </DismissableView>
               </SafeAreaView>
@@ -350,14 +279,10 @@ export default () => {
               <Button
                 type="primary"
                 disabled={
-                  !values.dues?.date ||
-                  !!errors.dues?.date ||
-                  !values.dues?.due ||
-                  !!errors.dues?.due ||
-                  !values.dues?.paid ||
-                  !!errors.dues?.paid ||
-                  !values.dues?.remaining ||
-                  !!errors.dues?.remaining
+                  !values.donations?.date ||
+                  !!errors.donations?.date ||
+                  !values.donations?.amount ||
+                  !!errors.donations?.amount
                 }
                 onPress={handleSubmit}>
                 Simpan

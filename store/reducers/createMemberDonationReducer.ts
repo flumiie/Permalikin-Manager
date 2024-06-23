@@ -1,4 +1,7 @@
-import { CREATE_MEMBER_DUE, CREATE_MEMBER_DUE_ERROR } from '../constants';
+import {
+  CREATE_MEMBER_DONATION,
+  CREATE_MEMBER_DONATION_ERROR,
+} from '../constants';
 
 const initialState = {
   data: '',
@@ -7,13 +10,13 @@ const initialState = {
 
 export default (state = initialState, action: any) => {
   switch (action.type) {
-    case CREATE_MEMBER_DUE:
+    case CREATE_MEMBER_DONATION:
       return {
         data: action.payload,
         error: null,
       };
 
-    case CREATE_MEMBER_DUE_ERROR:
+    case CREATE_MEMBER_DONATION_ERROR:
       return {
         ...state,
         error: action.payload,
