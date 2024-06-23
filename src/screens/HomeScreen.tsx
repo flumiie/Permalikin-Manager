@@ -1,6 +1,8 @@
+import { Marquee } from '@animatereactnative/marquee';
 import { useNavigation } from '@react-navigation/core';
 import { StackNavigationProp } from '@react-navigation/stack';
-import React, { useEffect } from 'react';
+import dayjs from 'dayjs';
+import React, { useEffect, useState } from 'react';
 import {
   FlatList,
   ImageSourcePropType,
@@ -12,16 +14,17 @@ import {
 import FastImage from 'react-native-fast-image';
 import { useMMKVStorage } from 'react-native-mmkv-storage';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import Icon from 'react-native-vector-icons/Feather';
+import Icon from 'react-native-vector-icons/FontAwesome6';
 
 import { asyncStorage } from '../../store';
+import getRSSNews from '../../store/actions/getRSSNews';
+import { useAppDispatch } from '../../store/hooks';
 import { RootStackParamList } from '../Routes';
 import { BoldText, Card, MediumText, RegularText, Spacer } from '../components';
 
 interface HeaderProps extends Partial<ViewProps> {
   user: string;
-  weather: string;
-  temperature: number;
+  news: string;
 }
 
 const Header = (props: HeaderProps) => {
@@ -44,28 +47,25 @@ const Header = (props: HeaderProps) => {
         </RegularText>
         <Spacer height={8} />
 
-        <View style={headerStyles.weatherContainer}>
-          <View style={headerStyles.weatherLeftContents}>
-            <View style={headerStyles.weatherIcon}>
-              <Icon name="sun" size={20} color="#000" />
+        <View style={headerStyles.newsContainer}>
+          <View style={headerStyles.newsLeftContents}>
+            <View style={headerStyles.newsIcon}>
+              <Icon name="newspaper" size={20} color="#000" />
             </View>
             <Spacer width={8} />
             <View style={headerStyles.center}>
-              <RegularText type="body-small" color="#E1E1E1">
-                Thursday, 16 May 2024
-              </RegularText>
+              <Marquee spacing={0} speed={1.25}>
+                <MediumText type="label-large" color="#FAFAFA">
+                  {props.news}
+                  {'   |   '}
+                </MediumText>
+              </Marquee>
               <Spacer height={4} />
-              <MediumText type="label-large" color="#FAFAFA">
-                {props.weather}
-              </MediumText>
+              <RegularText type="body-small" color="#E1E1E1">
+                {dayjs().format('dddd, D MMMM YYYY')}
+              </RegularText>
             </View>
           </View>
-          <BoldText
-            type="title-medium"
-            color="#FAFAFA"
-            style={headerStyles.center}>
-            {props.temperature}°C
-          </BoldText>
         </View>
       </View>
     </View>
@@ -114,6 +114,7 @@ const HOME_ACTIONS: RespectorActionsType[] = [
 
 export default () => {
   const insets = useSafeAreaInsets();
+  const dispatch = useAppDispatch();
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
   const [_, setSnackbar] = useMMKVStorage<{
@@ -135,6 +136,8 @@ export default () => {
   );
   const [__, setSearchMode] = useMMKVStorage('searchMode', asyncStorage, false);
 
+  const [news, setNews] = useState<[]>([]);
+
   useEffect(() => {
     if (registrationStatus && credentials?.token) {
       setSnackbar({
@@ -146,6 +149,23 @@ export default () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [registrationStatus, credentials?.token]);
+
+  useEffect(() => {
+    dispatch(
+      getRSSNews({
+        onSuccess: v => {
+          setNews(v._j.items);
+        },
+        onError: () => {
+          setNews([]);
+        },
+      }),
+    );
+  }, [dispatch]);
+
+  useEffect(() => {
+    console.log(news);
+  }, [news]);
 
   return (
     <>
@@ -164,8 +184,14 @@ export default () => {
             <>
               <Header
                 user={credentials?.name}
-                weather="Sunny"
-                temperature={25}
+                news={news
+                  .map((S: any) => {
+                    let res = S.content.split('<p>');
+                    res = res[res.length - 1];
+                    res = res.split('</p>')[0];
+                    return res;
+                  })
+                  .join('   |   ')}
               />
               <Spacer height={18} />
             </>
@@ -209,6 +235,7 @@ export default () => {
 
 const headerStyles = StyleSheet.create({
   center: {
+    flex: 1,
     alignSelf: 'center',
   },
   header: {
@@ -233,7 +260,7 @@ const headerStyles = StyleSheet.create({
     height: '100%',
     backgroundColor: '#BF2229',
   },
-  weatherContainer: {
+  newsContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     backgroundColor: 'rgba(252, 252, 255, 0.1)',
@@ -242,10 +269,11 @@ const headerStyles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 14,
   },
-  weatherLeftContents: {
+  newsLeftContents: {
+    flex: 1,
     flexDirection: 'row',
   },
-  weatherIcon: {
+  newsIcon: {
     padding: 8,
     borderRadius: 30,
     backgroundColor: '#fff',

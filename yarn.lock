@@ -15,6 +15,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@animatereactnative/marquee@npm:^0.2.0":
+  version: 0.2.0
+  resolution: "@animatereactnative/marquee@npm:0.2.0"
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+    react-native-reanimated: ">=2.2.0"
+  checksum: de909412ee5100c976e2f59f84f4b13c258cdc00dffc9dad92c9c1625c294271046d26afc536312feeb6a5b28fc4ab62e18946ebbdb5e49f87db300302b8d7b3
+  languageName: node
+  linkType: hard
+
 "@babel/code-frame@npm:^7.0.0, @babel/code-frame@npm:^7.12.13, @babel/code-frame@npm:^7.22.13, @babel/code-frame@npm:^7.24.7":
   version: 7.24.7
   resolution: "@babel/code-frame@npm:7.24.7"
@@ -3206,6 +3217,13 @@ __metadata:
   version: 15.7.12
   resolution: "@types/prop-types@npm:15.7.12"
   checksum: ac16cc3d0a84431ffa5cfdf89579ad1e2269549f32ce0c769321fdd078f84db4fbe1b461ed5a1a496caf09e637c0e367d600c541435716a55b1d9713f5035dfe
+  languageName: node
+  linkType: hard
+
+"@types/react-native-rss-parser@npm:^1.4.3":
+  version: 1.4.3
+  resolution: "@types/react-native-rss-parser@npm:1.4.3"
+  checksum: b761cbb8edc825c306368a79c103d8153137c98dcb8a05b0defa85714ef8ec5aaeae50c82d3a24946ed4b821a65744eea23be48b2a429c6d5d0eadf562f81658
   languageName: node
   linkType: hard
 
@@ -8817,6 +8835,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "permalikin-manager@workspace:."
   dependencies:
+    "@animatereactnative/marquee": ^0.2.0
     "@babel/core": ^7.20.0
     "@babel/preset-env": ^7.20.0
     "@babel/runtime": ^7.20.0
@@ -8840,6 +8859,7 @@ __metadata:
     "@reduxjs/toolkit": ^2.2.5
     "@trivago/prettier-plugin-sort-imports": ^4.3.0
     "@types/react": ^18.2.6
+    "@types/react-native-rss-parser": ^1.4.3
     "@types/react-native-vector-icons": ^6.4.18
     "@types/react-test-renderer": ^18.0.0
     axios: ^1.7.2
@@ -8861,6 +8881,7 @@ __metadata:
     react-native-image-crop-picker: ^0.41.1
     react-native-mmkv-storage: ^0.9.1
     react-native-reanimated: ^3.12.0
+    react-native-rss-parser: ^1.5.1
     react-native-safe-area-context: ^4.10.4
     react-native-screens: ^3.31.1
     react-native-svg: ^15.3.0
@@ -9353,6 +9374,15 @@ __metadata:
     react: "*"
     react-native: "*"
   checksum: 14ed9eea5d48b456801847c64a29be5cef2141ac2f5af1f687201083be6dafc925b62235c77bf172b5d9894bc69912677620f96d222341dc451c894211988ab8
+  languageName: node
+  linkType: hard
+
+"react-native-rss-parser@npm:^1.5.1":
+  version: 1.5.1
+  resolution: "react-native-rss-parser@npm:1.5.1"
+  dependencies:
+    xmldom: ^0.3.0
+  checksum: 463bc1e4444dc0c39d100b4731eb35e24a080f5cc045d8a2dc28d0838b2c8d60b5d4a8d6393024cadc1eb73cdf6157bbb3104d7976af073e4de66ba40ecac6ac
   languageName: node
   linkType: hard
 
@@ -11406,6 +11436,13 @@ __metadata:
   version: 11.0.1
   resolution: "xmlbuilder@npm:11.0.1"
   checksum: 7152695e16f1a9976658215abab27e55d08b1b97bca901d58b048d2b6e106b5af31efccbdecf9b07af37c8377d8e7e821b494af10b3a68b0ff4ae60331b415b0
+  languageName: node
+  linkType: hard
+
+"xmldom@npm:^0.3.0":
+  version: 0.3.0
+  resolution: "xmldom@npm:0.3.0"
+  checksum: a4d1e48dc7fa5f5e460c24e26d9d2d98edc52cdfcbf3b2c0edbb61d1808d1af986bc3ef7f4cafa673edf3f08130ed2def9ec6d0a993e2f33c2804b1726cab100
   languageName: node
   linkType: hard
 
