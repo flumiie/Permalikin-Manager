@@ -13,6 +13,8 @@
     "pnpm:prep": "pnpm i && pnpm import",
     "gradle:clean": "./gradlew clean build",
     "android": "react-native run-android",
+    "android:testrelease": "react-native run-android --mode release",
+    "android:release": "npx react-native build-android --mode=release",
     "ios:prep": "bundle install && npx pod-install && rm -f ./ios/.xcode.env.local",
     "ios": "react-native run-ios --simulator=\"iPhone 15 Pro Max\" --mode Debug",
     "ios:release": "react-native run-ios --simulator=\"iPhone 15 Pro Max\" --mode Release",
