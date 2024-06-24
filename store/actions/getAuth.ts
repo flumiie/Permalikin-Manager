@@ -1,47 +1,32 @@
-import axios from 'axios';
+import auth from '@react-native-firebase/auth';
 
-import { HOST } from '..';
 import { GET_AUTH, GET_AUTH_ERROR } from '../constants';
 
 interface GetAuthProps {
   email: string;
   password: string;
   onSuccess: (v: any) => void;
-  onError: () => void;
+  onError: (v: any) => void;
 }
 
 export default (props: GetAuthProps) => {
   return async (dispatch: any) =>
-    await axios
-      .post(
-        `${HOST}/v1/user/auth`,
-        {
-          email: props.email,
-          password: props.password,
-        },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            Accept: 'application/json',
-          },
-        },
-      )
+    await auth()
+      .signInWithEmailAndPassword(props.email, props.password)
       .then(res => {
-        if (res.status === 200) {
-          dispatch({
-            type: GET_AUTH,
-            payload: res.data,
-          });
-          if (res.data?.message === 'success') {
-            props.onSuccess(res.data?.data);
-          }
-        }
+        dispatch({
+          type: GET_AUTH,
+          payload: res,
+        });
+
+        props.onSuccess(res);
       })
       .catch(err => {
         dispatch({
           type: GET_AUTH_ERROR,
           payload: err?.message,
         });
-        props.onError();
+
+        props.onError(err);
       });
 };

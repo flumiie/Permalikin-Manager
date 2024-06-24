@@ -14,6 +14,7 @@ interface ButtonProps extends PressableProps {
   onPress: () => void;
   type: 'primary' | 'secondary' | 'outline';
   children?: React.ReactNode | string;
+  backgroundColor?: string;
   style?: ViewStyle;
   textStyle?: TextStyle;
 }
@@ -68,7 +69,7 @@ export default (props: ButtonProps) => {
   return (
     <View
       style={{
-        backgroundColor,
+        backgroundColor: props.backgroundColor ?? backgroundColor,
         ...styles.buttonContainer,
       }}>
       <Pressable

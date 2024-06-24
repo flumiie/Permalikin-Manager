@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/core';
 import { StackNavigationProp } from '@react-navigation/stack';
-import React, { useRef } from 'react';
+import React from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -9,14 +9,13 @@ import {
   View,
 } from 'react-native';
 import { useMMKVStorage } from 'react-native-mmkv-storage';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import 'react-native-safe-area-context';
 
 import { asyncStorage } from '../../../store';
 import { RootStackParamList } from '../../Routes';
 import { BoldText, RegularText, Spacer } from '../../components';
 
 export default () => {
-  const insets = useSafeAreaInsets();
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
   const [_, setSnackbar] = useMMKVStorage<{

@@ -1,49 +1,36 @@
-import axios from 'axios';
+import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth';
 
-import { HOST } from '..';
 import { SIGN_UP, SIGN_UP_ERROR } from '../constants';
 
-interface SignUpProps {
+interface GetAuthProps {
   name: string;
   email: string;
   password: string;
-  onSuccess: (v: any) => void;
-  onError: () => void;
+  onSuccess: (v: FirebaseAuthTypes.UserCredential) => void;
+  onError: (v: any) => void;
 }
 
-export default (props: SignUpProps) => {
+export default (props: GetAuthProps) => {
   return async (dispatch: any) =>
-    await axios
-      .post(
-        `${HOST}/v1/user/auth`,
-        {
-          name: props.name,
-          email: props.email,
-          password: props.password,
-        },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            Accept: 'application/json',
-          },
-        },
-      )
+    await auth()
+      .createUserWithEmailAndPassword(props.email, props.password)
       .then(res => {
-        if (res.status === 200) {
-          dispatch({
-            type: SIGN_UP,
-            payload: res.data,
-          });
-          if (res.data?.message === 'success') {
-            props.onSuccess(res.data?.data);
-          }
-        }
+        res.user.updateProfile({
+          displayName: props.name,
+        });
+        dispatch({
+          type: SIGN_UP,
+          payload: res,
+        });
+
+        props.onSuccess(res);
       })
       .catch(err => {
         dispatch({
           type: SIGN_UP_ERROR,
           payload: err?.message,
         });
-        props.onError();
+
+        props.onError(err);
       });
 };

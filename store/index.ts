@@ -14,12 +14,12 @@ import {
 
 const rootReducer = combineReducers({
   getAuth: getAuthReducer,
+  signUp: signUpReducer,
   getMemberDues: getMemberDuesReducer,
   getMemberDonations: getMemberDonationsReducer,
   getMemberInterests: getMemberInterestsReducer,
   createMemberDonation: createMemberDonationReducer,
   createMemberDue: createMemberDueReducer,
-  signUp: signUpReducer,
 });
 
 const store = configureStore({

@@ -35,8 +35,15 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "813912710571-9t6cgiusm83q5p8v8rcgnvh2gnd5mgvf.apps.googleusercontent.com",
+              "client_id": "813912710571-0iefd3rjt7f849vb4gkgi2qs0885n08j.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "813912710571-c44moou4h5u9irt0idf7b4hc6ojpki62.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.flumi.permalikinmanager"
+              }
             }
           ]
         }

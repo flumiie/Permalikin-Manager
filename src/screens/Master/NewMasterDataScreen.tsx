@@ -204,7 +204,7 @@ export default () => {
                     firestore()
                       .collection('Personels')
                       .add(values)
-                      .then(res => {
+                      .then(() => {
                         navigation.goBack();
                         setSnackbar({
                           show: true,

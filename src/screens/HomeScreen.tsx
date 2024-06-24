@@ -13,7 +13,6 @@ import {
 } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { useMMKVStorage } from 'react-native-mmkv-storage';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 
 import { asyncStorage } from '../../store';
@@ -113,7 +112,6 @@ const HOME_ACTIONS: RespectorActionsType[] = [
 ];
 
 export default () => {
-  const insets = useSafeAreaInsets();
   const dispatch = useAppDispatch();
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
@@ -162,10 +160,6 @@ export default () => {
       }),
     );
   }, [dispatch]);
-
-  useEffect(() => {
-    console.log(news);
-  }, [news]);
 
   return (
     <>

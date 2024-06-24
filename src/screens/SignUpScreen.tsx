@@ -19,6 +19,7 @@ import { useAppDispatch } from '../../store/hooks';
 import { AuthStackParamList, RootStackParamList } from '../Routes';
 import {
   Button,
+  DismissableView,
   MediumText,
   RegularText,
   Spacer,
@@ -37,6 +38,17 @@ export default () => {
     type: 'success' | 'error';
     message: string;
   } | null>('snackbar', asyncStorage, null);
+  const [__, setCredentials] = useMMKVStorage<{
+    token: string;
+    name: string;
+    email: string;
+    photo: string;
+  }>('credentials', asyncStorage, {
+    token: '',
+    name: '',
+    email: '',
+    photo: '',
+  });
 
   const nameInputRef = useRef<RNTextInput>(null);
   const emailInputRef = useRef<RNTextInput>(null);
@@ -45,189 +57,201 @@ export default () => {
   const [tosChecked, setTosChecked] = useState(false);
 
   const ValidationSchema = Yup.object().shape({
-    name: Yup.string().required('This field is mandatory'),
-    email: Yup.string()
-      .required('This field is mandatory')
-      .email('Invalid email address'),
-    password: Yup.string().required('This field is mandatory'),
+    name: Yup.string().required('Harus diisi'),
+    email: Yup.string().required('Harus diisi').email('Invalid email address'),
+    password: Yup.string().required('Harus diisi'),
   });
 
   return (
-    <View
-      style={{
-        paddingTop: 72 + insets.top,
-        ...styles.container,
-      }}>
-      <MediumText size={28} color="#BF2229" style={styles.title}>
-        Registrasi
-      </MediumText>
-      <Spacer height={40} />
-      <Formik
-        enableReinitialize={false}
-        initialValues={{ name: '', email: '', password: '' }}
-        validateOnBlur
-        validateOnChange
-        validationSchema={ValidationSchema}
-        onSubmit={values => {
-          dispatch(
-            signUp({
-              name: values.name,
-              email: values.email,
-              password: values.password,
-              onSuccess: () => {
-                navigation.navigate('BottomTabs', {
-                  screen: 'Home',
-                });
-                setSnackbar({
-                  show: true,
-                  type: 'success',
-                  message: 'Registrasi berhasil',
-                });
-              },
-              onError: () => {
+    <Formik
+      enableReinitialize={false}
+      initialValues={{ name: '', email: '', password: '' }}
+      validateOnBlur
+      validateOnChange
+      validationSchema={ValidationSchema}
+      onSubmit={values => {
+        dispatch(
+          signUp({
+            name: values.name,
+            email: values.email,
+            password: values.password,
+            onSuccess: v => {
+              let token = '';
+              v.user.getIdTokenResult().then(asd => (token = asd.token));
+
+              setSnackbar({
+                show: true,
+                type: 'success',
+                message: 'Registrasi berhasil',
+              });
+              setCredentials({
+                token,
+                name: v.user.displayName ?? '',
+                email: v.user.email ?? '',
+                photo: v.user.photoURL ?? '',
+              });
+            },
+            onError: v => {
+              if (v.code === 'auth/email-already-in-use') {
                 setSnackbar({
                   show: true,
                   type: 'error',
-                  message: 'Ada kesalahan. Mohon coba lagi nanti',
+                  message: 'Email sudah dipakai',
                 });
-              },
-            }),
-          );
-        }}>
-        {({
-          values,
-          errors,
-          touched,
-          handleChange,
-          handleBlur,
-          handleSubmit,
-        }) => (
-          <View>
-            <TextInput
-              ref={nameInputRef}
-              id="name"
-              placeholder="Nama"
-              onChangeText={handleChange('name')}
-              onBlur={handleBlur('name')}
-              onSubmitEditing={() => {
-                if (!values.email) {
-                  emailInputRef.current?.focus();
-                } else if (!values.password) {
-                  passwordInputRef.current?.focus();
-                }
-                nameInputRef.current?.blur();
-              }}
-              value={values.name}
-              error={touched.name && errors.name}
-            />
-            <Spacer height={16} />
-            <TextInput
-              ref={emailInputRef}
-              id="email"
-              placeholder="Email"
-              keyboardType="email-address"
-              onChangeText={handleChange('email')}
-              onBlur={handleBlur('email')}
-              onSubmitEditing={() => {
-                if (!values.name) {
-                  nameInputRef.current?.focus();
-                } else if (!values.password) {
-                  passwordInputRef.current?.focus();
-                }
-                emailInputRef.current?.blur();
-              }}
-              value={values.email}
-              error={touched.email && errors.email}
-            />
-            <Spacer height={16} />
-            <TextInput
-              ref={passwordInputRef}
-              id="password"
-              placeholder="Password"
-              onChangeText={handleChange('password')}
-              onBlur={handleBlur('password')}
-              onSubmitEditing={() => {
-                if (!values.name) {
-                  nameInputRef.current?.focus();
-                } else if (!values.email) {
-                  emailInputRef.current?.focus();
-                }
-                passwordInputRef.current?.blur();
-              }}
-              secureTextEntry={passwordInvisible}
-              rightIcons={{
-                password: passwordInvisible ? 'eye-off' : 'eye',
-              }}
-              showPassword={() => {
-                setPasswordInvisible(!passwordInvisible);
-              }}
-              value={values.password}
-              error={touched.password && errors.password}
-            />
-            <Spacer height={20} />
-            <BouncyCheckbox
-              size={24}
-              fillColor="#BF2229"
-              unFillColor="#FFF"
-              innerIconStyle={styles.checkboxIcon}
-              textComponent={
-                <View style={styles.checkboxContent}>
-                  <Spacer width={14} />
-                  <RegularText size={12} style={styles.textWrap}>
-                    Saya menyetujui{' '}
-                    <RegularText
-                      size={12}
-                      color="#BF2229"
-                      onPress={() => {
-                        //TODO: Terms of Service page
-                      }}>
-                      Persyaratan Layanan
-                    </RegularText>{' '}
-                    dan{' '}
-                    <RegularText
-                      size={12}
-                      color="#BF2229"
-                      onPress={() => {
-                        //TODO: Privacy Policy page
-                      }}>
-                      Kebijakan Privasi
-                    </RegularText>
-                  </RegularText>
-                </View>
               }
-              onPress={(isChecked: boolean) => {
-                setTosChecked(isChecked);
-              }}
-            />
-            <Spacer height={32} />
-            <Button
-              type="primary"
-              disabled={
-                !values.name ||
-                !!errors.name ||
-                !values.email ||
-                !!errors.email ||
-                !values.password ||
-                !!errors.password ||
-                !tosChecked
+
+              if (v.code === 'auth/weak-password') {
+                setSnackbar({
+                  show: true,
+                  type: 'error',
+                  message: 'Password minimal 6 karakter',
+                });
               }
-              onPress={handleSubmit}>
-              Create Account
-            </Button>
-          </View>
-        )}
-      </Formik>
-      <Spacer height={16} />
-      <View style={styles.signInButtonContainer}>
-        <RegularText>Already have an account? </RegularText>
-        <Pressable
-          onPress={() => {
-            authNavigation.goBack();
+            },
+          }),
+        );
+      }}>
+      {({
+        values,
+        errors,
+        touched,
+        handleChange,
+        handleBlur,
+        handleSubmit,
+      }) => (
+        <DismissableView
+          style={{
+            paddingTop: 72 + insets.top,
+            ...styles.container,
           }}>
-          <RegularText color="#BF2229">Sign In</RegularText>
-        </Pressable>
-      </View>
-    </View>
+          <MediumText size={28} color="#BF2229" style={styles.title}>
+            Registrasi
+          </MediumText>
+          <Spacer height={40} />
+          <TextInput
+            ref={nameInputRef}
+            id="name"
+            placeholder="Nama"
+            onChangeText={handleChange('name')}
+            onBlur={handleBlur('name')}
+            onSubmitEditing={() => {
+              if (!values.email) {
+                emailInputRef.current?.focus();
+              } else if (!values.password) {
+                passwordInputRef.current?.focus();
+              }
+              nameInputRef.current?.blur();
+            }}
+            value={values.name}
+            error={touched.name && errors.name}
+          />
+          <Spacer height={16} />
+          <TextInput
+            ref={emailInputRef}
+            id="email"
+            placeholder="Email"
+            keyboardType="email-address"
+            onChangeText={handleChange('email')}
+            onBlur={handleBlur('email')}
+            onSubmitEditing={() => {
+              if (!values.name) {
+                nameInputRef.current?.focus();
+              } else if (!values.password) {
+                passwordInputRef.current?.focus();
+              }
+              emailInputRef.current?.blur();
+            }}
+            value={values.email}
+            error={touched.email && errors.email}
+          />
+          <Spacer height={16} />
+          <TextInput
+            ref={passwordInputRef}
+            id="password"
+            placeholder="Password"
+            onChangeText={handleChange('password')}
+            onBlur={handleBlur('password')}
+            onSubmitEditing={() => {
+              if (!values.name) {
+                nameInputRef.current?.focus();
+              } else if (!values.email) {
+                emailInputRef.current?.focus();
+              }
+              passwordInputRef.current?.blur();
+            }}
+            secureTextEntry={passwordInvisible}
+            rightIcons={{
+              password: passwordInvisible ? 'eye-off' : 'eye',
+            }}
+            showPassword={() => {
+              setPasswordInvisible(!passwordInvisible);
+            }}
+            value={values.password}
+            error={touched.password && errors.password}
+          />
+          <Spacer height={20} />
+          <BouncyCheckbox
+            size={24}
+            fillColor="#BF2229"
+            unFillColor="#FFF"
+            innerIconStyle={styles.checkboxIcon}
+            textComponent={
+              <View style={styles.checkboxContent}>
+                <Spacer width={14} />
+                <RegularText size={12} style={styles.textWrap}>
+                  Saya menyetujui{' '}
+                  <RegularText
+                    size={12}
+                    color="#BF2229"
+                    onPress={() => {
+                      //TODO: Terms of Service page
+                    }}>
+                    Persyaratan Layanan
+                  </RegularText>{' '}
+                  dan{' '}
+                  <RegularText
+                    size={12}
+                    color="#BF2229"
+                    onPress={() => {
+                      //TODO: Privacy Policy page
+                    }}>
+                    Kebijakan Privasi
+                  </RegularText>
+                </RegularText>
+              </View>
+            }
+            onPress={(isChecked: boolean) => {
+              setTosChecked(isChecked);
+            }}
+          />
+          <Spacer height={32} />
+          <Button
+            type="primary"
+            disabled={
+              !values.name ||
+              !!errors.name ||
+              !values.email ||
+              !!errors.email ||
+              !values.password ||
+              !!errors.password ||
+              !tosChecked
+            }
+            onPress={handleSubmit}>
+            Create Account
+          </Button>
+          <Spacer height={16} />
+          <View style={styles.row}>
+            <RegularText>Sudah punya akun? </RegularText>
+            <Pressable
+              onPress={() => {
+                authNavigation.goBack();
+              }}>
+              <RegularText color="#BF2229">Login disini</RegularText>
+            </Pressable>
+          </View>
+        </DismissableView>
+      )}
+    </Formik>
   );
 };
 
@@ -253,8 +277,9 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     borderWidth: 3.5,
   },
-  signInButtonContainer: {
+  row: {
     flexDirection: 'row',
+    justifyContent: 'center',
   },
   textWrap: {
     flexShrink: 1,

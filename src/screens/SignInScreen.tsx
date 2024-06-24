@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import { useMMKVStorage } from 'react-native-mmkv-storage';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
+import IoniconsIcon from 'react-native-vector-icons/Ionicons';
 import * as Yup from 'yup';
 
 import { asyncStorage } from '../../store';
@@ -21,6 +21,7 @@ import { useAppDispatch } from '../../store/hooks';
 import { AuthStackParamList } from '../Routes';
 import {
   Button,
+  DismissableView,
   MediumText,
   RegularText,
   Spacer,
@@ -88,15 +89,18 @@ export default () => {
           getAuth({
             email: values.email,
             password: values.password,
-            onSuccess: v => {
-              setCredentials(v);
-            },
-            onError: () => {
-              setSnackbar({
-                show: true,
-                type: 'error',
-                message: 'Email atau password salah',
-              });
+            onSuccess: v => setCredentials(v),
+            onError: v => {
+              if (
+                v.code === 'auth/invalid-email' ||
+                v.code === 'auth/invalid-credential'
+              ) {
+                setSnackbar({
+                  show: true,
+                  type: 'error',
+                  message: 'Email atau password salah',
+                });
+              }
             },
           }),
         );
@@ -109,7 +113,7 @@ export default () => {
         handleBlur,
         handleSubmit,
       }) => (
-        <View
+        <DismissableView
           style={{
             paddingTop: 72 + insets.top,
             ...styles.container,
@@ -176,7 +180,7 @@ export default () => {
               onPress={() => {
                 navigation.navigate('SignUp');
               }}>
-              <RegularText color="#BF2229">Registrasi</RegularText>
+              <RegularText color="#BF2229">Registrasi disini</RegularText>
             </Pressable>
           </View>
           <Spacer height={16} />
@@ -186,16 +190,24 @@ export default () => {
             color="#DDD"
           />
           <Spacer height={16} />
-          <Button type="primary" onPress={handleGoogleSignIn}>
+          <View style={styles.row}>
+            <RegularText color="#BBB">Atau login dengan ...</RegularText>
+          </View>
+          <Spacer height={16} />
+          <Button
+            type="primary"
+            disabled
+            // backgroundColor="#ea4335"
+            onPress={handleGoogleSignIn}>
             <View style={styles.row}>
-              <FontAwesomeIcon name="google" size={18} color="#FFF" />
+              <IoniconsIcon name="logo-google" size={18} color="#FFF" />
               <Spacer width={8} />
               <MediumText type="label-large" color="#FFF">
                 Google
               </MediumText>
             </View>
           </Button>
-        </View>
+        </DismissableView>
       )}
     </Formik>
   );
@@ -215,7 +227,7 @@ const styles = StyleSheet.create({
   },
   row: {
     flexDirection: 'row',
-    alignItems: 'center',
+    justifyContent: 'center',
   },
   title: {
     textAlign: 'center',

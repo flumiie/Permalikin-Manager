@@ -179,7 +179,6 @@ export default () => {
               message: 'Data sedang di index. Mohon coba lagi nanti',
             });
           } else {
-            console.log(v);
             setSnackbar({
               show: true,
               type: 'error',
