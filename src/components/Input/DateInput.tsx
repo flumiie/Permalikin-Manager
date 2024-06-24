@@ -29,7 +29,7 @@ export default (props: DateInputProps) => {
 
   const borderColor = useMemo(() => {
     if (props.error) {
-      return '#F64C4C';
+      return '#B60000';
     }
     if ((input?.length ?? 0) > 0) {
       return '#BF2229';
@@ -82,7 +82,7 @@ export default (props: DateInputProps) => {
       {props.error ? (
         <>
           <Spacer height={4} />
-          <RegularText color="#F64C4C">{props.error}</RegularText>
+          <RegularText color="#B60000">{props.error}</RegularText>
         </>
       ) : null}
     </>

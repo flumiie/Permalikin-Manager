@@ -45,7 +45,7 @@ export default (props: ButtonProps) => {
 
   const color = useMemo(() => {
     if (props.disabled) {
-      return '#1E1C1355';
+      return '#444';
     }
     if (props.type === 'outline') {
       return '#BF2229';
@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
   button: {
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 12,
+    paddingVertical: 14,
     paddingHorizontal: 24,
     borderRadius: 30,
   },

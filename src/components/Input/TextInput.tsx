@@ -38,7 +38,7 @@ export default forwardRef(
 
     const borderColor = useMemo(() => {
       if (props.error) {
-        return '#F64C4C';
+        return '#B60000';
       }
       if ((props.value?.length ?? 0) > 0) {
         return '#00AB41';
@@ -162,7 +162,7 @@ export default forwardRef(
         {props.error ? (
           <>
             <Spacer height={4} />
-            <RegularText color="#F64C4C">{props.error}</RegularText>
+            <RegularText color="#B60000">{props.error}</RegularText>
           </>
         ) : null}
       </>
@@ -192,10 +192,11 @@ const styles = StyleSheet.create({
   },
   input: {
     flex: 1,
+    height: 48,
     borderWidth: 1,
     borderRadius: 4,
     backgroundColor: '#FFF',
-    paddingVertical: 8,
+    paddingVertical: 12,
     paddingRight: 12,
     fontFamily: 'Poppins-Regular',
     fontSize: 14,
@@ -210,13 +211,13 @@ const styles = StyleSheet.create({
   },
   rightIcons: {
     position: 'absolute',
-    right: 12,
+    right: 0,
+    zIndex: 10,
     alignSelf: 'center',
     flexDirection: 'row',
-    zIndex: 10,
   },
   sideIcon: {
-    padding: 4,
     alignSelf: 'center',
+    padding: 14,
   },
 });
