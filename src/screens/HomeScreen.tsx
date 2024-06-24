@@ -53,12 +53,15 @@ const Header = (props: HeaderProps) => {
             </View>
             <Spacer width={8} />
             <View style={headerStyles.center}>
-              <Marquee spacing={0} speed={1.25}>
-                <MediumText type="label-large" color="#FAFAFA">
-                  {props.news}
-                  {'   |   '}
-                </MediumText>
-              </Marquee>
+              {props.news ? (
+                <Marquee spacing={0} speed={1.25}>
+                  <MediumText type="label-large" color="#FAFAFA">
+                    {`${props.news}   |   `}
+                  </MediumText>
+                </Marquee>
+              ) : (
+                <RegularText>RSS Feed</RegularText>
+              )}
               <Spacer height={4} />
               <RegularText type="body-small" color="#E1E1E1">
                 {dayjs().format('dddd, D MMMM YYYY')}
