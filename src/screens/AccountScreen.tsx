@@ -110,7 +110,7 @@ export default () => {
             });
           }}
         />
-        <SimpleList easterEgg icon="info" title="Tentang" subtitle="v1.0" />
+        <SimpleList easterEgg icon="info" title="Tentang" subtitle="v1.0.3" />
         <Spacer height={24} />
         <SimpleList
           icon="log-out"

@@ -1,6 +1,6 @@
 {
   "name": "permalikin-manager",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "private": true,
   "main": "index.js",
   "keywords": [],
@@ -87,6 +87,7 @@
     "jest": "^29.6.3",
     "prettier": "2.8.8",
     "react-native-dotenv": "^3.4.11",
+    "react-native-version": "^4.0.0",
     "react-test-renderer": "18.2.0",
     "typescript": "5.0.4"
   },

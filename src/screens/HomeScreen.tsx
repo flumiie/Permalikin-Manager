@@ -100,7 +100,7 @@ const HOME_ACTIONS: RespectorActionsType[] = [
     title: 'Laporan',
     subtitle: 'Listing data',
     disabled: false,
-    screen: 'Report',
+    screen: 'MemberList',
     type: 'bottom-tab',
   },
   {

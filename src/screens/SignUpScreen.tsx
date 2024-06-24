@@ -237,7 +237,7 @@ export default () => {
               !tosChecked
             }
             onPress={handleSubmit}>
-            Create Account
+            Buat Akun
           </Button>
           <Spacer height={16} />
           <View style={styles.row}>

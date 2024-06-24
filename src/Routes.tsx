@@ -27,7 +27,7 @@ export type AuthStackParamList = {
 
 export type BottomTabsParamList = {
   Home: undefined;
-  Report: undefined;
+  MemberList: undefined;
   Account: undefined;
 };
 
