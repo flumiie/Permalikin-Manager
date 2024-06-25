@@ -65,18 +65,14 @@ function App(): React.JSX.Element {
   return (
     <SafeAreaProvider>
       <StatusBar barStyle="dark-content" backgroundColor="#FCFCFF" />
-      <Snackbar
-        visible={snackbar?.show ?? false}
-        onHide={() => {
-          setSnackbar({
-            show: false,
-            type: 'success',
-            message: '',
-          });
-        }}
-        type={snackbar?.type ?? 'success'}
-        message={snackbar?.message ?? ''}
-      />
+      {snackbar ? (
+        <Snackbar
+          visible={snackbar.show}
+          onHide={() => setSnackbar(null)}
+          type={snackbar.type}
+          message={snackbar.message}
+        />
+      ) : null}
       <NavigationContainer theme={Theme}>
         <Provider store={store}>
           <GestureHandlerRootView style={styles.flex}>
