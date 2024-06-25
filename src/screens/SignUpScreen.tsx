@@ -77,8 +77,7 @@ export default () => {
             password: values.password,
             onSuccess: v => {
               let token = '';
-              v.user.getIdTokenResult().then(asd => (token = asd.token));
-
+              v.user.getIdTokenResult().then(S => (token = S.token));
               setSnackbar({
                 show: true,
                 type: 'success',
