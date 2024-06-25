@@ -91,7 +91,7 @@ android {
         applicationId "com.flumi.permalikinmanager"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 8
+        versionCode 9
         versionName userVer
     }
     signingConfigs {

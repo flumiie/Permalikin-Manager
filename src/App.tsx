@@ -41,16 +41,9 @@ function App(): React.JSX.Element {
   }, []);
 
   useEffect(() => {
-    setSnackbar({
-      show: false,
-      type: 'success',
-      message: '',
-    });
-  }, [setSnackbar]);
-
-  useEffect(() => {
     setNetworkConnected(!!isConnected);
-  }, [isConnected, setNetworkConnected]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isConnected]);
 
   useEffect(() => {
     if (networkConnected) {
@@ -60,7 +53,8 @@ function App(): React.JSX.Element {
         message: 'Berhasil terhubung ke internet',
       });
     }
-  }, [networkConnected, setSnackbar]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [networkConnected]);
 
   return (
     <SafeAreaProvider>
