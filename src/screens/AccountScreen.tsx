@@ -2,7 +2,7 @@ import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { useNavigation } from '@react-navigation/core';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { useState } from 'react';
-import { ScrollView, StatusBar, StyleSheet } from 'react-native';
+import { ScrollView, StyleSheet } from 'react-native';
 import { useMMKVStorage } from 'react-native-mmkv-storage';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -30,7 +30,6 @@ export default () => {
 
   return (
     <>
-      <StatusBar barStyle="dark-content" />
       <DropdownConfirm
         open={showConfirmLogoutDropdown}
         onClose={() => {
@@ -110,7 +109,7 @@ export default () => {
             });
           }}
         />
-        <SimpleList easterEgg icon="info" title="Tentang" subtitle="v1.0.4.3" />
+        <SimpleList easterEgg icon="info" title="Tentang" subtitle="v1.0.4.4" />
         <Spacer height={24} />
         <SimpleList
           icon="log-out"

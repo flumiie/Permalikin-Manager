@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/core';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { useEffect, useMemo, useState } from 'react';
-import { FlatList, StatusBar } from 'react-native';
+import { FlatList } from 'react-native';
 import { RefreshControl } from 'react-native';
 import { useMMKVStorage } from 'react-native-mmkv-storage';
 
@@ -10,7 +10,6 @@ import { getMemberList } from '../../store/actions';
 import { useAppDispatch } from '../../store/hooks';
 import { RootStackParamList } from '../Routes';
 import {
-  DismissableView,
   DropdownNavigator,
   Empty,
   ItemList,
@@ -166,7 +165,6 @@ export default () => {
 
   return (
     <>
-      <StatusBar barStyle="dark-content" />
       <DropdownNavigator
         open={!!showDropdown.memberCode}
         title={showDropdown.fullName ?? ''}
@@ -183,33 +181,31 @@ export default () => {
           });
         }}
       />
-      <DismissableView>
-        <FlatList
-          data={filteredData}
-          refreshControl={
-            <RefreshControl refreshing={loading} onRefresh={fetchData} />
-          }
-          keyExtractor={item => item.memberCode}
-          ListEmptyComponent={
-            <>
-              <Spacer height={24} />
-              <Empty />
-            </>
-          }
-          renderItem={({ item }) => (
-            <ReportListItem
-              item={item}
-              onPress={() => {
-                setSearchMode(false);
-                setShowDropdown({
-                  memberCode: item.memberCode,
-                  fullName: item.fullName,
-                });
-              }}
-            />
-          )}
-        />
-      </DismissableView>
+      <FlatList
+        data={filteredData}
+        refreshControl={
+          <RefreshControl refreshing={loading} onRefresh={fetchData} />
+        }
+        keyExtractor={item => item.memberCode}
+        ListEmptyComponent={
+          <>
+            <Spacer height={24} />
+            <Empty />
+          </>
+        }
+        renderItem={({ item }) => (
+          <ReportListItem
+            item={item}
+            onPress={() => {
+              setSearchMode(false);
+              setShowDropdown({
+                memberCode: item.memberCode,
+                fullName: item.fullName,
+              });
+            }}
+          />
+        )}
+      />
     </>
   );
 };

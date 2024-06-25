@@ -1,6 +1,6 @@
 {
   "name": "permalikin-manager",
-  "version": "1.0.4.3",
+  "version": "1.0.4.4",
   "private": true,
   "main": "index.js",
   "keywords": [],
@@ -21,6 +21,7 @@
     "bundle": "yarn bundle:ios && yarn bundle:android",
     "bundle:ios": "react-native bundle --platform ios --dev false --entry-file=index.js --bundle-output ios/main.jsbundle",
     "bundle:android": "react-native bundle --platform android --dev false --entry-file=index.js --bundle-output android/app/src/main/assets/index.android.bundle",
+    "prod:android": "npx react-native-version && yarn bundle:android && android:release",
     "lint": "eslint .",
     "start": "react-native start",
     "start:newcache": "react-native start --reset-cache",

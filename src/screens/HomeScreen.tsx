@@ -167,15 +167,14 @@ export default () => {
 
   return (
     <>
+      <StatusBar barStyle="light-content" backgroundColor="#BF2229" />
       <View
         // eslint-disable-next-line react-native/no-inline-styles
         style={{
           flex: 1,
           backgroundColor: '#FFF',
         }}>
-        <StatusBar backgroundColor="#BF2229" />
         <View style={styles.hiddenBackground} />
-
         <FlatList
           data={HOME_ACTIONS}
           ListHeaderComponent={
