@@ -15,6 +15,8 @@ import {
   NewMemberDonationScreen,
   NewMemberDueScreen,
   NewTransactionMenuScreen,
+  PersonalInformationScreen,
+  ResetPasswordScreen,
   SignInScreen,
   SignUpScreen,
 } from './screens';
@@ -23,6 +25,7 @@ import NewMemberInterestScreen from './screens/Master/NewMemberInterestScreen';
 export type AuthStackParamList = {
   SignIn: undefined;
   SignUp: undefined;
+  ResetPassword: undefined;
 };
 
 export type BottomTabsParamList = {
@@ -59,6 +62,7 @@ export type RootStackParamList = {
     fullName: string;
   };
   NewTransactionMenu: undefined;
+  PersonalInformation: undefined;
   EasterEgg: undefined;
 };
 
@@ -106,6 +110,10 @@ export default () => {
           component={NewTransactionMenuScreen}
         />
         <MainStack.Screen
+          name="PersonalInformation"
+          component={PersonalInformationScreen}
+        />
+        <MainStack.Screen
           name="EasterEgg"
           component={EasterEggScreen}
           options={{
@@ -122,6 +130,7 @@ export default () => {
       screenOptions={{ headerShown: false }}>
       <AuthStack.Screen name="SignIn" component={SignInScreen} />
       <AuthStack.Screen name="SignUp" component={SignUpScreen} />
+      <AuthStack.Screen name="ResetPassword" component={ResetPasswordScreen} />
     </AuthStack.Navigator>
   );
 };

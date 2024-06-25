@@ -43,12 +43,7 @@ export default () => {
     name: string;
     email: string;
     photo: string;
-  }>('credentials', asyncStorage, {
-    token: '',
-    name: '',
-    email: '',
-    photo: '',
-  });
+  } | null>('credentials', asyncStorage, null);
 
   const emailInputRef = useRef<RNTextInput>(null);
   const passwordInputRef = useRef<RNTextInput>(null);
@@ -94,7 +89,7 @@ export default () => {
                 setSnackbar({
                   show: true,
                   type: 'success',
-                  message: 'Registrasi berhasil',
+                  message: 'Login berhasil',
                 });
                 setCredentials({
                   token: S.token ?? '',
@@ -187,6 +182,16 @@ export default () => {
             onPress={handleSubmit}>
             Login
           </Button>
+          <Spacer height={16} />
+          <View style={styles.row}>
+            <RegularText>Lupa password? </RegularText>
+            <Pressable
+              onPress={() => {
+                navigation.navigate('ResetPassword');
+              }}>
+              <RegularText color="#BF2229">Reset password disini</RegularText>
+            </Pressable>
+          </View>
           <Spacer height={16} />
           <View style={styles.row}>
             <RegularText>Belum ada akun? </RegularText>

@@ -6,6 +6,7 @@ import getMemberDonations from './getMemberDonations';
 import getMemberDues from './getMemberDues';
 import getMemberInterests from './getMemberInterests';
 import getMemberList from './getMemberList';
+import passwordReset from './passwordReset';
 import setUserData from './setUserData';
 import signUp from './signUp';
 
@@ -18,6 +19,7 @@ export {
   getMemberDues,
   getMemberInterests,
   getMemberList,
+  passwordReset,
   setUserData,
   signUp,
 };

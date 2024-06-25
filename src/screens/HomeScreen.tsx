@@ -64,7 +64,7 @@ const Header = (props: HeaderProps) => {
               )}
               <Spacer height={4} />
               <RegularText type="body-small" color="#E1E1E1">
-                {dayjs().format('dddd, D MMMM YYYY')}
+                {dayjs().locale('id').format('dddd, D MMMM YYYY')}
               </RegularText>
             </View>
           </View>

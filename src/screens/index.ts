@@ -9,11 +9,15 @@ import NewMemberDonationScreen from './Master/NewMemberDonationScreen';
 import NewMemberDueScreen from './Master/NewMemberDueScreen';
 import NewTransactionMenuScreen from './Master/NewTransactionMenuScreen';
 import MemberListScreen from './MemberListScreen';
+import PersonalInformationScreen from './PersonalInformationScreen';
+import ResetPasswordScreen from './ResetPasswordScreen';
 import SignInScreen from './SignInScreen';
 import SignUpScreen from './SignUpScreen';
 
 export {
   AccountScreen,
+  PersonalInformationScreen,
+  ResetPasswordScreen,
   EasterEggScreen,
   HomeScreen,
   MemberListScreen,
