@@ -3,15 +3,13 @@ import { useNavigation } from '@react-navigation/core';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { useState } from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
+import { getVersion } from 'react-native-device-info';
 import { useMMKVStorage } from 'react-native-mmkv-storage';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { asyncStorage } from '../../store';
-import { passwordReset } from '../../store/actions';
-import { useAppDispatch } from '../../store/hooks';
 import { RootStackParamList } from '../Routes';
 import {
-  BoldText,
   DropdownConfirm,
   RegularText,
   SimpleList,
@@ -20,7 +18,6 @@ import {
 
 export default () => {
   const insets = useSafeAreaInsets();
-  const dispatch = useAppDispatch();
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
   const [_, setSnackbar] = useMMKVStorage<{
@@ -28,77 +25,19 @@ export default () => {
     type: 'success' | 'error';
     message: string;
   } | null>('snackbar', asyncStorage, null);
-  const [credentials] = useMMKVStorage<{
-    email: string;
-  } | null>('credentials', asyncStorage, null);
-  const [showConfirmPWResetDropdown, setShowConfirmPWResetDropdown] =
-    useState(false);
   const [showConfirmLogoutDropdown, setShowConfirmLogoutDropdown] =
     useState(false);
 
   return (
     <>
       <DropdownConfirm
-        open={showConfirmPWResetDropdown}
-        onClose={() => {
-          setShowConfirmPWResetDropdown(false);
-        }}
-        content={
-          <>
-            <BoldText type="title-medium">Konfirmasi Reset Password</BoldText>
-            <Spacer height={8} />
-            <RegularText>
-              <RegularText type="body-small">
-                Yakin mau reset password akun ini? Instruksi reset password akan
-                dikiriman ke email{' '}
-              </RegularText>
-              <RegularText type="body-small" style={styles.emailText}>
-                {credentials?.email}
-              </RegularText>
-            </RegularText>
-          </>
-        }
-        actions={{
-          left: {
-            label: 'Batal',
-            onPress: () => {
-              setShowConfirmPWResetDropdown(false);
-            },
-          },
-          right: {
-            label: 'OK',
-            onPress: () => {
-              dispatch(
-                passwordReset({
-                  email: credentials?.email ?? '',
-                  onSuccess: () => {
-                    setSnackbar({
-                      show: true,
-                      type: 'success',
-                      message: `Instruksi reset password sudah dikiriman ke email ${credentials?.email}`,
-                    });
-                  },
-                  onError: () => {
-                    setSnackbar({
-                      show: true,
-                      type: 'error',
-                      message: 'Ada kesalahan. Mohon coba lagi nanti',
-                    });
-                  },
-                }),
-              );
-            },
-          },
-        }}
-      />
-      <DropdownConfirm
         open={showConfirmLogoutDropdown}
         onClose={() => {
           setShowConfirmLogoutDropdown(false);
         }}
+        title="Konfirmasi Logout"
         content={
           <>
-            <BoldText type="title-medium">Konfirmasi Logout</BoldText>
             <Spacer height={8} />
             <RegularText type="body-small">
               Yakin mau keluar dari akun ini?
@@ -141,10 +80,10 @@ export default () => {
         />
         <SimpleList
           icon="lock"
-          title="Reset Password"
-          subtitle="Reset password akan dikiriman ke email"
+          title="Ubah Password"
+          subtitle="Ubah password akun Anda"
           onPress={() => {
-            setShowConfirmPWResetDropdown(true);
+            navigation.navigate('ChangePassword');
           }}
         />
         <SimpleList
@@ -160,7 +99,12 @@ export default () => {
             });
           }}
         />
-        <SimpleList easterEgg icon="info" title="Tentang" subtitle="v1.0.5" />
+        <SimpleList
+          easterEgg
+          icon="info"
+          title="Tentang"
+          subtitle={`v${getVersion()}`}
+        />
         <Spacer height={24} />
         <SimpleList
           icon="log-out"

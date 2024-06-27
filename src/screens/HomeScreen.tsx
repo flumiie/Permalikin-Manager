@@ -2,7 +2,8 @@ import { Marquee } from '@animatereactnative/marquee';
 import { useNavigation } from '@react-navigation/core';
 import { StackNavigationProp } from '@react-navigation/stack';
 import dayjs from 'dayjs';
-import React, { useEffect, useState } from 'react';
+import 'dayjs/locale/id';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   FlatList,
   ImageSourcePropType,
@@ -27,6 +28,28 @@ interface HeaderProps extends Partial<ViewProps> {
 }
 
 const Header = (props: HeaderProps) => {
+  const news = () => {
+    if (props.news) {
+      let res = props.news
+        .split('&nbsp;')
+        .join(' ')
+        .split('&quot;')
+        .join(' "')
+        .split('&rsquo;')
+        .join(" '")
+        .split('&ldquo;')
+        .join(' “');
+      return (
+        <Marquee spacing={0} speed={1.25}>
+          <MediumText type="label-large" color="#FAFAFA">
+            {`${res}   |   `}
+          </MediumText>
+        </Marquee>
+      );
+    }
+    return <RegularText>RSS Feed</RegularText>;
+  };
+
   return (
     <View {...props} style={headerStyles.header}>
       <View style={headerStyles.imageBackgroundColorOverlay} />
@@ -53,15 +76,7 @@ const Header = (props: HeaderProps) => {
             </View>
             <Spacer width={8} />
             <View style={headerStyles.center}>
-              {props.news ? (
-                <Marquee spacing={0} speed={1.25}>
-                  <MediumText type="label-large" color="#FAFAFA">
-                    {`${props.news}   |   `}
-                  </MediumText>
-                </Marquee>
-              ) : (
-                <RegularText>RSS Feed</RegularText>
-              )}
+              {news()}
               <Spacer height={4} />
               <RegularText type="body-small" color="#E1E1E1">
                 {dayjs().locale('id').format('dddd, D MMMM YYYY')}
@@ -96,6 +111,15 @@ const HOME_ACTIONS: RespectorActionsType[] = [
   },
   {
     id: 2,
+    icon: require('../../assets/images/transactions.png'),
+    title: 'Kas',
+    subtitle: 'Detail kas',
+    disabled: false,
+    screen: 'FundsData',
+    type: 'screen',
+  },
+  {
+    id: 3,
     icon: require('../../assets/images/reports.png'),
     title: 'Laporan',
     subtitle: 'Listing data',
@@ -104,7 +128,7 @@ const HOME_ACTIONS: RespectorActionsType[] = [
     type: 'bottom-tab',
   },
   {
-    id: 3,
+    id: 4,
     icon: undefined,
     title: '',
     subtitle: '',

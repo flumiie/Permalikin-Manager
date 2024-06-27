@@ -9125,6 +9125,7 @@ __metadata:
     react-native-bouncy-checkbox: ^4.0.1
     react-native-color-matrix-image-filters: ^6.0.9
     react-native-date-picker: ^5.0.4
+    react-native-device-info: ^11.1.0
     react-native-dotenv: ^3.4.11
     react-native-fast-image: ^8.6.3
     react-native-gesture-handler: ^2.16.2
@@ -9555,6 +9556,15 @@ __metadata:
     react: ">= 17.0.1"
     react-native: ">= 0.64.3"
   checksum: 67db7fba5de613c61a70b5b9274daef8c7d3b6f6cdc5a6063eb61126d4df43252c501c2cb78ebda37fb0997ccb0994e949976d0fb395453580019923100e03ad
+  languageName: node
+  linkType: hard
+
+"react-native-device-info@npm:^11.1.0":
+  version: 11.1.0
+  resolution: "react-native-device-info@npm:11.1.0"
+  peerDependencies:
+    react-native: "*"
+  checksum: 272cab82573933a1f3a9bc394b82a387ccbdf9fbef131fc1f04b8ff78b36f581931b5c643f5aa278f28577cbc320ef2ac588cafdb73292e9b0cf4427d54c44ce
   languageName: node
   linkType: hard
 

@@ -46,30 +46,7 @@ export default () => {
   const [personels, setPersonels] = useMMKVStorage<MasterDataType[]>(
     'personels',
     asyncStorage,
-    [
-      // {
-      //   avatar: '',
-      //   memberCode: '',
-      //   fullName: '',
-      //   birthPlaceDate: '',
-      //   religion: '',
-      //   address: {
-      //     identityCardAddress: '',
-      //     currentAddress: '',
-      //     country: '',
-      //     province: '',
-      //     city: '',
-      //     zipCode: '',
-      //   },
-      //   phoneNo: '',
-      //   email: '',
-      //   status: '',
-      //   balance: {
-      //     initial: '',
-      //     end: '',
-      //   },
-      // },
-    ],
+    [],
   );
   const [_, setSearchMode] = useMMKVStorage('searchMode', asyncStorage, false);
 
@@ -126,19 +103,24 @@ export default () => {
       fullName: string | null;
     },
   ) => {
-    if (v === 'Cek Iuran Anggota') {
+    if (v === 'Edit Master Data') {
+      return navigation.navigate('EditMasterData', {
+        memberCode: data.memberCode ?? '',
+      });
+    }
+    if (v === 'Iuran Anggota') {
       return navigation.navigate('MemberDues', {
         memberCode: data.memberCode ?? '',
         fullName: data.fullName ?? '',
       });
     }
-    if (v === 'Cek Donasi / Sumbangan') {
+    if (v === 'Donasi / Sumbangan') {
       return navigation.navigate('MemberDonations', {
         memberCode: data.memberCode ?? '',
         fullName: data.fullName ?? '',
       });
     }
-    if (v === 'Cek Bunga Bank') {
+    if (v === 'Bunga Bank') {
       return navigation.navigate('MemberInterests', {
         memberCode: data.memberCode ?? '',
         fullName: data.fullName ?? '',
@@ -169,9 +151,10 @@ export default () => {
         open={!!showDropdown.memberCode}
         title={showDropdown.fullName ?? ''}
         options={[
-          'Cek Iuran Anggota',
-          'Cek Donasi / Sumbangan',
-          'Cek Bunga Bank',
+          { type: 'primary', label: 'Edit Master Data' },
+          { type: 'secondary', label: 'Iuran Anggota' },
+          { type: 'secondary', label: 'Donasi / Sumbangan' },
+          { type: 'secondary', label: 'Bunga Bank' },
         ]}
         onSelect={v => onSelectNavigator(v, showDropdown)}
         onClose={() => {

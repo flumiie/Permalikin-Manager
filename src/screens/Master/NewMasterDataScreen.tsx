@@ -166,6 +166,7 @@ export default () => {
             <StatusBar backgroundColor="#FFF" />
             <DropdownConfirm
               open={showConfirmCreateDataDropdown.state}
+              title="Konfirmasi tambah master data"
               onClose={() => {
                 setShowConfirmCreateDataDropdown({
                   state: false,
@@ -174,11 +175,8 @@ export default () => {
               }}
               content={
                 <>
-                  <BoldText type="title-medium">
-                    Konfirmasi tambah master data
-                  </BoldText>
                   <Spacer height={8} />
-                  <RegularText type="body-small">
+                  <RegularText type="body-medium">
                     Yakin data sudah benar? Data akan ditambahkan setelah
                     menekan OK
                   </RegularText>

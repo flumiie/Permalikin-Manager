@@ -147,13 +147,11 @@ export default () => {
                   values: null,
                 });
               }}
+              title="Konfirmasi tambah data donasi"
               content={
                 <>
-                  <BoldText type="title-medium">
-                    Konfirmasi tambah data donasi
-                  </BoldText>
                   <Spacer height={8} />
-                  <RegularText type="body-small">
+                  <RegularText type="body-medium">
                     Yakin data sudah benar? Data akan ditambahkan setelah
                     menekan OK
                   </RegularText>

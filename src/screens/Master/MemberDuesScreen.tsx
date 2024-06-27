@@ -84,15 +84,15 @@ export default () => {
   }>('credentials', asyncStorage, {
     token: '',
   });
-  const [snackbar, setSnackbar] = useMMKVStorage<{
+  const [_, setSnackbar] = useMMKVStorage<{
     show: boolean;
     type: 'success' | 'error';
     message: string;
   } | null>('snackbar', asyncStorage, null);
-  const [memberDues, setMemberDues] = useMMKVStorage<MemberDuesType[] | null>(
+  const [memberDues, setMemberDues] = useMMKVStorage<MemberDuesType[]>(
     'memberDues',
     asyncStorage,
-    null,
+    [],
   );
   const [__, setSearchMode] = useMMKVStorage('searchMode', asyncStorage, false);
 
@@ -210,7 +210,7 @@ export default () => {
   }, [navigation, route.params?.fullName]);
 
   useEffect(() => {
-    if (credentials?.token || snackbar?.message === 'Data sudah tersimpan') {
+    if (credentials?.token) {
       fetchData();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

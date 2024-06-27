@@ -82,18 +82,16 @@ export default () => {
                 email: '',
               });
             }}
+            title="Konfirmasi Reset Password"
             content={
               <>
-                <BoldText type="title-medium">
-                  Konfirmasi Reset Password
-                </BoldText>
                 <Spacer height={8} />
                 <RegularText>
-                  <RegularText type="body-small">
+                  <RegularText type="body-medium">
                     Yakin mau reset password akun ini? Instruksi reset password
                     akan dikiriman ke email{' '}
                   </RegularText>
-                  <RegularText type="body-small" style={styles.emailText}>
+                  <RegularText type="body-medium" style={styles.emailText}>
                     {showConfirmPWResetDropdown.email}
                   </RegularText>
                 </RegularText>

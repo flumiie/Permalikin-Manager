@@ -19,12 +19,14 @@ import Icon from 'react-native-vector-icons/Feather';
 import Button from '../Button';
 import Spacer from '../Spacer';
 import BoldText from '../Text/BoldText';
-import MediumText from '../Text/MediumText';
 
 interface DropdownProps {
   open: boolean;
   title: string;
-  options: string[];
+  options: {
+    type: 'primary' | 'secondary';
+    label: string;
+  }[];
   onSelect: (value: string) => void;
   onClose: () => void;
   style?: ViewStyle;
@@ -90,12 +92,12 @@ export default (props: DropdownProps) => {
                     style={styles.optionContainer}>
                     <Button
                       key={index.toString()}
-                      type="secondary"
+                      type={option.type}
                       onPress={() => {
-                        props.onSelect(option);
+                        props.onSelect(option.label);
                         setTimeout(() => props.onClose(), 100);
                       }}>
-                      <MediumText>{option}</MediumText>
+                      {option.label}
                     </Button>
                   </View>
                 );

@@ -42,6 +42,11 @@ export default () => {
     type: 'success' | 'error';
     message: string;
   } | null>('snackbar', asyncStorage, null);
+  const [__, setMemberDues] = useMMKVStorage<MemberDuesType[]>(
+    'memberDues',
+    asyncStorage,
+    [],
+  );
 
   // const avatarInputRef = useRef<RNTextInput>(null);
   const dateInputRef = useRef<RNTextInput>(null);
@@ -52,10 +57,7 @@ export default () => {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [dateCreated, setDateCreated] = useState<Date>(new Date());
   const [showConfirmCreateDataDropdown, setShowConfirmCreateDataDropdown] =
-    useState<{
-      state: boolean;
-      values: { dues: MemberDuesType } | null;
-    } | null>(null);
+    useState(false);
 
   // const [showCountriesDropdown, setShowCountriesDropdown] = useState(false);
   // const [showProvinceDropdown, setShowProvinceDropdown] = useState(false);
@@ -101,19 +103,8 @@ export default () => {
         validateOnBlur
         validateOnChange
         validationSchema={ValidationSchema}
-        onSubmit={values => {
-          setShowConfirmCreateDataDropdown({
-            state: true,
-            values: {
-              ...values.dues,
-              dues: {
-                date: values.dues?.date,
-                due: values.dues?.due?.replace(/[.|,| |-]/g, ''),
-                paid: values.dues?.paid?.replace(/[.|,| |-]/g, ''),
-                remaining: values.dues?.remaining?.replace(/[.|,| |-]/g, ''),
-              },
-            },
-          });
+        onSubmit={() => {
+          setShowConfirmCreateDataDropdown(true);
         }}>
         {({
           values,
@@ -152,20 +143,15 @@ export default () => {
               }}
             />
             <DropdownConfirm
-              open={showConfirmCreateDataDropdown?.state ?? false}
+              open={showConfirmCreateDataDropdown}
               onClose={() => {
-                setShowConfirmCreateDataDropdown({
-                  state: false,
-                  values: null,
-                });
+                setShowConfirmCreateDataDropdown(false);
               }}
+              title="Konfirmasi tambah data iuran"
               content={
                 <>
-                  <BoldText type="title-medium">
-                    Konfirmasi tambah data iuran
-                  </BoldText>
                   <Spacer height={8} />
-                  <RegularText type="body-small">
+                  <RegularText type="body-medium">
                     Yakin data sudah benar? Data akan ditambahkan setelah
                     menekan OK
                   </RegularText>
@@ -175,25 +161,29 @@ export default () => {
                 left: {
                   label: 'Batal',
                   onPress: () => {
-                    setShowConfirmCreateDataDropdown({
-                      state: false,
-                      values: null,
-                    });
+                    setShowConfirmCreateDataDropdown(false);
                   },
                 },
                 right: {
                   label: 'OK',
                   onPress: () => {
+                    setShowConfirmCreateDataDropdown(false);
                     dispatch(
                       createMemberDue({
                         memberCode: route.params?.memberCode ?? '',
-                        duesData: showConfirmCreateDataDropdown?.values?.dues,
+                        duesData: values.dues,
                         onSuccess: () => {
+                          setMemberDues(prev => {
+                            let temp = prev;
+                            temp = [...temp, values.dues];
+                            return temp;
+                          });
                           setSnackbar({
                             show: true,
                             type: 'success',
                             message: 'Data sudah tersimpan',
                           });
+                          setShowConfirmCreateDataDropdown(false);
                           navigation.goBack();
                         },
                         onError: () => {
@@ -205,10 +195,6 @@ export default () => {
                         },
                       }),
                     );
-                    setShowConfirmCreateDataDropdown({
-                      state: false,
-                      values: null,
-                    });
                   },
                 },
               }}
