@@ -1,3 +1,4 @@
+import changePassword from './changePassword';
 import createMemberDonation from './createMemberDonation';
 import createMemberDue from './createMemberDue';
 import createMemberInterest from './createMemberInterest';
@@ -11,6 +12,7 @@ import setUserData from './setUserData';
 import signUp from './signUp';
 
 export {
+  changePassword,
   createMemberDonation,
   createMemberDue,
   createMemberInterest,

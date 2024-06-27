@@ -1,12 +1,12 @@
 import firestore, { firebase } from '@react-native-firebase/firestore';
 
 import { MemberDuesType } from '../../src/libs/dataTypes';
-import { CREATE_MEMBER_DUE, CREATE_MEMBER_DUE_ERROR } from '../constants';
+import { CREATE_MEMBER_DUE_ERROR } from '../constants';
 
 interface GetUserDataProps {
   memberCode: string;
   duesData: MemberDuesType;
-  onSuccess: (v: any) => void;
+  onSuccess: () => void;
   onError: (v: string) => void;
 }
 
@@ -24,12 +24,8 @@ export default (props: GetUserDataProps) => {
             .update({
               dues: firebase.firestore.FieldValue.arrayUnion(props.duesData),
             })
-            .then(res => {
-              dispatch({
-                type: CREATE_MEMBER_DUE,
-                payload: res,
-              });
-              props.onSuccess(res);
+            .then(() => {
+              props.onSuccess();
             })
             .catch(err => {
               dispatch({

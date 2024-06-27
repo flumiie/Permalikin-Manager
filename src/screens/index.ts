@@ -1,6 +1,9 @@
 import AccountScreen from './AccountScreen';
+import ChangePasswordScreen from './ChangePasswordScreen';
 import EasterEggScreen from './EasterEggScreen';
+import FundsDataScreen from './Funds/FundsDataScreen';
 import HomeScreen from './HomeScreen';
+import EditMasterDataScreen from './Master/EditMasterDataScreen';
 import MemberDonationsScreen from './Master/MemberDonationsScreen';
 import MemberDuesScreen from './Master/MemberDuesScreen';
 import MemberInterestsScreen from './Master/MemberInterestsScreen';
@@ -17,6 +20,7 @@ import SignUpScreen from './SignUpScreen';
 export {
   AccountScreen,
   PersonalInformationScreen,
+  ChangePasswordScreen,
   ResetPasswordScreen,
   EasterEggScreen,
   HomeScreen,
@@ -27,6 +31,8 @@ export {
 
 export {
   NewMasterDataScreen,
+  EditMasterDataScreen,
+  FundsDataScreen,
   MemberDonationsScreen,
   MemberDuesScreen,
   MemberInterestsScreen,

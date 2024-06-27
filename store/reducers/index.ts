@@ -1,3 +1,4 @@
+import changePasswordReducer from './changePasswordReducer';
 import createMemberDonationReducer from './createMemberDonationReducer';
 import createMemberDueReducer from './createMemberDueReducer';
 import createMemberInterestReducer from './createMemberInterestReducer';
@@ -8,6 +9,7 @@ import getMemberInterestsReducer from './getMemberInterestsReducer';
 import signUpReducer from './signUpReducer';
 
 export {
+  changePasswordReducer,
   createMemberDueReducer,
   createMemberDonationReducer,
   createMemberInterestReducer,

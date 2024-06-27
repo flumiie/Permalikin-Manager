@@ -1,10 +1,11 @@
 import firestore from '@react-native-firebase/firestore';
 
-import { GET_MEMBER_DUES, GET_MEMBER_DUES_ERROR } from '../constants';
+import { MasterDataType } from '../../src/libs/dataTypes';
+import { GET_MEMBER, GET_MEMBER_ERROR } from '../constants';
 
 interface GetUserDataProps {
   memberCode: string;
-  onSuccess: (v: any) => void;
+  onSuccess: (v: MasterDataType) => void;
   onError: (v: string) => void;
 }
 
@@ -13,25 +14,22 @@ export default (props: GetUserDataProps) => {
     await firestore()
       .collection('Personels')
       .where('memberCode', '==', props.memberCode)
-      .where('dues', '!=', null)
       .get()
       .then(querySnap => {
-        const data = querySnap.docs.map(doc => {
-          return doc.data().dues;
-        });
+        const data = querySnap.docs.map(doc => doc.data());
 
         dispatch({
-          type: GET_MEMBER_DUES,
+          type: GET_MEMBER,
           payload: data,
         });
 
-        props.onSuccess(data);
+        return props.onSuccess(data?.[0]);
       })
       .catch(err => {
         dispatch({
-          type: GET_MEMBER_DUES_ERROR,
+          type: GET_MEMBER_ERROR,
           payload: err?.message,
         });
-        props.onError(err?.message);
+        return props.onError(err?.message);
       });
 };

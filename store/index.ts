@@ -3,6 +3,7 @@ import { MMKVLoader } from 'react-native-mmkv-storage';
 import { thunk } from 'redux-thunk';
 
 import {
+  changePasswordReducer,
   createMemberDonationReducer,
   createMemberDueReducer,
   getAuthReducer,
@@ -14,6 +15,7 @@ import {
 
 const rootReducer = combineReducers({
   getAuth: getAuthReducer,
+  changePassword: changePasswordReducer,
   signUp: signUpReducer,
   getMemberDues: getMemberDuesReducer,
   getMemberDonations: getMemberDonationsReducer,

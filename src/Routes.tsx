@@ -7,7 +7,10 @@ import { asyncStorage } from '../store';
 import BottomTabs from './BottomTabs';
 import { NavigationHeader } from './components';
 import {
+  ChangePasswordScreen,
   EasterEggScreen,
+  EditMasterDataScreen,
+  FundsDataScreen,
   MemberDonationsScreen,
   MemberDuesScreen,
   MemberInterestsScreen,
@@ -36,7 +39,11 @@ export type BottomTabsParamList = {
 
 export type RootStackParamList = {
   BottomTabs: NavigatorScreenParams<BottomTabsParamList>;
+  FundsData: undefined;
   NewMasterData: undefined;
+  EditMasterData: {
+    memberCode: string;
+  };
   MemberDues: {
     memberCode: string;
     fullName: string;
@@ -63,6 +70,7 @@ export type RootStackParamList = {
   };
   NewTransactionMenu: undefined;
   PersonalInformation: undefined;
+  ChangePassword: undefined;
   EasterEgg: undefined;
 };
 
@@ -83,9 +91,19 @@ export default () => {
           options={{ headerShown: false }}
         />
         <MainStack.Screen
+          name="FundsData"
+          component={FundsDataScreen}
+          options={{ title: 'Data Kas' }}
+        />
+        <MainStack.Screen
           name="NewMasterData"
           component={NewMasterDataScreen}
           options={{ title: 'Data Baru' }}
+        />
+        <MainStack.Screen
+          name="EditMasterData"
+          component={EditMasterDataScreen}
+          options={{ title: 'Edit Data Master' }}
         />
         <MainStack.Screen name="MemberDues" component={MemberDuesScreen} />
         <MainStack.Screen name="NewMemberDue" component={NewMemberDueScreen} />
@@ -112,6 +130,10 @@ export default () => {
         <MainStack.Screen
           name="PersonalInformation"
           component={PersonalInformationScreen}
+        />
+        <MainStack.Screen
+          name="ChangePassword"
+          component={ChangePasswordScreen}
         />
         <MainStack.Screen
           name="EasterEgg"
