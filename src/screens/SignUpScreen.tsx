@@ -1,4 +1,4 @@
-import { useNavigation } from '@react-navigation/core';
+import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { Formik } from 'formik';
 import React, { useRef, useState } from 'react';
@@ -16,7 +16,7 @@ import * as Yup from 'yup';
 import { asyncStorage } from '../../store';
 import { signUp } from '../../store/actions';
 import { useAppDispatch } from '../../store/hooks';
-import { AuthStackParamList, RootStackParamList } from '../Routes';
+import { AuthStackParamList } from '../Routes';
 import {
   Button,
   DismissableView,
@@ -31,7 +31,6 @@ export default () => {
   const dispatch = useAppDispatch();
   const authNavigation =
     useNavigation<StackNavigationProp<AuthStackParamList>>();
-  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
   const [_, setSnackbar] = useMMKVStorage<{
     show: boolean;
@@ -49,6 +48,11 @@ export default () => {
     email: '',
     photo: '',
   });
+  const [___, setRegistrationStatus] = useMMKVStorage(
+    'registrationStatus',
+    asyncStorage,
+    false,
+  );
 
   const nameInputRef = useRef<RNTextInput>(null);
   const emailInputRef = useRef<RNTextInput>(null);
@@ -77,6 +81,7 @@ export default () => {
             password: values.password,
             onSuccess: v => {
               v.user.getIdTokenResult().then(S => {
+                setRegistrationStatus(true);
                 setSnackbar({
                   show: true,
                   type: 'success',

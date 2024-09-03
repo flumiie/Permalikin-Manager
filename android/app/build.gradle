@@ -94,6 +94,18 @@ android {
         versionCode 11
         versionName userVer
     }
+    // flavorDimensions "version"
+    // productFlavors {
+    //     development {
+    //         dimension "version"
+    //         applicationIdSuffix ".dev"
+    //         versionNameSuffix " dev"
+    //     }
+    //     production {
+    //         dimension "version"
+    //         applicationIdSuffix ""
+    //     }
+    // }
     signingConfigs {
         debug {
             storeFile file('debug.keystore')
@@ -112,7 +124,7 @@ android {
     }
     splits {
         abi {
-            enable true
+            enable gradle.startParameter.taskNames.any { it.contains("Release") }
             reset()
             include 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
             universalApk false

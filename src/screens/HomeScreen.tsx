@@ -1,9 +1,9 @@
 import { Marquee } from '@animatereactnative/marquee';
-import { useNavigation } from '@react-navigation/core';
+import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import dayjs from 'dayjs';
 import 'dayjs/locale/id';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   FlatList,
   ImageSourcePropType,
@@ -89,7 +89,7 @@ const Header = (props: HeaderProps) => {
   );
 };
 
-type RespectorActionsType = {
+type ActionsType = {
   id: number;
   icon: ImageSourcePropType | undefined;
   title: string;
@@ -99,7 +99,7 @@ type RespectorActionsType = {
   type: string;
 };
 
-const HOME_ACTIONS: RespectorActionsType[] = [
+const HOME_ACTIONS: ActionsType[] = [
   {
     id: 1,
     icon: require('../../assets/images/master.png'),
@@ -154,26 +154,26 @@ export default () => {
     token: '',
     name: '',
   });
-  const [registrationStatus, setRegistrationStatus] = useMMKVStorage(
+  const [registrationStatus] = useMMKVStorage(
     'registrationStatus',
     asyncStorage,
-    null,
+    false,
   );
   const [__, setSearchMode] = useMMKVStorage('searchMode', asyncStorage, false);
 
   const [news, setNews] = useState<[]>([]);
 
   useEffect(() => {
-    if (registrationStatus && credentials?.token) {
+    if (credentials?.token && registrationStatus) {
       setSnackbar({
         show: true,
         type: 'success',
         message: `Registrasi berhasil, selamat datang ${credentials?.token}`,
       });
-      setRegistrationStatus(null);
+      asyncStorage.removeItem('registrationStatus');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [registrationStatus, credentials?.token]);
+  }, [credentials?.token && registrationStatus]);
 
   useEffect(() => {
     dispatch(
@@ -225,7 +225,7 @@ export default () => {
             item,
             index,
           }: {
-            item: RespectorActionsType;
+            item: ActionsType;
             index: number;
           }) => (
             <>

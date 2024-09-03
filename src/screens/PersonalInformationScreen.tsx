@@ -1,4 +1,4 @@
-import { useNavigation } from '@react-navigation/core';
+import { useNavigation } from '@react-navigation/native';
 import { Formik } from 'formik';
 import React, { useRef } from 'react';
 import {

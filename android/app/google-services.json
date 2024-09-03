@@ -14,10 +14,54 @@
       },
       "oauth_client": [
         {
-          "client_id": "813912710571-e5p4ugb5jh9h1usapaqibb9j30qga4cn.apps.googleusercontent.com",
+          "client_id": "813912710571-5c6n5372fc3mpilnfu18fsvvv2n82tal.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.flumi.permalikinmanager",
+            "certificate_hash": "165c312b15d1e2b01c99c4a4c2cd192341748afa"
+          }
+        },
+        {
+          "client_id": "813912710571-9t6cgiusm83q5p8v8rcgnvh2gnd5mgvf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA0z38HXXn1ytsyT-3uhQQKCV7VmR8wW3o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "813912710571-9t6cgiusm83q5p8v8rcgnvh2gnd5mgvf.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "813912710571-c44moou4h5u9irt0idf7b4hc6ojpki62.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.flumi.permalikinmanager"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:813912710571:android:f6a4788d74a6b18b19c6ee",
+        "android_client_info": {
+          "package_name": "com.flumi.permalikinmanager.dev"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "813912710571-9kr6hvo6mb7ocovrf86qucqu1f97ui9t.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.flumi.permalikinmanager.dev",
             "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
           }
         },
@@ -35,7 +79,7 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "813912710571-0iefd3rjt7f849vb4gkgi2qs0885n08j.apps.googleusercontent.com",
+              "client_id": "813912710571-9t6cgiusm83q5p8v8rcgnvh2gnd5mgvf.apps.googleusercontent.com",
               "client_type": 3
             },
             {

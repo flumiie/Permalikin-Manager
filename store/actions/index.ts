@@ -3,6 +3,7 @@ import createMemberDonation from './createMemberDonation';
 import createMemberDue from './createMemberDue';
 import createMemberInterest from './createMemberInterest';
 import getAuth from './getAuth';
+import getFunds from './getFunds';
 import getMemberDonations from './getMemberDonations';
 import getMemberDues from './getMemberDues';
 import getMemberInterests from './getMemberInterests';
@@ -17,6 +18,7 @@ export {
   createMemberDue,
   createMemberInterest,
   getAuth,
+  getFunds,
   getMemberDonations,
   getMemberDues,
   getMemberInterests,

@@ -1,5 +1,5 @@
 import { BottomTabHeaderProps } from '@react-navigation/bottom-tabs';
-import { useNavigation } from '@react-navigation/core';
+import { useNavigation } from '@react-navigation/native';
 import { StackHeaderProps } from '@react-navigation/stack';
 import { Formik } from 'formik';
 import React, { useRef } from 'react';
