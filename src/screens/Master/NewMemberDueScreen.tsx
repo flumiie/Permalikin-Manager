@@ -1,4 +1,5 @@
-import { RouteProp, useNavigation, useRoute } from '@react-navigation/core';
+import { RouteProp } from '@react-navigation/core';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import dayjs from 'dayjs';
 import { Formik } from 'formik';

@@ -86,7 +86,7 @@ export default () => {
             navigation.navigate('ChangePassword');
           }}
         />
-        <SimpleList
+        {/* <SimpleList
           icon="info"
           title="Pedoman Pengguna"
           subtitle="Pelajari cara menggunakan apl. ini"
@@ -98,7 +98,7 @@ export default () => {
               message: 'Sementara ini tidak tersedia',
             });
           }}
-        />
+        /> */}
         <SimpleList
           easterEgg
           icon="info"

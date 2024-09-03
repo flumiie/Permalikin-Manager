@@ -12,7 +12,7 @@ import BoldText from './Text/BoldText';
 
 interface ButtonProps extends PressableProps {
   onPress: () => void;
-  type: 'primary' | 'secondary' | 'outline';
+  type: 'primary' | 'secondary' | 'outline' | 'disabled';
   children?: React.ReactNode | string;
   backgroundColor?: string;
   style?: ViewStyle;
@@ -33,6 +33,9 @@ export default (props: ButtonProps) => {
     if (props.type === 'secondary') {
       return '#FFD3D3';
     }
+    if (props.type === 'disabled') {
+      return '#EEE';
+    }
     return 'transparent';
   }, [props.disabled, props.type]);
 
@@ -52,6 +55,9 @@ export default (props: ButtonProps) => {
     }
     if (props.type === 'secondary') {
       return '#001C38';
+    }
+    if (props.type === 'disabled') {
+      return '#888';
     }
     return '#FFF';
   }, [props.disabled, props.type]);
@@ -74,7 +80,8 @@ export default (props: ButtonProps) => {
       }}>
       <Pressable
         {...props}
-        android_ripple={androidRipple}
+        disabled={props.type === 'disabled'}
+        android_ripple={props.type !== 'disabled' ? androidRipple : null}
         // eslint-disable-next-line react-native/no-inline-styles
         style={{
           borderColor,

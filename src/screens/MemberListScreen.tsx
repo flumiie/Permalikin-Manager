@@ -28,6 +28,7 @@ const ReportListItem = (props: { item: any; onPress: () => void }) => {
       sub={{
         subtitle: props.item.email,
         desc: props.item.memberCode,
+        balance: 0,
       }}
       onPress={props.onPress}
     />
@@ -108,24 +109,12 @@ export default () => {
         memberCode: data.memberCode ?? '',
       });
     }
-    if (v === 'Iuran Anggota') {
-      return navigation.navigate('MemberDues', {
-        memberCode: data.memberCode ?? '',
-        fullName: data.fullName ?? '',
-      });
-    }
-    if (v === 'Donasi / Sumbangan') {
-      return navigation.navigate('MemberDonations', {
-        memberCode: data.memberCode ?? '',
-        fullName: data.fullName ?? '',
-      });
-    }
-    if (v === 'Bunga Bank') {
-      return navigation.navigate('MemberInterests', {
-        memberCode: data.memberCode ?? '',
-        fullName: data.fullName ?? '',
-      });
-    }
+    // if (v === 'Iuran Anggota') {
+    //   return navigation.navigate('MemberDues', {
+    //     memberCode: data.memberCode ?? '',
+    //     fullName: data.fullName ?? '',
+    //   });
+    // }
 
     return null;
   };
@@ -152,9 +141,7 @@ export default () => {
         title={showDropdown.fullName ?? ''}
         options={[
           { type: 'primary', label: 'Edit Master Data' },
-          { type: 'secondary', label: 'Iuran Anggota' },
-          { type: 'secondary', label: 'Donasi / Sumbangan' },
-          { type: 'secondary', label: 'Bunga Bank' },
+          { type: 'disabled', label: 'Iuran Anggota' },
         ]}
         onSelect={v => onSelectNavigator(v, showDropdown)}
         onClose={() => {

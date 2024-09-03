@@ -17,41 +17,42 @@ interface CardProps {
   title: string;
   subtitle: string;
   disabled?: boolean;
+  type: 'screen' | 'hidden';
   style?: ViewStyle;
   onPress: () => void;
 }
 
 export default (props: CardProps) => {
+  if (props.type === 'hidden') {
+    return <View style={{ ...styles.container, ...props.style }} />;
+  }
   return (
     <View style={{ ...styles.container, ...props.style }}>
       <Pressable
         disabled={props.disabled}
-        android_ripple={{ color: props.disabled ? 'transparent' : '#BF222966' }}
+        android_ripple={{
+          color: props.disabled ? 'transparent' : '#BF222966',
+        }}
         // eslint-disable-next-line react-native/no-inline-styles
         style={{
           borderColor: props.disabled ? 'transparent' : '#EEE',
-          backgroundColor: props.disabled ? 'transparent' : '#F8EFEF',
+          backgroundColor: props.disabled ? '#EEE' : '#F8EFEF',
           ...styles.pressable,
         }}
         onPress={props.onPress}>
-        {props.disabled ? (
-          <View />
-        ) : (
-          <Image style={styles.image} source={props.icon} />
-        )}
-
+        <Image source={props.icon} style={styles.image} />
         <Spacer height={8} />
         <View>
           <MediumText
             size={16}
             lineHeight={24}
-            color={props.disabled ? 'transparent' : '#1F1F1F'}
+            color={props.disabled ? '#888' : '#1F1F1F'}
             style={styles.text}>
             {props.title}
           </MediumText>
           <Spacer height={2} />
           <RegularText type="body-small" color="#74777F" style={styles.text}>
-            {props.subtitle}
+            {props.disabled ? '(Coming soon)' : props.subtitle}
           </RegularText>
         </View>
       </Pressable>

@@ -4,11 +4,8 @@ import EasterEggScreen from './EasterEggScreen';
 import FundsDataScreen from './Funds/FundsDataScreen';
 import HomeScreen from './HomeScreen';
 import EditMasterDataScreen from './Master/EditMasterDataScreen';
-import MemberDonationsScreen from './Master/MemberDonationsScreen';
 import MemberDuesScreen from './Master/MemberDuesScreen';
-import MemberInterestsScreen from './Master/MemberInterestsScreen';
 import NewMasterDataScreen from './Master/NewMasterDataScreen';
-import NewMemberDonationScreen from './Master/NewMemberDonationScreen';
 import NewMemberDueScreen from './Master/NewMemberDueScreen';
 import NewTransactionMenuScreen from './Master/NewTransactionMenuScreen';
 import MemberListScreen from './MemberListScreen';
@@ -33,10 +30,7 @@ export {
   NewMasterDataScreen,
   EditMasterDataScreen,
   FundsDataScreen,
-  MemberDonationsScreen,
   MemberDuesScreen,
-  MemberInterestsScreen,
-  NewMemberDonationScreen,
   NewMemberDueScreen,
   NewTransactionMenuScreen,
 };

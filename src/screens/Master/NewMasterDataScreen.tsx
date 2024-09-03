@@ -403,7 +403,7 @@ export default () => {
                     ref={fullNameInputRef}
                     id="full-name"
                     label="Nama Lengkap*"
-                    placeholder="Contoh: Robbi Firmansyah"
+                    placeholder="Contoh: Tjen Khin Fan"
                     filledTextColor
                     onChangeText={handleChange('fullName')}
                     onBlur={handleBlur('fullName')}
@@ -531,7 +531,7 @@ export default () => {
                     ref={emailInputRef}
                     id="email"
                     label="Email"
-                    placeholder="Contoh: robbi@gmail.com"
+                    placeholder="Contoh: ytjendrawan@gmail.com"
                     filledTextColor
                     onChangeText={handleChange('email')}
                     onBlur={handleBlur('email')}

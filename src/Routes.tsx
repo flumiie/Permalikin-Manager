@@ -11,11 +11,8 @@ import {
   EasterEggScreen,
   EditMasterDataScreen,
   FundsDataScreen,
-  MemberDonationsScreen,
   MemberDuesScreen,
-  MemberInterestsScreen,
   NewMasterDataScreen,
-  NewMemberDonationScreen,
   NewMemberDueScreen,
   NewTransactionMenuScreen,
   PersonalInformationScreen,
@@ -23,7 +20,6 @@ import {
   SignInScreen,
   SignUpScreen,
 } from './screens';
-import NewMemberInterestScreen from './screens/Master/NewMemberInterestScreen';
 
 export type AuthStackParamList = {
   SignIn: undefined;
@@ -49,22 +45,6 @@ export type RootStackParamList = {
     fullName: string;
   };
   NewMemberDue: {
-    memberCode: string;
-    fullName: string;
-  };
-  MemberDonations: {
-    memberCode: string;
-    fullName: string;
-  };
-  NewMemberDonation: {
-    memberCode: string;
-    fullName: string;
-  };
-  MemberInterests: {
-    memberCode: string;
-    fullName: string;
-  };
-  NewMemberInterest: {
     memberCode: string;
     fullName: string;
   };
@@ -108,32 +88,18 @@ export default () => {
         <MainStack.Screen name="MemberDues" component={MemberDuesScreen} />
         <MainStack.Screen name="NewMemberDue" component={NewMemberDueScreen} />
         <MainStack.Screen
-          name="MemberDonations"
-          component={MemberDonationsScreen}
-        />
-        <MainStack.Screen
-          name="NewMemberDonation"
-          component={NewMemberDonationScreen}
-        />
-        <MainStack.Screen
-          name="MemberInterests"
-          component={MemberInterestsScreen}
-        />
-        <MainStack.Screen
-          name="NewMemberInterest"
-          component={NewMemberInterestScreen}
-        />
-        <MainStack.Screen
           name="NewTransactionMenu"
           component={NewTransactionMenuScreen}
         />
         <MainStack.Screen
           name="PersonalInformation"
           component={PersonalInformationScreen}
+          options={{ title: 'Info Personal' }}
         />
         <MainStack.Screen
           name="ChangePassword"
           component={ChangePasswordScreen}
+          options={{ title: 'Ubah Password' }}
         />
         <MainStack.Screen
           name="EasterEgg"

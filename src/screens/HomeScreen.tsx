@@ -65,7 +65,7 @@ const Header = (props: HeaderProps) => {
         <Spacer height={2} />
 
         <RegularText type="body-medium" color="#E1E1E1">
-          Selamat datang di Permalikin Manager
+          Kelola pengeluaran & pemasukkan Permalikin
         </RegularText>
         <Spacer height={8} />
 
@@ -111,19 +111,19 @@ const HOME_ACTIONS: ActionsType[] = [
   },
   {
     id: 2,
-    icon: require('../../assets/images/transactions.png'),
+    icon: require('../../assets/images/smartphone-disabled.png'),
     title: 'Kas',
     subtitle: 'Detail kas',
-    disabled: false,
+    disabled: true,
     screen: 'FundsData',
     type: 'screen',
   },
   {
     id: 3,
-    icon: require('../../assets/images/reports.png'),
+    icon: require('../../assets/images/smartphone-disabled.png'),
     title: 'Laporan',
     subtitle: 'Listing data',
-    disabled: false,
+    disabled: true,
     screen: 'MemberList',
     type: 'bottom-tab',
   },
@@ -134,7 +134,7 @@ const HOME_ACTIONS: ActionsType[] = [
     subtitle: '',
     disabled: true,
     screen: '',
-    type: '',
+    type: 'hidden',
   },
 ];
 
@@ -234,6 +234,7 @@ export default () => {
                 title={item.title}
                 subtitle={item.subtitle}
                 disabled={item.disabled}
+                type={item.type}
                 onPress={() => {
                   setSearchMode(false);
                   if (item.type === 'screen') {

@@ -11,6 +11,7 @@ import RegularText from '../Text/RegularText';
 type SubtitleType = {
   subtitle: string;
   desc: string;
+  balance: number;
 };
 
 interface ItemListProps extends PressableProps {
@@ -51,7 +52,7 @@ export default (props: ItemListProps) => {
                 alignSelf: props.sub ? 'flex-start' : 'center',
               }}>
               <MediumText color="#000">{props.title}</MediumText>
-              {(props.sub as SubtitleType)?.subtitle ? (
+              {(props.sub as SubtitleType) ? (
                 <>
                   <RegularText size={12} color="#4B4B4B">
                     {(props.sub as SubtitleType).subtitle}
@@ -59,6 +60,9 @@ export default (props: ItemListProps) => {
                   <RegularText size={12} color="#4B4B4B">
                     {(props.sub as SubtitleType).desc}
                   </RegularText>
+                  {/* <RegularText size={12} color="#4B4B4B">
+                    Belum dibayar: Rp {(props.sub as SubtitleType).balance}
+                  </RegularText> */}
                 </>
               ) : null}
               {(props.sub as BadgeProps)?.label ? (

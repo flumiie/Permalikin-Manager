@@ -24,7 +24,7 @@ interface DropdownProps {
   open: boolean;
   title: string;
   options: {
-    type: 'primary' | 'secondary';
+    type: 'primary' | 'secondary' | 'disabled';
     label: string;
   }[];
   onSelect: (value: string) => void;
