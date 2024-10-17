@@ -65,7 +65,7 @@ const Header = (props: HeaderProps) => {
         <Spacer height={2} />
 
         <RegularText type="body-medium" color="#E1E1E1">
-          Kelola pengeluaran & pemasukkan Permalikin
+          Kelola pengeluaran & pemasukkan Permalindo
         </RegularText>
         <Spacer height={8} />
 

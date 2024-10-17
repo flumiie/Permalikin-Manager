@@ -7,17 +7,17 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:813912710571:android:ae49219ece7d835019c6ee",
+        "mobilesdk_app_id": "1:813912710571:android:16703594bfc2d0bf19c6ee",
         "android_client_info": {
-          "package_name": "com.flumi.permalikinmanager"
+          "package_name": "com.flumi.permalindomanager"
         }
       },
       "oauth_client": [
         {
-          "client_id": "813912710571-5c6n5372fc3mpilnfu18fsvvv2n82tal.apps.googleusercontent.com",
+          "client_id": "813912710571-3tihv0ufrrb060hvt1vphbpvvr2qrk3v.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.flumi.permalikinmanager",
+            "package_name": "com.flumi.permalindomanager",
             "certificate_hash": "165c312b15d1e2b01c99c4a4c2cd192341748afa"
           }
         },
@@ -51,17 +51,17 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:813912710571:android:f6a4788d74a6b18b19c6ee",
+        "mobilesdk_app_id": "1:813912710571:android:f15e784a28f4258419c6ee",
         "android_client_info": {
-          "package_name": "com.flumi.permalikinmanager.dev"
+          "package_name": "com.flumi.permalindomanager.dev"
         }
       },
       "oauth_client": [
         {
-          "client_id": "813912710571-9kr6hvo6mb7ocovrf86qucqu1f97ui9t.apps.googleusercontent.com",
+          "client_id": "813912710571-u7ltvfcom54esjt5lesvhv07p485d64e.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.flumi.permalikinmanager.dev",
+            "package_name": "com.flumi.permalindomanager.dev",
             "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
           }
         },
