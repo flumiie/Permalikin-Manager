@@ -11,11 +11,22 @@ prepare_react_native_project!
 linkage = ENV['USE_FRAMEWORKS']
 if linkage != nil
   Pod::UI.puts "Configuring Pod with #{linkage}ally linked Frameworks".green
-  use_frameworks! :linkage => linkage.to_sym
+   use_frameworks! :linkage => linkage.to_sym
+#  use_frameworks! :linkage => :static
+#  $RNFirebaseAsStaticFramework = true
+  # $RNGoogleUtilitiesAsStaticFramework = true
 end
 
 target 'PermalikinManager' do
   config = use_native_modules!
+
+  # https://github.com/invertase/react-native-firebase/issues/6332#issuecomment-1503090331
+   pod 'Firebase', :modular_headers => true
+   pod 'FirebaseCore', :modular_headers => true
+   pod 'FirebaseCoreExtension', :modular_headers => true
+   pod 'FirebaseFirestore', :modular_headers => true
+   pod 'FirebaseFirestoreInternal', :modular_headers => true
+   pod 'GoogleUtilities', :modular_headers => true
 
   use_react_native!(
     :path => config[:reactNativePath],

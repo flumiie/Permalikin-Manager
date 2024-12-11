@@ -7,4 +7,7 @@ module.exports = {
     },
   },
   assets: ['./assets/fonts'],
+  ios: {
+    useFrameworks: 'static',
+  },
 };
